@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RDU Command Centre v5.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sky-top:#1a3a5c;--sky-mid:#2e6ea6;--sky-light:#6aaed6;--horizon:#e8b86d;--dust:#c4893a;
+  --earth:#7a4a1e;--earth-dark:#3d2010;--earth-deep:#1e0f06;
+  --tan:#d4a96a;--tan-light:#f0d5a0;--tan-dim:rgba(212,169,106,0.12);
+  --brown:#5c3317;--brown-mid:#8b4f22;--brown-light:#b8722e;
+  --blue-sky:#4a9fd4;--blue-bright:#2e8bc0;--blue-dim:rgba(74,159,212,0.12);
+  --red-dust:#c0392b;--green-gum:#5a8a3c;
+  --purple-va:#7c5cbf;--purple-dim:rgba(124,92,191,0.12);
+  --text:#1e0f06;--text-light:#5c3317;--muted:#8b6f4a;--subtle:#b8956a;
+  --surface:#fdf6e8;--surface2:#f5e8cc;--border:#d4b896;--border2:#c4a070;
+  --shadow:0 2px 12px rgba(61,32,16,0.15),0 1px 4px rgba(61,32,16,0.1);
+  --shadow-lg:0 6px 30px rgba(61,32,16,0.2),0 2px 8px rgba(61,32,16,0.12);
+  --neon:#00ff88;--neon-glow:0 0 12px rgba(0,255,136,0.6),0 0 30px rgba(0,255,136,0.25);
+  --neon-gold:#ffd700;--neon-gold-glow:0 0 10px rgba(255,215,0,0.7),0 0 25px rgba(255,215,0,0.3);
+  --moko-bg:#060e0a;--moko-bg2:#0a1410;--moko-border:rgba(0,255,136,0.35);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--earth-deep);font-family:'Barlow',sans-serif;color:var(--text);height:100vh;overflow:hidden;}
+.sky-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background:linear-gradient(180deg,var(--sky-top) 0%,var(--sky-mid) 35%,var(--sky-light) 60%,var(--horizon) 78%,var(--dust) 88%,var(--earth) 94%,var(--earth-dark) 100%);}
+.sky-bg::before{content:'';position:absolute;bottom:18%;left:50%;transform:translateX(-50%);width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,#fff8e0 0%,#ffd060 40%,rgba(255,180,60,0) 70%);opacity:0.85;box-shadow:0 0 60px 20px rgba(255,200,60,0.3),0 0 120px 60px rgba(255,160,30,0.15);}
+.sky-bg::after{content:'';position:absolute;bottom:14%;left:0;right:0;height:12%;background:linear-gradient(180deg,transparent,rgba(196,137,58,0.4),rgba(122,74,30,0.6));}
+.silhouette{position:fixed;bottom:0;left:0;right:0;height:22%;z-index:1;pointer-events:none;}
+.silhouette svg{width:100%;height:100%;}
+.grain{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:0.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");}
+
+/* LOGIN */
+.login-screen{position:fixed;inset:0;z-index:500;display:flex;align-items:center;justify-content:center;}
+.login-card{background:linear-gradient(160deg,var(--earth-dark),#2a1208);border:2px solid var(--tan);border-radius:10px;padding:32px 36px;width:340px;display:flex;flex-direction:column;gap:12px;box-shadow:var(--shadow-lg),0 0 60px rgba(212,169,106,0.12);position:relative;overflow:hidden;}
+.login-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--horizon),var(--tan-light),var(--horizon),transparent);}
+.login-logo-row{display:flex;align-items:center;gap:10px;}
+.login-logo-icon{width:42px;height:42px;background:linear-gradient(135deg,var(--blue-sky),var(--blue-bright));border-radius:8px;border:1px solid var(--tan);display:flex;align-items:center;justify-content:center;font-size:1.3rem;box-shadow:0 2px 10px rgba(46,139,192,0.4);}
+.login-title{font-family:'Bebas Neue',sans-serif;font-size:1.35rem;color:var(--tan-light);letter-spacing:0.08em;line-height:1.1;}
+.login-sub-text{font-family:'Barlow Condensed',sans-serif;font-size:0.44rem;color:var(--subtle);letter-spacing:0.16em;text-transform:uppercase;}
+.login-label{font-family:'Barlow Condensed',sans-serif;font-size:0.48rem;font-weight:700;letter-spacing:0.14em;color:var(--subtle);text-transform:uppercase;margin-bottom:-6px;}
+.login-input{background:rgba(255,255,255,0.05);border:1.5px solid var(--border);border-radius:5px;color:var(--tan-light);font-family:'Barlow',sans-serif;font-size:0.75rem;padding:9px 12px;outline:none;transition:all 0.15s;width:100%;}
+.login-input:focus{border-color:var(--blue-sky);box-shadow:0 0 0 3px rgba(74,159,212,0.15);background:rgba(255,255,255,0.08);}
+.login-input::placeholder{color:var(--muted);}
+.login-btn{background:linear-gradient(135deg,var(--brown),var(--brown-mid));border:none;color:var(--tan-light);font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.14em;padding:11px;cursor:pointer;border-radius:5px;transition:all 0.15s;box-shadow:0 3px 12px rgba(61,32,16,0.4);margin-top:4px;}
+.login-btn:hover{background:linear-gradient(135deg,var(--brown-mid),var(--dust));transform:translateY(-1px);}
+.login-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+.login-error{font-family:'Barlow Condensed',sans-serif;font-size:0.52rem;color:var(--red-dust);letter-spacing:0.08em;text-align:center;min-height:14px;}
+.login-foot{font-family:'Barlow Condensed',sans-serif;font-size:0.42rem;color:var(--muted);text-align:center;letter-spacing:0.12em;}
+
+/* SYNC BAR */
+.sync-bar{position:fixed;bottom:32px;right:18px;z-index:200;display:flex;align-items:center;gap:6px;background:rgba(30,15,6,0.9);border:1px solid var(--border);border-radius:20px;padding:4px 12px 4px 9px;font-family:'Barlow Condensed',sans-serif;font-size:0.44rem;letter-spacing:0.1em;color:var(--subtle);text-transform:uppercase;backdrop-filter:blur(8px);transition:all 0.35s;}
+.sync-bar.ok{border-color:var(--green-gum);color:var(--green-gum);}
+.sync-bar.saving{border-color:var(--tan);color:var(--tan);}
+.sync-bar.err{border-color:var(--red-dust);color:var(--red-dust);}
+.sync-dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0;}
+.sync-bar.saving .sync-dot{animation:pulse 0.7s infinite;}
+
+/* MODALS */
+.modal-ov{position:fixed;inset:0;background:rgba(10,5,2,0.78);backdrop-filter:blur(5px);z-index:400;display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal-box{background:var(--surface);border:1.5px solid var(--border);border-radius:8px;width:600px;max-width:96vw;max-height:85vh;display:flex;flex-direction:column;box-shadow:var(--shadow-lg);}
+.modal-sm{width:460px;}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:10px 15px;border-bottom:1.5px solid var(--border);background:linear-gradient(135deg,var(--earth-dark),var(--brown) 60%,var(--earth-dark));border-radius:6px 6px 0 0;font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:0.12em;color:var(--tan-light);flex-shrink:0;}
+.modal-close{background:none;border:none;color:var(--subtle);cursor:pointer;font-size:1rem;padding:2px 6px;border-radius:3px;transition:all 0.15s;}
+.modal-close:hover{color:var(--red-dust);background:rgba(192,57,43,0.1);}
+.modal-tabs{display:flex;border-bottom:1.5px solid var(--border);background:var(--surface2);flex-shrink:0;}
+.mtab{flex:1;background:none;border:none;border-bottom:2px solid transparent;padding:7px 4px;font-family:'Barlow Condensed',sans-serif;font-size:0.56rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all 0.15s;}
+.mtab:hover{color:var(--brown);}
+.mtab.active{color:var(--blue-bright);border-bottom-color:var(--blue-bright);background:rgba(74,159,212,0.06);}
+.modal-body{flex:1;overflow-y:auto;padding:14px 16px;}
+.modal-body::-webkit-scrollbar{width:3px;}
+.modal-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+
+/* COMMENTS */
+.comment-item{background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:8px 10px;border-left:3px solid var(--blue-sky);margin-bottom:7px;}
+.comment-meta{font-family:'Barlow Condensed',sans-serif;font-size:0.42rem;font-weight:700;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;margin-bottom:3px;}
+.comment-author{color:var(--brown-mid);}
+.comment-text{font-family:'Barlow',sans-serif;font-size:0.6rem;color:var(--text-light);line-height:1.5;}
+.comment-empty{font-family:'Barlow Condensed',sans-serif;font-size:0.54rem;color:var(--muted);text-align:center;padding:18px 0;letter-spacing:0.1em;}
+.comment-add-row{display:flex;gap:6px;padding:10px 15px;border-top:1px solid var(--border);background:var(--surface2);flex-shrink:0;border-radius:0 0 6px 6px;}
+.comment-textarea{flex:1;background:var(--surface);border:1.5px solid var(--border);color:var(--text);font-family:'Barlow',sans-serif;font-size:0.58rem;padding:7px 9px;outline:none;border-radius:4px;resize:none;height:48px;line-height:1.5;}
+.comment-textarea:focus{border-color:var(--blue-sky);}
+.comment-post-btn{background:linear-gradient(135deg,var(--brown),var(--brown-mid));border:none;color:var(--tan-light);font-family:'Bebas Neue',sans-serif;font-size:0.72rem;padding:8px 13px;cursor:pointer;border-radius:4px;letter-spacing:0.1em;transition:all 0.15s;align-self:flex-end;white-space:nowrap;}
+.comment-post-btn:hover{background:linear-gradient(135deg,var(--brown-mid),var(--dust));}
+
+/* DRIVE MODAL */
+.drive-linked{display:flex;flex-direction:column;gap:10px;}
+.drive-open-btn{display:block;background:rgba(74,159,212,0.12);border:1.5px solid rgba(74,159,212,0.4);border-radius:6px;padding:13px 16px;text-decoration:none;color:var(--blue-bright);font-family:'Bebas Neue',sans-serif;font-size:0.88rem;letter-spacing:0.1em;text-align:center;transition:all 0.15s;}
+.drive-open-btn:hover{background:rgba(74,159,212,0.25);}
+.drive-unlink-btn{background:none;border:1px solid var(--border);border-radius:4px;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:0.5rem;padding:4px 10px;cursor:pointer;letter-spacing:0.1em;text-transform:uppercase;transition:all 0.15s;align-self:flex-end;}
+.drive-unlink-btn:hover{color:var(--red-dust);border-color:var(--red-dust);}
+.drive-no-folder{display:flex;flex-direction:column;gap:10px;}
+.drive-create-btn{background:rgba(0,200,100,0.12);border:1.5px solid rgba(0,200,100,0.4);border-radius:6px;padding:11px;color:#00c864;font-family:'Bebas Neue',sans-serif;font-size:0.82rem;letter-spacing:0.12em;cursor:pointer;transition:all 0.15s;width:100%;}
+.drive-create-btn:hover{background:rgba(0,200,100,0.22);}
+.drive-create-btn:disabled{opacity:0.5;cursor:not-allowed;}
+.drive-or{text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:0.48rem;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase;}
+.drive-link-row{display:flex;gap:6px;}
+.drive-link-input{flex:1;background:var(--surface2);border:1.5px solid var(--border);color:var(--text);font-family:'Barlow',sans-serif;font-size:0.58rem;padding:7px 9px;outline:none;border-radius:4px;}
+.drive-link-input:focus{border-color:var(--blue-sky);}
+.drive-link-btn{background:linear-gradient(135deg,var(--brown),var(--brown-mid));border:none;color:var(--tan-light);font-family:'Bebas Neue',sans-serif;font-size:0.68rem;padding:7px 12px;cursor:pointer;border-radius:4px;letter-spacing:0.1em;white-space:nowrap;}
+.drive-status{font-family:'Barlow Condensed',sans-serif;font-size:0.52rem;letter-spacing:0.1em;text-align:center;min-height:16px;}
+.drive-status.ok{color:var(--green-gum);}
+.drive-status.err{color:var(--red-dust);}
+
+/* SETTINGS */
+.settings-section{margin-bottom:14px;}
+.settings-section-title{font-family:'Bebas Neue',sans-serif;font-size:0.72rem;letter-spacing:0.12em;color:var(--brown);margin-bottom:7px;padding-bottom:4px;border-bottom:1px solid var(--border);}
+.ptog-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(212,184,150,0.25);}
+.ptog-label{font-family:'Barlow',sans-serif;font-size:0.6rem;color:var(--text-light);font-weight:500;}
+.toggle-sw{position:relative;width:32px;height:18px;display:inline-block;flex-shrink:0;}
+.toggle-sw input{opacity:0;width:0;height:0;}
+.toggle-track{position:absolute;inset:0;background:var(--border);border-radius:18px;cursor:pointer;transition:0.2s;}
+.toggle-track::before{content:'';position:absolute;width:12px;height:12px;left:3px;top:3px;background:#fff;border-radius:50%;transition:0.2s;}
+.toggle-sw input:checked + .toggle-track{background:var(--green-gum);}
+.toggle-sw input:checked + .toggle-track::before{transform:translateX(14px);}
+.activity-row{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid rgba(212,184,150,0.22);}
+.activity-row:last-child{border-bottom:none;}
+.activity-dot{width:6px;height:6px;border-radius:50%;background:var(--blue-sky);flex-shrink:0;margin-top:3px;}
+.activity-event{font-family:'Barlow',sans-serif;font-size:0.56rem;color:var(--text-light);font-weight:500;}
+.activity-meta{font-family:'Barlow Condensed',sans-serif;font-size:0.4rem;color:var(--muted);letter-spacing:0.1em;margin-top:1px;text-transform:uppercase;}
+.acct-pill{background:linear-gradient(135deg,var(--earth-dark),var(--brown));border:1px solid var(--tan);border-radius:6px;padding:9px 13px;display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.acct-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--blue-sky),var(--blue-bright));display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+.acct-name{font-family:'Bebas Neue',sans-serif;font-size:0.88rem;color:var(--tan-light);letter-spacing:0.08em;}
+.acct-role{font-family:'Barlow Condensed',sans-serif;font-size:0.38rem;color:var(--subtle);letter-spacing:0.16em;text-transform:uppercase;margin-top:1px;}
+.acct-form{display:flex;flex-direction:column;gap:6px;}
+.acct-input{background:var(--surface2);border:1.5px solid var(--border);color:var(--text);font-family:'Barlow',sans-serif;font-size:0.6rem;padding:7px 10px;outline:none;border-radius:4px;transition:all 0.15s;}
+.acct-input:focus{border-color:var(--blue-sky);background:var(--surface);}
+.acct-btn{background:linear-gradient(135deg,var(--brown),var(--brown-mid));border:none;color:var(--tan-light);font-family:'Bebas Neue',sans-serif;font-size:0.7rem;padding:8px 16px;cursor:pointer;border-radius:4px;letter-spacing:0.1em;transition:all 0.15s;}
+.acct-btn:hover{background:linear-gradient(135deg,var(--brown-mid),var(--dust));}
+.acct-status{font-family:'Barlow Condensed',sans-serif;font-size:0.5rem;letter-spacing:0.1em;min-height:14px;}
+.acct-status.ok{color:var(--green-gum);}
+.acct-status.err{color:var(--red-dust);}
+.logout-btn{width:100%;background:rgba(192,57,43,0.1);border:1px solid rgba(192,57,43,0.3);color:var(--red-dust);font-family:'Bebas Neue',sans-serif;font-size:0.72rem;padding:9px;cursor:pointer;border-radius:4px;letter-spacing:0.14em;transition:all 0.15s;margin-top:12px;}
+.logout-btn:hover{background:rgba(192,57,43,0.2);}
+.team-table{width:100%;border-collapse:collapse;font-size:0.56rem;}
+.team-table th{font-family:'Bebas Neue',sans-serif;font-size:0.56rem;font-weight:400;letter-spacing:0.12em;color:var(--brown);border-bottom:2px solid var(--border2);padding:4px 5px;text-align:left;}
+.team-table td{padding:4px 5px;border-bottom:1px solid var(--border);color:var(--text-light);vertical-align:middle;}
+.team-input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'Barlow',sans-serif;font-size:0.54rem;padding:3px 5px;outline:none;border-radius:3px;}
+.team-input:focus{border-color:var(--blue-sky);}
+.team-save-btn{background:rgba(74,159,212,0.12);border:1px solid rgba(74,159,212,0.35);color:var(--blue-bright);font-family:'Bebas Neue',sans-serif;font-size:0.5rem;padding:3px 7px;cursor:pointer;border-radius:3px;letter-spacing:0.1em;transition:all 0.15s;}
+.team-save-btn:hover{background:rgba(74,159,212,0.25);}
+
+/* ANIMATIONS */
+@keyframes fadeDown{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes neonPulse{0%,100%{opacity:1;text-shadow:var(--neon-glow)}50%{opacity:0.8;text-shadow:none}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+@keyframes devFade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+/* MAIN GRID */
+.wrap{position:relative;z-index:3;width:100vw;height:100vh;display:grid;grid-template-rows:62px 1fr 1fr 26px;grid-template-columns:160px 1fr 1fr 200px;gap:8px;padding:12px 14px;}
+
+/* HEADER */
+header{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,var(--earth-dark) 0%,var(--brown) 50%,var(--earth-dark) 100%);border:2px solid var(--tan);border-radius:6px;padding:0 14px;box-shadow:var(--shadow-lg),inset 0 1px 0 rgba(240,213,160,0.2);animation:fadeDown 0.5s ease both;position:relative;overflow:hidden;}
+header::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--horizon),var(--tan-light),var(--horizon),transparent);}
+header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--tan),transparent);opacity:0.4;}
+.logo-block{display:flex;align-items:center;gap:10px;}
+.logo-mark{width:38px;height:38px;background:linear-gradient(135deg,var(--blue-sky),var(--blue-bright));border-radius:6px;border:1px solid var(--tan);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+.logo-title{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--tan-light);letter-spacing:0.08em;line-height:1;text-shadow:0 2px 8px rgba(0,0,0,0.5);}
+.logo-sub{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:0.44rem;color:var(--subtle);letter-spacing:0.14em;margin-top:2px;text-transform:uppercase;}
+.colorbond-badge{display:flex;flex-direction:column;align-items:center;background:linear-gradient(135deg,#c0c8d0,#8a9baa 30%,#b8c4cc 60%,#d0d8e0);border:1.5px solid rgba(255,255,255,0.4);border-radius:5px;padding:3px 8px;margin-left:5px;box-shadow:0 2px 8px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.5);flex-shrink:0;}
+.cb-word{font-family:'Bebas Neue',sans-serif;font-size:0.65rem;letter-spacing:0.12em;color:#1a2a3a;line-height:1;}
+.cb-reg{font-family:'Barlow Condensed',sans-serif;font-size:0.32rem;font-weight:700;color:#3a5068;letter-spacing:0.18em;text-transform:uppercase;margin-top:1px;}
+.header-centre{display:flex;gap:6px;align-items:center;}
+.status-pill{display:flex;align-items:center;gap:5px;background:rgba(30,15,6,0.5);border:1px solid var(--border);border-radius:20px;padding:3px 9px;font-family:'Barlow Condensed',sans-serif;font-size:0.48rem;font-weight:600;letter-spacing:0.1em;color:var(--subtle);text-transform:uppercase;}
+.status-dot{width:5px;height:5px;border-radius:50%;animation:pulse 2.5s infinite;}
+.status-dot.green{background:#7bc67e;box-shadow:0 0 5px #7bc67e;}
+.status-dot.blue{background:var(--blue-sky);box-shadow:0 0 5px var(--blue-sky);}
+.status-dot.amber{background:var(--tan);box-shadow:0 0 5px var(--tan);}
+.header-right{display:flex;align-items:center;gap:8px;}
+.live-time{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;color:var(--tan-light);line-height:1;letter-spacing:0.1em;text-shadow:0 2px 6px rgba(0,0,0,0.4);}
+.live-date{font-family:'Barlow Condensed',sans-serif;font-size:0.42rem;color:var(--subtle);letter-spacing:0.16em;margin-top:2px;text-transform:uppercase;}
+.user-pill{display:flex;align-items:center;gap:5px;background:rgba(74,159,212,0.12);border:1px solid rgba(74,159,212,0.35);border-radius:20px;padding:3px 10px;font-family:'Barlow Condensed',sans-serif;font-size:0.48rem;font-weight:700;letter-spacing:0.1em;color:var(--blue-sky);text-transform:uppercase;}
+.user-avatar{width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,var(--blue-sky),var(--blue-bright));display:flex;align-items:center;justify-content:center;font-size:0.56rem;flex-shrink:0;}
+.settings-btn{background:rgba(212,169,106,0.12);border:1px solid rgba(212,169,106,0.35);border-radius:5px;padding:5px 8px;cursor:pointer;font-size:0.9rem;transition:all 0.2s;line-height:1;}
+.settings-btn:hover{background:rgba(212,169,106,0.25);transform:rotate(45deg);}
+
+/* PANELS */
+footer{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;padding:0 4px;}
+.footer-left{font-family:'Barlow Condensed',sans-serif;font-size:0.42rem;letter-spacing:0.14em;color:var(--muted);text-transform:uppercase;}
+.footer-right{display:flex;gap:12px;}
+.footer-tag{font-family:'Barlow Condensed',sans-serif;font-size:0.42rem;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;}
+.panel{background:rgba(253,246,232,0.88);border:1.5px solid var(--border);border-radius:6px;padding:11px;position:relative;overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow);animation:fadeUp 0.4s ease both;backdrop-filter:blur(4px);transition:box-shadow 0.2s,border-color 0.2s,transform 0.15s;}
+.panel:hover{box-shadow:var(--shadow-lg);border-color:var(--border2);transform:translateY(-1px);}
+.panel::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--brown-light),var(--tan),var(--brown-light));opacity:0.6;}
+.panel-label{font-family:'Bebas Neue',sans-serif;font-size:0.82rem;letter-spacing:0.14em;color:var(--brown);text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.panel-label::after{content:'';flex:1;height:1.5px;background:linear-gradient(90deg,var(--border),transparent);}
+.panel-hide-btn{background:none;border:none;color:var(--subtle);cursor:pointer;font-size:0.65rem;padding:0 2px;line-height:1;transition:color 0.15s;flex-shrink:0;margin-left:2px;}
+.panel-hide-btn:hover{color:var(--red-dust);}
+
+/* QUICK LAUNCH */
+.launcher{grid-column:1;grid-row:2/4;animation-delay:0.05s;}
+.apps-grid{display:flex;flex-direction:column;gap:2px;flex:1;justify-content:space-between;}
+.app-btn{display:flex;align-items:center;gap:7px;padding:4px 7px;background:transparent;border:1px solid var(--border);border-radius:4px;cursor:pointer;text-decoration:none;color:var(--text-light);font-family:'Barlow Condensed',sans-serif;font-size:0.6rem;font-weight:700;letter-spacing:0.04em;transition:all 0.15s;flex-shrink:0;}
+.app-btn:hover{background:var(--surface2);border-color:var(--brown-mid);color:var(--brown);transform:translateX(2px);}
+.app-btn.blue:hover{background:var(--blue-dim);border-color:var(--blue-sky);color:var(--blue-bright);}
+.app-btn.amber:hover{background:var(--tan-dim);border-color:var(--tan);color:var(--dust);}
+.app-icon{font-size:0.85rem;flex-shrink:0;width:16px;text-align:center;}
+.note-input{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:4px;color:var(--text);font-family:'Barlow',sans-serif;font-size:0.56rem;padding:6px 8px;resize:none;outline:none;line-height:1.6;min-height:50px;transition:border-color 0.15s;}
+.note-input:focus{border-color:var(--blue-sky);background:var(--surface);}
+.note-input::placeholder{color:var(--subtle);}
+
+/* WEATHER + VA */
+.weather-va-row{grid-column:2;grid-row:2;display:flex;gap:8px;overflow:hidden;}
+.weather-panel{flex:1.4;animation-delay:0.1s;}
+.weather-main{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+.weather-icon{font-size:2rem;}
+.weather-temp{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--brown);line-height:1;}
+.weather-temp span{font-size:0.9rem;color:var(--muted);font-family:'Barlow',sans-serif;font-weight:400;}
+.weather-desc{font-family:'Barlow Condensed',sans-serif;font-size:0.58rem;color:var(--text-light);letter-spacing:0.06em;margin-top:2px;font-weight:700;text-transform:uppercase;}
+.weather-loc{font-size:0.38rem;color:var(--muted);letter-spacing:0.12em;margin-top:2px;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;}
+.weather-stats{display:grid;grid-template-columns:1fr 1fr;gap:4px;}
+.w-stat{background:var(--surface2);border:1px solid var(--border);padding:4px 6px;border-radius:4px;border-left:3px solid var(--blue-sky);}
+.w-stat-label{font-family:'Barlow Condensed',sans-serif;font-size:0.36rem;letter-spacing:0.14em;color:var(--muted);margin-bottom:2px;font-weight:700;text-transform:uppercase;}
+.w-stat-val{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;color:var(--brown);letter-spacing:0.04em;}
+.weather-loading{color:var(--muted);font-size:0.56rem;text-align:center;margin:auto;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:0.1em;}
+.va-col{flex:1;display:flex;flex-direction:column;gap:8px;min-width:0;}
+.va-panel{flex:1;animation-delay:0.12s;min-height:0;}
+.va-panel::before{background:linear-gradient(90deg,var(--purple-va),#b39ddb,var(--purple-va));opacity:0.7;}
+.va-panel .panel-label{color:#5c3a8a;font-size:0.7rem;}
+.va-task-list{display:flex;flex-direction:column;gap:2px;flex:1;overflow-y:auto;}
+.va-task-item{display:flex;align-items:center;gap:5px;font-size:0.54rem;color:var(--text-light);font-weight:500;padding:3px 5px;border-radius:4px;font-family:'Barlow',sans-serif;border-left:2px solid transparent;transition:background 0.15s;}
+.va-task-item:hover{background:var(--surface2);border-left-color:var(--purple-va);}
+.va-task-check{width:11px;height:11px;min-width:11px;border:1.5px solid var(--border2);border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:7px;transition:all 0.2s;color:#fff;cursor:pointer;flex-shrink:0;}
+.va-task-item.done .va-task-check{background:var(--purple-va);border-color:var(--purple-va);}
+.va-task-item.done .va-task-text{text-decoration:line-through;opacity:0.4;}
+.va-task-text{flex:1;line-height:1.3;cursor:pointer;}
+.va-task-del{background:none;border:none;color:transparent;cursor:pointer;font-size:0.54rem;padding:0 1px;transition:color 0.15s;flex-shrink:0;line-height:1;}
+.va-task-item:hover .va-task-del{color:var(--subtle);}
+.va-task-del:hover{color:var(--red-dust)!important;}
+.va-add-row{display:flex;gap:4px;margin-top:4px;flex-shrink:0;}
+.va-add-input{flex:1;background:var(--surface2);border:1.5px solid var(--border);color:var(--text);font-family:'Barlow',sans-serif;font-size:0.48rem;padding:3px 5px;outline:none;border-radius:3px;min-width:0;}
+.va-add-input:focus{border-color:var(--purple-va);}
+.va-add-input::placeholder{color:var(--subtle);}
+.va-add-btn{background:var(--purple-dim);border:1px solid rgba(124,92,191,0.4);color:var(--purple-va);font-family:'Bebas Neue',sans-serif;font-size:0.54rem;padding:3px 6px;cursor:pointer;border-radius:3px;letter-spacing:0.1em;transition:all 0.15s;white-space:nowrap;}
+.va-add-btn:hover{background:rgba(124,92,191,0.2);}
+
+/* KAI + DEVOTIONAL */
+.kai-dev-row{grid-column:3;grid-row:2;display:flex;gap:8px;overflow:hidden;}
+.kai-panel{flex:1.2;animation-delay:0.15s;min-height:0;}
+.kai-panel::before{background:linear-gradient(90deg,var(--blue-bright),var(--blue-sky),var(--blue-bright));opacity:0.7;}
+.kai-scroll{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:5px;}
+.kai-acct{border-radius:5px;padding:6px 8px;border:1.5px solid;display:flex;align-items:center;gap:7px;flex-shrink:0;}
+.kai-acct.biz{background:linear-gradient(135deg,#1a2e1a,#0a1a0a);border-color:rgba(0,255,136,0.3);}
+.kai-acct.tax{background:linear-gradient(135deg,#2a1a00,#1a0e00);border-color:rgba(255,180,0,0.3);}
+.kai-acct.pers{background:linear-gradient(135deg,#0a1a2e,#060e1a);border-color:rgba(74,159,212,0.3);}
+.kai-acct-icon{font-size:0.95rem;flex-shrink:0;}
+.kai-acct-info{flex:1;min-width:0;}
+.kai-acct-label{font-family:'Barlow Condensed',sans-serif;font-size:0.36rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:1px;}
+.kai-acct.biz .kai-acct-label{color:rgba(0,255,136,0.6);}
+.kai-acct.tax .kai-acct-label{color:rgba(255,180,0,0.6);}
+.kai-acct.pers .kai-acct-label{color:rgba(74,159,212,0.6);}
+.kai-acct-val{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;line-height:1;letter-spacing:0.04em;}
+.kai-acct.biz .kai-acct-val{color:#00ff88;text-shadow:0 0 10px rgba(0,255,136,0.5);}
+.kai-acct.tax .kai-acct-val{color:#ffb400;text-shadow:0 0 10px rgba(255,180,0,0.5);}
+.kai-acct.pers .kai-acct-val{color:#4a9fd4;text-shadow:0 0 10px rgba(74,159,212,0.5);}
+.kai-acct-ts{font-family:'Barlow Condensed',sans-serif;font-size:0.3rem;letter-spacing:0.08em;margin-top:1px;color:rgba(255,255,255,0.22);}
+.kai-acct-right{display:flex;gap:3px;flex-shrink:0;align-items:center;}
+.kai-micro-input{width:58px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);color:#fff;font-family:'Barlow',sans-serif;font-size:0.44rem;padding:3px 4px;outline:none;border-radius:3px;}
+.kai-micro-input::placeholder{color:rgba(255,255,255,0.25);}
+.kai-micro-btn{border:none;font-family:'Bebas Neue',sans-serif;font-size:0.5rem;padding:3px 5px;cursor:pointer;border-radius:3px;letter-spacing:0.1em;transition:all 0.15s;white-space:nowrap;}
+.kai-acct.biz .kai-micro-btn{background:rgba(0,255,136,0.2);color:#00ff88;border:1px solid rgba(0,255,136,0.4);}
+.kai-acct.tax .kai-micro-btn{background:rgba(255,180,0,0.2);color:#ffb400;border:1px solid rgba(255,180,0,0.4);}
+.kai-acct.pers .kai-micro-btn{background:rgba(74,159,212,0.2);color:#4a9fd4;border:1px solid rgba(74,159,212,0.4);}
+.kai-micro-btn:hover{filter:brightness(1.3);}
+.kai-total-row{display:flex;align-items:center;justify-content:space-between;background:rgba(30,15,6,0.5);border:1px solid var(--border);border-radius:4px;padding:4px 8px;flex-shrink:0;}
+.kai-total-label{font-family:'Barlow Condensed',sans-serif;font-size:0.38rem;font-weight:700;letter-spacing:0.16em;color:var(--subtle);text-transform:uppercase;}
+.kai-total-val{font-family:'Bebas Neue',sans-serif;font-size:0.88rem;color:var(--tan-light);}
+.devotional-panel{flex:1;animation-delay:0.17s;min-height:0;}
+.devotional-panel::before{background:linear-gradient(90deg,#8b5e3c,#d4a96a,#8b5e3c);opacity:0.8;}
+.devotional-body{flex:1;display:flex;flex-direction:column;justify-content:center;gap:5px;}
+.devotional-verse{font-family:'Barlow',sans-serif;font-size:0.55rem;line-height:1.65;color:var(--text-light);font-style:italic;background:var(--surface2);border-left:3px solid var(--tan);padding:7px 9px;border-radius:0 4px 4px 0;animation:devFade 0.8s ease both;}
+.devotional-ref{font-family:'Bebas Neue',sans-serif;font-size:0.65rem;color:var(--brown);letter-spacing:0.12em;text-align:right;margin-top:2px;}
+.devotional-date{font-family:'Barlow Condensed',sans-serif;font-size:0.33rem;letter-spacing:0.14em;color:var(--muted);text-transform:uppercase;text-align:center;margin-top:3px;}
+
+/* TASKS */
+.tasks-panel{grid-column:4;grid-row:2;animation-delay:0.2s;}
+.task-list{display:flex;flex-direction:column;gap:2px;flex:1;overflow-y:auto;}
+.task-item{display:flex;align-items:center;gap:6px;font-size:0.6rem;color:var(--text-light);font-weight:500;padding:3px 5px;border-radius:4px;font-family:'Barlow',sans-serif;border-left:2px solid transparent;transition:background 0.15s;}
+.task-item:hover{background:var(--surface2);color:var(--brown);border-left-color:var(--blue-sky);}
+.task-check{width:13px;height:13px;min-width:13px;border:1.5px solid var(--border2);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:8px;transition:all 0.2s;color:#fff;cursor:pointer;flex-shrink:0;}
+.task-item.done .task-check{background:var(--green-gum);border-color:var(--green-gum);}
+.task-item.done .task-text{text-decoration:line-through;opacity:0.4;}
+.task-text{flex:1;line-height:1.3;cursor:pointer;}
+.task-del{background:none;border:none;color:transparent;cursor:pointer;font-size:0.62rem;padding:0 1px;transition:color 0.15s;flex-shrink:0;line-height:1;}
+.task-item:hover .task-del{color:var(--subtle);}
+.task-del:hover{color:var(--red-dust)!important;}
+.task-add-row{display:flex;gap:4px;margin-top:6px;flex-shrink:0;}
+.task-add-input{flex:1;background:var(--surface2);border:1.5px solid var(--border);color:var(--text);font-family:'Barlow',sans-serif;font-size:0.54rem;padding:4px 7px;outline:none;border-radius:4px;transition:all 0.15s;}
+.task-add-input:focus{border-color:var(--blue-sky);background:var(--surface);}
+.task-add-input::placeholder{color:var(--subtle);}
+.task-add-btn{background:linear-gradient(135deg,var(--brown),var(--brown-mid));border:none;color:var(--tan-light);font-family:'Bebas Neue',sans-serif;font-size:0.62rem;padding:4px 9px;cursor:pointer;border-radius:4px;letter-spacing:0.1em;transition:all 0.15s;white-space:nowrap;}
+.task-add-btn:hover{background:linear-gradient(135deg,var(--brown-mid),var(--dust));}
+
+/* MAHI + PO */
+.mahi-po-row{grid-column:2/4;grid-row:3;display:flex;gap:8px;overflow:hidden;}
+.jobs-panel{flex:3;animation-delay:0.25s;}
+.jobs-table-wrap{flex:1;overflow-y:auto;}
+table{width:100%;border-collapse:collapse;font-size:0.58rem;}
+th{font-family:'Bebas Neue',sans-serif;font-size:0.58rem;font-weight:400;letter-spacing:0.14em;color:var(--brown);text-transform:uppercase;padding:3px 5px;border-bottom:2px solid var(--border2);text-align:left;white-space:nowrap;}
+td{padding:3px 5px;border-bottom:1px solid var(--border);color:var(--text-light);vertical-align:middle;font-family:'Barlow',sans-serif;font-weight:500;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--surface2);color:var(--brown);}
+.dyn-sel{appearance:none;-webkit-appearance:none;border:1.5px solid;border-radius:20px;padding:2px 18px 2px 7px;font-family:'Barlow Condensed',sans-serif;font-size:0.4rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;cursor:pointer;outline:none;background-repeat:no-repeat;background-position:right 4px center;background-size:7px;transition:all 0.15s;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 10 10'%3E%3Cpath d='M2 3l3 4 3-4' stroke='%23888' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");}
+.dyn-sel option{background:var(--surface);color:var(--text);font-size:0.65rem;}
+.jbtn{background:none;border:1px solid var(--border);border-radius:3px;cursor:pointer;font-size:0.68rem;padding:2px 4px;transition:all 0.15s;line-height:1;}
+.jbtn:hover{background:var(--surface2);transform:scale(1.1);}
+.jbtn.has-drive{border-color:rgba(74,159,212,0.5);background:rgba(74,159,212,0.08);}
+.jbtn.has-comments{border-color:rgba(90,138,60,0.5);background:rgba(90,138,60,0.08);}
+.add-row{display:flex;gap:5px;margin-top:6px;flex-shrink:0;flex-wrap:nowrap;align-items:center;}
+.add-input{background:var(--surface2);border:1.5px solid var(--border);color:var(--text);font-family:'Barlow',sans-serif;font-size:0.55rem;padding:4px 7px;outline:none;border-radius:4px;transition:all 0.15s;min-width:0;}
+.add-input:focus{border-color:var(--blue-sky);background:var(--surface);}
+.add-input::placeholder{color:var(--subtle);}
+.add-input option{background:var(--surface);color:var(--text);}
+.add-btn{background:linear-gradient(135deg,var(--brown),var(--brown-mid));border:none;color:var(--tan-light);font-family:'Bebas Neue',sans-serif;font-size:0.65rem;padding:4px 11px;cursor:pointer;border-radius:4px;letter-spacing:0.1em;transition:all 0.15s;white-space:nowrap;box-shadow:0 2px 8px rgba(61,32,16,0.3);flex-shrink:0;}
+.add-btn:hover{background:linear-gradient(135deg,var(--brown-mid),var(--dust));transform:translateY(-1px);}
+.po-panel{flex:1;animation-delay:0.27s;}
+.po-panel::before{background:linear-gradient(90deg,#6b3a2a,#c4893a,#6b3a2a);opacity:0.7;}
+.po-table-wrap{flex:1;overflow-y:auto;}
+.po-table{width:100%;border-collapse:collapse;font-size:0.54rem;}
+.po-table th{font-family:'Bebas Neue',sans-serif;font-size:0.52rem;font-weight:400;letter-spacing:0.12em;color:var(--brown-mid);text-transform:uppercase;padding:3px 4px;border-bottom:2px solid var(--border2);text-align:left;white-space:nowrap;}
+.po-table td{padding:3px 4px;border-bottom:1px solid var(--border);color:var(--text-light);vertical-align:middle;}
+.po-table tr:last-child td{border-bottom:none;}
+.po-table tr:hover td{background:var(--surface2);}
+.po-add-row{display:flex;gap:3px;margin-top:5px;flex-shrink:0;flex-wrap:nowrap;align-items:center;}
+.po-add-input{background:var(--surface2);border:1.5px solid var(--border);color:var(--text);font-family:'Barlow',sans-serif;font-size:0.48rem;padding:3px 5px;outline:none;border-radius:3px;min-width:0;}
+.po-add-input:focus{border-color:var(--dust);}
+.po-add-input::placeholder{color:var(--subtle);}
+.po-add-input option{background:var(--surface);color:var(--text);}
+.po-add-btn{background:linear-gradient(135deg,#6b3a2a,#8b4f22);border:none;color:var(--tan-light);font-family:'Bebas Neue',sans-serif;font-size:0.6rem;padding:3px 7px;cursor:pointer;border-radius:3px;letter-spacing:0.1em;transition:all 0.15s;white-space:nowrap;flex-shrink:0;}
+.po-add-btn:hover{background:linear-gradient(135deg,#8b4f22,var(--dust));transform:translateY(-1px);}
+
+/* MOKO */
+.moko-panel{grid-column:4;grid-row:3;animation-delay:0.3s;background:linear-gradient(160deg,var(--moko-bg),var(--moko-bg2))!important;border-color:var(--moko-border)!important;}
+.moko-panel:hover{border-color:rgba(0,255,136,0.6)!important;box-shadow:0 0 30px rgba(0,255,136,0.1),var(--shadow-lg)!important;}
+.moko-panel::before{background:linear-gradient(90deg,transparent,var(--neon),#39ff14,var(--neon),transparent)!important;opacity:0.9!important;}
+.moko-panel .panel-label{color:var(--neon)!important;text-shadow:0 0 8px rgba(0,255,136,0.5);}
+.moko-panel .panel-label::after{background:linear-gradient(90deg,rgba(0,255,136,0.3),transparent)!important;}
+.moko-koru-bg{position:absolute;inset:0;pointer-events:none;z-index:0;opacity:0.07;overflow:hidden;}
+.aus-silhouette{position:absolute;right:-5px;bottom:28px;width:70px;height:55px;opacity:0.12;pointer-events:none;}
+.moko-board{background:linear-gradient(160deg,#020808,#061008);border-radius:6px;overflow:hidden;margin-bottom:6px;border:1px solid rgba(0,255,136,0.2);flex-shrink:0;box-shadow:0 0 20px rgba(0,255,136,0.08);position:relative;}
+.moko-board-header{background:linear-gradient(90deg,rgba(0,30,15,0.9),rgba(0,20,10,0.9),rgba(0,30,15,0.9));padding:4px 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(0,255,136,0.15);}
+.moko-board-title{font-family:'Bebas Neue',sans-serif;font-size:0.72rem;letter-spacing:0.14em;color:var(--neon);text-shadow:var(--neon-glow);}
+.moko-rev-section{padding:7px 10px 4px;}
+.moko-rev-eyebrow{font-family:'Barlow Condensed',sans-serif;font-size:0.36rem;font-weight:700;letter-spacing:0.2em;color:rgba(0,255,136,0.4);text-transform:uppercase;margin-bottom:1px;}
+.moko-rev{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--neon);line-height:1;letter-spacing:0.04em;text-shadow:var(--neon-glow);animation:neonPulse 4s ease-in-out infinite;}
+.moko-vibe{font-family:'Barlow Condensed',sans-serif;font-size:0.4rem;font-weight:600;color:rgba(0,255,136,0.6);margin-top:2px;letter-spacing:0.08em;text-transform:uppercase;}
+.moko-progress-wrap{padding:0 10px 7px;}
+.moko-bar-track{height:4px;background:rgba(0,255,136,0.1);border-radius:2px;overflow:hidden;margin-bottom:3px;}
+.moko-bar-fill{height:100%;background:linear-gradient(90deg,#006633,var(--neon),#39ff14);border-radius:2px;transition:width 0.7s cubic-bezier(.4,0,.2,1);box-shadow:0 0 8px rgba(0,255,136,0.6);}
+.moko-bar-label{font-family:'Barlow Condensed',sans-serif;font-size:0.36rem;color:rgba(0,255,136,0.4);letter-spacing:0.1em;}
+.moko-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(0,255,136,0.06);border-top:1px solid rgba(0,255,136,0.1);}
+.moko-stat{padding:5px 8px;background:rgba(0,0,0,0.3);}
+.moko-stat-label{font-family:'Barlow Condensed',sans-serif;font-size:0.34rem;font-weight:700;letter-spacing:0.14em;color:rgba(0,255,136,0.35);text-transform:uppercase;margin-bottom:1px;}
+.moko-stat-val{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:0.04em;}
+.moko-stat-val.neon{color:var(--neon);text-shadow:var(--neon-glow);}
+.moko-stat-val.gold{color:var(--neon-gold);text-shadow:var(--neon-gold-glow);}
+.moko-inputs{display:flex;flex-direction:column;gap:3px;flex:1;justify-content:flex-end;}
+.moko-row{display:flex;gap:3px;}
+.moko-input{flex:1;background:rgba(0,255,136,0.04);border:1px solid rgba(0,255,136,0.2);color:#cce8d8;font-family:'Barlow',sans-serif;font-size:0.52rem;padding:4px 7px;outline:none;border-radius:4px;transition:all 0.15s;}
+.moko-input:focus{border-color:var(--neon);box-shadow:0 0 0 2px rgba(0,255,136,0.15);}
+.moko-input::placeholder{color:rgba(0,255,136,0.25);}
+.moko-btn{background:rgba(0,255,136,0.12);border:1px solid rgba(0,255,136,0.35);color:var(--neon);font-family:'Bebas Neue',sans-serif;font-size:0.62rem;padding:4px 9px;cursor:pointer;border-radius:4px;letter-spacing:0.1em;transition:all 0.15s;white-space:nowrap;}
+.moko-btn:hover{background:rgba(0,255,136,0.22);box-shadow:var(--neon-glow);}
+::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-track{background:var(--surface2);}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+</style>
+</head>
+<body>
+<div class="sky-bg"></div>
+<div class="silhouette">
+  <svg viewBox="0 0 1440 180" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="120" width="1440" height="60" fill="#1e0f06"/>
+    <path d="M0,130 Q80,100 160,118 Q240,135 320,110 Q400,88 480,115 Q560,138 640,108 Q720,80 800,112 Q880,138 960,105 Q1040,75 1120,108 Q1200,135 1280,112 Q1360,92 1440,118 L1440,180 L0,180 Z" fill="#3d2010"/>
+    <path d="M0,140 Q120,125 240,138 Q360,150 480,130 Q600,112 720,135 Q840,155 960,130 Q1080,108 1200,135 Q1320,158 1440,140 L1440,180 L0,180 Z" fill="#2a1508"/>
+    <g fill="#1e0f06"><rect x="60" y="105" width="6" height="25"/><ellipse cx="63" cy="100" rx="12" ry="14"/><rect x="110" y="108" width="5" height="22"/><ellipse cx="112" cy="103" rx="10" ry="12"/><rect x="145" y="100" width="7" height="30"/><ellipse cx="148" cy="94" rx="14" ry="16"/><rect x="1200" y="103" width="6" height="27"/><ellipse cx="1203" cy="97" rx="13" ry="15"/><rect x="1300" y="100" width="7" height="30"/><ellipse cx="1303" cy="94" rx="14" ry="16"/><rect x="1360" y="108" width="5" height="22"/><ellipse cx="1362" cy="103" rx="9" ry="11"/></g>
+    <g transform="translate(820,72)" fill="#1a0c04"><ellipse cx="0" cy="30" rx="18" ry="13"/><rect x="-6" y="13" width="12" height="16" rx="4"/><ellipse cx="0" cy="9" rx="11" ry="10"/><ellipse cx="8" cy="12" rx="7" ry="5"/><polygon points="-9,3 -14,-10 -3,1"/><polygon points="8,3 16,-8 6,1"/><rect x="-14" y="38" width="5" height="22" rx="2"/><rect x="-2" y="38" width="5" height="22" rx="2"/><ellipse cx="14" cy="36" rx="10" ry="9"/><rect x="8" y="44" width="5" height="18" rx="2"/><path d="M18,28 Q30,15 26,5 Q24,0 22,4 Q25,10 16,22 Z"/></g>
+  </svg>
+</div>
+<div class="grain"></div>
+<div class="sync-bar" id="syncBar"><div class="sync-dot"></div><span id="syncLabel">Connecting...</span></div>
+
+<!-- LOGIN -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo-row">
+      <div class="login-logo-icon">🏠</div>
+      <div><div class="login-title">Roofing Down Under</div><div class="login-sub-text">CMD Centre v5.0 · Secure Access</div></div>
+    </div>
+    <div class="login-label">Username</div>
+    <input class="login-input" id="loginUser" placeholder="e.g. ronny" autocomplete="username" onkeydown="if(event.key==='Enter')document.getElementById('loginPass').focus()">
+    <div class="login-label">Password</div>
+    <input class="login-input" id="loginPass" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" id="loginBtn" onclick="doLogin()">LOGIN TO RDU</button>
+    <div class="login-error" id="loginErr"></div>
+    <div class="login-foot">🐾 Cattle Dogs. Roofing. Repeat.</div>
+  </div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div class="modal-ov" id="settingsModal" style="display:none">
+  <div class="modal-box">
+    <div class="modal-head">⚙️ Settings — RDU Command Centre<button class="modal-close" onclick="closeModal('settingsModal')">✕</button></div>
+    <div class="modal-tabs">
+      <button class="mtab active" id="tab-panels" onclick="showSettingsTab('panels',this)">Panels</button>
+      <button class="mtab" id="tab-team" onclick="showSettingsTab('team',this)">Team</button>
+      <button class="mtab" id="tab-activity" onclick="showSettingsTab('activity',this)">Activity</button>
+      <button class="mtab" id="tab-account" onclick="showSettingsTab('account',this)">Account</button>
+    </div>
+    <div id="settingsBody" class="modal-body"></div>
+  </div>
+</div>
+
+<!-- COMMENTS MODAL -->
+<div class="modal-ov" id="commentsModal" style="display:none">
+  <div class="modal-box modal-sm" style="max-height:72vh;">
+    <div class="modal-head">💬 Job Comments — <span id="commentJobLabel" style="color:var(--tan)"></span><button class="modal-close" onclick="closeModal('commentsModal')">✕</button></div>
+    <div id="commentsList" class="modal-body"></div>
+    <div class="comment-add-row">
+      <textarea class="comment-textarea" id="commentInput" placeholder="Add a comment..."></textarea>
+      <button class="comment-post-btn" onclick="submitComment()">POST</button>
+    </div>
+  </div>
+</div>
+
+<!-- DRIVE MODAL -->
+<div class="modal-ov" id="driveModal" style="display:none">
+  <div class="modal-box modal-sm">
+    <div class="modal-head">📁 Job Files — <span id="driveJobLabel" style="color:var(--tan)"></span><button class="modal-close" onclick="closeModal('driveModal')">✕</button></div>
+    <div id="driveContent" class="modal-body"></div>
+  </div>
+</div>
+
+<!-- MAIN GRID -->
+<div class="wrap" id="mainWrap" style="display:none">
+  <header>
+    <div class="logo-block">
+      <div class="logo-mark">🏠</div>
+      <div><div class="logo-title">Roofing Down Under</div><div class="logo-sub">CMD Centre v5.0 · Ronny Lee Couling · Lic 352581C · ABN 96 899 143 964</div></div>
+      <div class="colorbond-badge"><span class="cb-word">COLORBOND<sup style="font-size:0.5em">®</sup></span><span class="cb-reg">Accredited</span></div>
+    </div>
+    <div class="header-centre">
+      <div class="status-pill"><div class="status-dot green"></div>Systems Online</div>
+      <div class="status-pill"><div class="status-dot blue"></div>ABN Active</div>
+      <div class="status-pill"><div class="status-dot amber"></div>VA Connected</div>
+    </div>
+    <div class="header-right">
+      <div style="text-align:right;"><div class="live-time" id="clock">--:--:--</div><div class="live-date" id="dateDisplay">Loading...</div></div>
+      <div class="user-pill" id="userPill" style="display:none"><div class="user-avatar">👤</div><span id="userPillName">—</span></div>
+      <button class="settings-btn" onclick="openSettings()" title="Settings">⚙️</button>
+    </div>
+  </header>
+
+  <!-- QUICK LAUNCH -->
+  <div class="panel launcher" id="panel-launcher">
+    <div class="panel-label">Quick Launch<button class="panel-hide-btn admin-only" onclick="togglePanel('launcher')" title="Hide panel">—</button></div>
+    <div class="apps-grid">
+      <a href="https://go.xero.com" target="_blank" class="app-btn blue"><span class="app-icon">💼</span>Xero</a>
+      <a href="https://app.roofr.com" target="_blank" class="app-btn amber"><span class="app-icon">🏠</span>Roofr</a>
+      <a href="https://web.whatsapp.com" target="_blank" class="app-btn"><span class="app-icon">💬</span>WhatsApp</a>
+      <a href="https://drive.google.com" target="_blank" class="app-btn blue"><span class="app-icon">📁</span>Drive</a>
+      <a href="https://mail.google.com" target="_blank" class="app-btn amber"><span class="app-icon">✉️</span>Gmail</a>
+      <a href="https://calendar.google.com" target="_blank" class="app-btn blue"><span class="app-icon">📅</span>Calendar</a>
+      <a href="https://claude.ai" target="_blank" class="app-btn"><span class="app-icon">🤖</span>Claude</a>
+      <a href="https://open.spotify.com" target="_blank" class="app-btn"><span class="app-icon">🎵</span>Spotify</a>
+      <a href="https://www.instagram.com" target="_blank" class="app-btn amber"><span class="app-icon">📸</span>Instagram</a>
+      <a href="https://messages.google.com" target="_blank" class="app-btn"><span class="app-icon">📱</span>Messages</a>
+      <a href="https://docs.google.com/spreadsheets/d/10HonAOsH6DY3njzkUyIWusl0nyA_a3VOOAgKD4Rz8wQ" target="_blank" class="app-btn blue"><span class="app-icon">📊</span>Master GSheet</a>
+      <a href="https://notebooklm.google.com" target="_blank" class="app-btn amber"><span class="app-icon">📓</span>NotebookLM</a>
+    </div>
+    <div style="margin-top:8px;">
+      <div class="panel-label" style="margin-bottom:4px;font-size:0.7rem;">Notes</div>
+      <textarea class="note-input" id="notesArea" placeholder="Rocky 🐾 — worksite drop 8am&#10;Toneth: invoice HCM Build&#10;Myla: chase Lloyds deposit"></textarea>
+    </div>
+  </div>
+
+  <!-- WEATHER + VA -->
+  <div class="weather-va-row">
+    <div class="panel weather-panel" id="panel-weather">
+      <div class="panel-label">Weather — Sutherland Shire<button class="panel-hide-btn admin-only" onclick="togglePanel('weather')" title="Hide panel">—</button></div>
+      <div id="weatherContent" class="weather-loading">Fetching conditions...</div>
+    </div>
+    <div class="va-col">
+      <div class="panel va-panel" id="panel-myla">
+        <div class="panel-label">Myla Tasks 🟣<button class="panel-hide-btn admin-only" onclick="togglePanel('myla')" title="Hide panel">—</button></div>
+        <div class="va-task-list" id="mylaTaskList"></div>
+        <div class="va-add-row"><input class="va-add-input" id="mylaInput" placeholder="Add task..." onkeydown="if(event.key==='Enter')addVaTask('myla')"><button class="va-add-btn" onclick="addVaTask('myla')">+ Add</button></div>
+      </div>
+      <div class="panel va-panel" id="panel-toneth">
+        <div class="panel-label">Toneth Tasks 🟣<button class="panel-hide-btn admin-only" onclick="togglePanel('toneth')" title="Hide panel">—</button></div>
+        <div class="va-task-list" id="tonethTaskList"></div>
+        <div class="va-add-row"><input class="va-add-input" id="tonethInput" placeholder="Add task..." onkeydown="if(event.key==='Enter')addVaTask('toneth')"><button class="va-add-btn" onclick="addVaTask('toneth')">+ Add</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KAI + DEVOTIONAL -->
+  <div class="kai-dev-row">
+    <div class="panel kai-panel" id="panel-kai">
+      <div class="panel-label">KAI — Bank Balances 💵<button class="panel-hide-btn admin-only" onclick="togglePanel('kai')" title="Hide panel">—</button></div>
+      <div class="kai-scroll">
+        <div class="kai-acct biz"><div class="kai-acct-icon">🏦</div><div class="kai-acct-info"><div class="kai-acct-label">Business</div><div class="kai-acct-val" id="kaiBiz">$—</div><div class="kai-acct-ts" id="kaiBizTs">Not set</div></div><div class="kai-acct-right"><input class="kai-micro-input" id="kaiBizIn" placeholder="$..." onkeydown="if(event.key==='Enter')setKai('biz')"><button class="kai-micro-btn" onclick="setKai('biz')">SET</button></div></div>
+        <div class="kai-acct tax"><div class="kai-acct-icon">📋</div><div class="kai-acct-info"><div class="kai-acct-label">Tax Hold</div><div class="kai-acct-val" id="kaiTax">$—</div><div class="kai-acct-ts" id="kaiTaxTs">Not set</div></div><div class="kai-acct-right"><input class="kai-micro-input" id="kaiTaxIn" placeholder="$..." onkeydown="if(event.key==='Enter')setKai('tax')"><button class="kai-micro-btn" onclick="setKai('tax')">SET</button></div></div>
+        <div class="kai-acct pers"><div class="kai-acct-icon">👤</div><div class="kai-acct-info"><div class="kai-acct-label">Personal</div><div class="kai-acct-val" id="kaiPers">$—</div><div class="kai-acct-ts" id="kaiPersTs">Not set</div></div><div class="kai-acct-right"><input class="kai-micro-input" id="kaiPersIn" placeholder="$..." onkeydown="if(event.key==='Enter')setKai('pers')"><button class="kai-micro-btn" onclick="setKai('pers')">SET</button></div></div>
+        <div class="kai-total-row"><span class="kai-total-label">Total Across Accounts</span><span class="kai-total-val" id="kaiTotal">$—</span></div>
+      </div>
+    </div>
+    <div class="panel devotional-panel" id="panel-devotional">
+      <div class="panel-label">Daily Devotional 📖<button class="panel-hide-btn admin-only" onclick="togglePanel('devotional')" title="Hide panel">—</button></div>
+      <div class="devotional-body" id="devotionalBody"></div>
+    </div>
+  </div>
+
+  <!-- TASKS -->
+  <div class="panel tasks-panel" id="panel-tasks">
+    <div class="panel-label">⚡ Super Human Tasks<button class="panel-hide-btn admin-only" onclick="togglePanel('tasks')" title="Hide panel">—</button></div>
+    <div class="task-list" id="taskList"></div>
+    <div class="task-add-row"><input class="task-add-input" id="newTaskInput" placeholder="Add a task..." onkeydown="if(event.key==='Enter')addTask()"><button class="task-add-btn" onclick="addTask()">+ Add</button></div>
+  </div>
+
+  <!-- MAHI + PO -->
+  <div class="mahi-po-row">
+    <div class="panel jobs-panel" id="panel-jobs">
+      <div class="panel-label">MAHI — Live Projects 🔨<button class="panel-hide-btn admin-only" onclick="togglePanel('jobs')" title="Hide panel">—</button></div>
+      <div class="jobs-table-wrap">
+        <table><thead><tr>
+          <th style="width:56px">Quote #</th>
+          <th>Client</th>
+          <th>Address</th>
+          <th style="width:62px">Value</th>
+          <th style="width:110px">Status</th>
+          <th style="width:90px">Invoice</th>
+          <th style="width:24px" title="Comments">💬</th>
+          <th style="width:24px" title="Drive Files">📁</th>
+          <th style="width:16px"></th>
+        </tr></thead><tbody id="jobBody"></tbody></table>
+      </div>
+      <div class="add-row">
+        <input class="add-input" id="jobQuote" placeholder="Quote #" style="width:60px;flex:none;">
+        <input class="add-input" id="jobName" placeholder="Client name..." style="flex:2">
+        <input class="add-input" id="jobAddr" placeholder="Address..." style="flex:2.2">
+        <input class="add-input" id="jobValue" placeholder="$Value..." style="width:65px;flex:none;">
+        <select id="jobStage" class="add-input" style="flex:1.5">
+          <option value="in-progress">In Progress</option><option value="needs-qdraft">Needs Q-Draft</option>
+          <option value="quoted">Quoted</option><option value="quote-accepted">Quote Accepted</option>
+          <option value="deposit-paid">Deposit Paid</option><option value="materials-ordered">Materials Ordered</option>
+          <option value="materials-onsite">Materials On-Site</option><option value="works-commenced">Works Commenced</option>
+          <option value="progress-sent">Progress Sent</option><option value="progress-paid">Progress Paid</option>
+          <option value="practical-completion">Practical Completion</option><option value="final-sent">Final Invoice Sent</option>
+          <option value="final-paid">Final Paid</option><option value="complete">Complete ✓</option>
+          <option value="waiting-ronny">Waiting Ronny</option><option value="waiting-client">Waiting Client</option>
+        </select>
+        <button class="add-btn" onclick="addJob()">+ Add Job</button>
+      </div>
+    </div>
+    <div class="panel po-panel" id="panel-po">
+      <div class="panel-label">PO — Subcontractors 📄<button class="panel-hide-btn admin-only" onclick="togglePanel('po')" title="Hide panel">—</button></div>
+      <div class="po-table-wrap">
+        <table class="po-table"><thead><tr><th>PO #</th><th>Address</th><th>Name</th><th>Status</th><th style="width:14px"></th></tr></thead><tbody id="poBody"></tbody></table>
+      </div>
+      <div class="po-add-row">
+        <input class="po-add-input" id="poNum" placeholder="PO #" style="width:42px;flex:none;">
+        <input class="po-add-input" id="poAddr" placeholder="Address..." style="flex:2;">
+        <input class="po-add-input" id="poName" placeholder="Sub name..." style="width:62px;flex:none;">
+        <select id="poStatus" class="po-add-input" style="width:82px;flex:none;">
+          <option value="drafted">Drafted</option><option value="sent">Sent</option>
+          <option value="in-progress">In Progress</option><option value="works-complete">Works Complete</option>
+          <option value="invoice-received">Inv. Received</option><option value="paid">Paid ✓</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+        <button class="po-add-btn" onclick="addPO()">+ Add</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOKO -->
+  <div class="panel moko-panel" id="panel-moko">
+    <div class="moko-koru-bg"><svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="#00ff88" stroke-width="1.5"><path d="M20,160 C20,130 35,115 55,118 C75,121 82,140 72,152 C62,164 45,160 40,148 C35,136 42,122 55,122 C68,122 74,134 68,144"/><path d="M15,165 C8,145 12,125 28,110"/></g></svg></div>
+    <div class="panel-label" style="position:relative;z-index:1;">MOKO — Ronny's Scoreboard 👑</div>
+    <div class="moko-board">
+      <svg class="aus-silhouette" viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg"><path d="M18,8 L22,5 L30,4 L40,6 L48,10 L52,8 L58,10 L64,16 L66,24 L62,30 L64,36 L61,44 L56,50 L52,54 L48,52 L44,58 L40,62 L35,60 L30,64 L25,62 L20,56 L15,50 L10,42 L8,34 L10,26 L14,18 Z" fill="#00ff88"/><path d="M58,10 L62,4 L60,2 L56,6 Z" fill="#00ff88"/></svg>
+      <div class="moko-board-header"><span class="moko-board-title">RONNY'S SCOREBOARD · 2026</span><span>🐾</span></div>
+      <div class="moko-rev-section"><div class="moko-rev-eyebrow">// Total Revenue</div><div class="moko-rev" id="mokoRev">$0</div><div class="moko-vibe" id="mokoVibe">Set your revenue below to track progress! 🔥</div></div>
+      <div class="moko-progress-wrap"><div class="moko-bar-track"><div class="moko-bar-fill" id="mokoBar" style="width:0%"></div></div><div class="moko-bar-label" id="mokoBarLabel">Set a revenue and target below</div></div>
+      <div class="moko-stats"><div class="moko-stat"><div class="moko-stat-label">Quotes Out</div><div class="moko-stat-val neon" id="mokoQuotes">0</div></div><div class="moko-stat"><div class="moko-stat-label">Jobs Won</div><div class="moko-stat-val gold" id="mokoWon">0</div></div></div>
+    </div>
+    <div class="moko-inputs" style="position:relative;z-index:1;">
+      <div class="moko-row"><input class="moko-input" id="mokoRevInput" placeholder="Revenue $..."><button class="moko-btn" onclick="updateMokoRev()">SET</button></div>
+      <div class="moko-row"><input class="moko-input" id="mokoTargetInput" placeholder="Target $..."><button class="moko-btn" onclick="updateMokoTarget()">TARGET</button></div>
+      <div class="moko-row"><input class="moko-input" id="mokoQInput" placeholder="Quotes #"><input class="moko-input" id="mokoWInput" placeholder="Won #"><button class="moko-btn" onclick="updateMokoStats()">UPD</button></div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-left">RDU Command Centre v5.0 · Cloud Sync Active · RoofingDownUnder.net · Sydney NSW AU</div>
+    <div class="footer-right">
+      <span class="footer-tag">Lic 352581C · ABN 96 899 143 964</span>
+      <span class="footer-tag">Myla · Toneth · Harry · Pauly · Josh</span>
+      <span class="footer-tag">🐾 Cattle Dogs. Roofing. Repeat.</span>
+    </div>
+  </footer>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// RDU COMMAND CENTRE v5.0 — ALL SYSTEMS
+// ═══════════════════════════════════════════════════════
+
+const SHEET = 'https://script.google.com/macros/s/AKfycbxREWhTD51GJeloL2iAz1aapddtaE5OATu71HBAIO86R_eByoJSujAcgkNoW6eilheEKg/exec';
+const LS_KEY  = 'rdu_data';
+const SES_KEY = 'rdu_session';
+
+let D = {};
+let CU = null; // current user
+let _commentJobId = null;
+let _driveJobId   = null;
+
+// ── COLOUR MAPS ──────────────────────────────────────
+const SC = {
+  'in-progress':         {bg:'rgba(90,138,60,0.12)',   c:'#5a8a3c', b:'rgba(90,138,60,0.35)'},
+  'needs-qdraft':        {bg:'rgba(74,159,212,0.12)',  c:'#2e8bc0', b:'rgba(74,159,212,0.35)'},
+  'quoted':              {bg:'rgba(74,159,212,0.12)',  c:'#2e8bc0', b:'rgba(74,159,212,0.35)'},
+  'quote-accepted':      {bg:'rgba(0,180,100,0.12)',   c:'#00a060', b:'rgba(0,180,100,0.35)'},
+  'deposit-paid':        {bg:'rgba(90,138,60,0.12)',   c:'#5a8a3c', b:'rgba(90,138,60,0.35)'},
+  'materials-ordered':   {bg:'rgba(124,92,191,0.12)',  c:'#7c5cbf', b:'rgba(124,92,191,0.30)'},
+  'materials-onsite':    {bg:'rgba(124,92,191,0.15)',  c:'#9070d0', b:'rgba(124,92,191,0.35)'},
+  'works-commenced':     {bg:'rgba(0,180,100,0.12)',   c:'#00a060', b:'rgba(0,180,100,0.30)'},
+  'progress-sent':       {bg:'rgba(196,137,58,0.12)',  c:'#c4893a', b:'rgba(196,137,58,0.35)'},
+  'progress-paid':       {bg:'rgba(0,180,100,0.15)',   c:'#009050', b:'rgba(0,180,100,0.35)'},
+  'practical-completion':{bg:'rgba(196,137,58,0.12)',  c:'#c4893a', b:'rgba(196,137,58,0.35)'},
+  'final-sent':          {bg:'rgba(196,137,58,0.15)',  c:'#d4893a', b:'rgba(196,137,58,0.40)'},
+  'final-paid':          {bg:'rgba(0,200,100,0.18)',   c:'#007840', b:'rgba(0,200,100,0.40)'},
+  'complete':            {bg:'rgba(0,200,100,0.22)',   c:'#005830', b:'rgba(0,200,100,0.50)'},
+  'waiting-ronny':       {bg:'rgba(196,137,58,0.12)',  c:'#c4893a', b:'rgba(196,137,58,0.35)'},
+  'waiting-client':      {bg:'rgba(192,57,43,0.10)',   c:'#c0392b', b:'rgba(192,57,43,0.30)'},
+};
+const IC = {
+  'not-invoiced': {bg:'rgba(120,120,120,0.1)', c:'#888',    b:'rgba(130,130,130,0.3)'},
+  'deposit-sent': {bg:'rgba(74,159,212,0.12)', c:'#2e8bc0', b:'rgba(74,159,212,0.35)'},
+  'deposit-paid': {bg:'rgba(90,138,60,0.12)',  c:'#5a8a3c', b:'rgba(90,138,60,0.35)'},
+  'progress-sent':{bg:'rgba(196,137,58,0.12)', c:'#c4893a', b:'rgba(196,137,58,0.35)'},
+  'progress-paid':{bg:'rgba(0,180,100,0.15)',  c:'#009050', b:'rgba(0,180,100,0.35)'},
+  'final-sent':   {bg:'rgba(196,137,58,0.15)', c:'#d4893a', b:'rgba(196,137,58,0.40)'},
+  'final-paid':   {bg:'rgba(0,200,100,0.22)',  c:'#007840', b:'rgba(0,200,100,0.50)'},
+  'on-hold':      {bg:'rgba(192,57,43,0.10)',  c:'#c0392b', b:'rgba(192,57,43,0.30)'},
+};
+const PC = {
+  'drafted':         {bg:'rgba(74,159,212,0.12)', c:'#2e8bc0', b:'rgba(74,159,212,0.35)'},
+  'sent':            {bg:'rgba(90,138,60,0.12)',  c:'#5a8a3c', b:'rgba(90,138,60,0.35)'},
+  'in-progress':     {bg:'rgba(196,137,58,0.12)',c:'#c4893a', b:'rgba(196,137,58,0.35)'},
+  'works-complete':  {bg:'rgba(0,180,100,0.15)', c:'#009050', b:'rgba(0,180,100,0.35)'},
+  'invoice-received':{bg:'rgba(124,92,191,0.12)',c:'#7c5cbf', b:'rgba(124,92,191,0.30)'},
+  'paid':            {bg:'rgba(0,200,100,0.22)', c:'#007840', b:'rgba(0,200,100,0.50)'},
+  'cancelled':       {bg:'rgba(192,57,43,0.10)', c:'#c0392b', b:'rgba(192,57,43,0.30)'},
+};
+
+function styleSel(sel, map) {
+  const c = map[sel.value] || {bg:'rgba(120,120,120,0.1)',c:'#888',b:'rgba(130,130,130,0.3)'};
+  sel.style.cssText += `;background-color:${c.bg};color:${c.c};border-color:${c.b};`;
+}
+
+// ── SYNC ─────────────────────────────────────────────
+function syncUI(s, m) {
+  const b = document.getElementById('syncBar');
+  b.className = 'sync-bar ' + s;
+  document.getElementById('syncLabel').textContent = m;
+}
+function lsRead() { try { return JSON.parse(localStorage.getItem(LS_KEY)); } catch(e) { return null; } }
+function lsWrite(d) { try { localStorage.setItem(LS_KEY, JSON.stringify(d)); } catch(e) {} }
+
+let _st = null;
+function save() {
+  D._ts = Date.now();
+  lsWrite(D);
+  syncUI('saving','Saving...');
+  clearTimeout(_st);
+  _st = setTimeout(async () => {
+    try {
+      await fetch(SHEET, {method:'POST', mode:'no-cors', body:JSON.stringify(D), headers:{'Content-Type':'text/plain'}});
+      syncUI('ok','☁ Synced');
+    } catch(e) { syncUI('err','⚠ Local only'); }
+    setTimeout(() => syncUI('ok','☁ Live sync active'), 3000);
+  }, 600);
+}
+
+async function fetchCloud(init) {
+  try {
+    if (init) syncUI('saving','Loading cloud...');
+    const r = await fetch(SHEET + '?t=' + Date.now());
+    if (!r.ok) throw new Error();
+    const txt = await r.text();
+    if (!txt || txt.length < 10) throw new Error();
+    const cloud = JSON.parse(txt);
+    if (cloud && cloud._ts && cloud._ts > (D._ts || 0)) {
+      D = cloud; lsWrite(D); renderAll();
+      syncUI('ok','☁ Cloud loaded');
+    } else { syncUI('ok','☁ Live sync active'); }
+    setTimeout(() => syncUI('ok','☁ Live sync active'), 2500);
+  } catch(e) {
+    syncUI('ok','💾 Local only');
+    setTimeout(() => syncUI('ok','💾 Saved locally'), 2000);
+  }
+}
+
+// ── AUTH ─────────────────────────────────────────────
+function checkSession() {
+  const s = JSON.parse(localStorage.getItem(SES_KEY) || 'null');
+  if (s && s.expires > Date.now()) { CU = s.user; showDash(); return true; }
+  return false;
+}
+
+async function doLogin() {
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value;
+  const err = document.getElementById('loginErr');
+  const btn = document.getElementById('loginBtn');
+  if (!u || !p) { err.textContent = 'Enter username and password.'; return; }
+  btn.disabled = true; btn.textContent = 'Checking...'; err.textContent = '';
+  try {
+    const res = await fetch(`${SHEET}?action=login&u=${encodeURIComponent(u)}&p=${encodeURIComponent(p)}`);
+    const data = await res.json();
+    if (data.ok) {
+      CU = data.user;
+      localStorage.setItem(SES_KEY, JSON.stringify({user: CU, expires: Date.now() + 7*24*60*60*1000}));
+      logAct('Login', `Logged in`);
+      showDash();
+    } else {
+      err.textContent = 'Invalid username or password.';
+      btn.disabled = false; btn.textContent = 'LOGIN TO RDU';
+    }
+  } catch(e) {
+    err.textContent = 'Network error — check connection.';
+    btn.disabled = false; btn.textContent = 'LOGIN TO RDU';
+  }
+}
+
+function showDash() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('mainWrap').style.display = '';
+  const pill = document.getElementById('userPill');
+  pill.style.display = 'flex';
+  document.getElementById('userPillName').textContent = CU.name;
+  // show/hide admin-only elements
+  document.querySelectorAll('.admin-only').forEach(el => {
+    el.style.display = CU.role === 'admin' ? '' : 'none';
+  });
+  // apply saved panel visibility
+  const panels = D.panels || {};
+  Object.keys(panels).forEach(k => {
+    const el = document.getElementById('panel-' + k);
+    if (el && !panels[k]) el.style.display = 'none';
+  });
+  D = lsRead() || { _ts:0, tasks:[], va_myla:[], va_toneth:[], jobs:[], pos:[], kai:{}, moko:{}, notes:'', panels:{} };
+  renderAll();
+  fetchCloud(true);
+  setInterval(() => fetchCloud(false), 60000);
+  loadWeather();
+  setInterval(loadWeather, 600000);
+  updateClock();
+  setInterval(updateClock, 1000);
+  loadDevotional();
+}
+
+function doLogout() {
+  localStorage.removeItem(SES_KEY);
+  location.reload();
+}
+
+// ── ACTIVITY LOG ─────────────────────────────────────
+function logAct(event, details) {
+  if (!CU) return;
+  const u = encodeURIComponent(CU.username);
+  const n = encodeURIComponent(CU.name);
+  const ev = encodeURIComponent(event);
+  const d = encodeURIComponent(details);
+  fetch(`${SHEET}?action=log-activity&u=${u}&n=${n}&event=${ev}&details=${d}`).catch(() => {});
+}
+
+// ── CLOCK ─────────────────────────────────────────────
+function updateClock() {
+  const n = new Date();
+  document.getElementById('clock').textContent = n.toLocaleTimeString('en-AU', {hour12:false});
+  document.getElementById('dateDisplay').textContent = n.toLocaleDateString('en-AU', {weekday:'long', day:'numeric', month:'long', year:'numeric'}).toUpperCase();
+}
+
+// ── RENDER ALL ────────────────────────────────────────
+function renderAll() {
+  document.getElementById('taskList').innerHTML = '';
+  (D.tasks||[]).forEach(renderTask);
+  document.getElementById('mylaTaskList').innerHTML = '';
+  (D.va_myla||[]).forEach(t => renderVaTask('myla', t));
+  document.getElementById('tonethTaskList').innerHTML = '';
+  (D.va_toneth||[]).forEach(t => renderVaTask('toneth', t));
+  document.getElementById('jobBody').innerHTML = '';
+  (D.jobs||[]).forEach(renderJob);
+  document.getElementById('poBody').innerHTML = '';
+  if (!(D.pos||[]).length) {
+    document.getElementById('poBody').innerHTML = '<tr id="poEmpty"><td colspan="5" style="text-align:center;color:var(--muted);font-size:0.48rem;font-family:\'Barlow Condensed\',sans-serif;letter-spacing:0.1em;padding:10px 0;">No POs yet — add one below</td></tr>';
+  } else { D.pos.forEach(renderPO); }
+  ['biz','tax','pers'].forEach(a => {
+    const d = (D.kai||{})[a];
+    if (d && d.set) {
+      kA[a] = d.val; kS[a] = true;
+      const vmap = {biz:'kaiBiz', tax:'kaiTax', pers:'kaiPers'};
+      const tmap = {biz:'kaiBizTs', tax:'kaiTaxTs', pers:'kaiPersTs'};
+      document.getElementById(vmap[a]).textContent = '$' + d.val.toLocaleString('en-AU');
+      document.getElementById(tmap[a]).textContent = d.ts || 'Previously set';
+    }
+  });
+  updateKaiTotal();
+  if (D.moko && D.moko.rev !== undefined) {
+    mokoRev = D.moko.rev || 0; mokoTarget = D.moko.target || 0;
+    if (D.moko.quotes) document.getElementById('mokoQuotes').textContent = D.moko.quotes;
+    if (D.moko.won)    document.getElementById('mokoWon').textContent = D.moko.won;
+    refreshMoko(); updateMokoProgress();
+  }
+  document.getElementById('notesArea').value = D.notes || '';
+}
+
+// ── TASKS ─────────────────────────────────────────────
+function collectTasks() { return Array.from(document.querySelectorAll('#taskList .task-item')).map(el => ({text: el.querySelector('.task-text').textContent, done: el.classList.contains('done')})); }
+function renderTask(t) {
+  const el = document.createElement('div');
+  el.className = 'task-item' + (t.done ? ' done' : '');
+  el.innerHTML = `<div class="task-check" onclick="toggleTask(this.parentElement)">✓</div><span class="task-text" onclick="toggleTask(this.parentElement)">${t.text}</span><button class="task-del" onclick="removeTask(this)">✕</button>`;
+  document.getElementById('taskList').appendChild(el);
+}
+function toggleTask(el) { el.classList.toggle('done'); D.tasks = collectTasks(); save(); }
+function removeTask(btn) { btn.closest('.task-item').remove(); D.tasks = collectTasks(); save(); }
+function addTask() {
+  const inp = document.getElementById('newTaskInput'); const t = inp.value.trim(); if (!t) return;
+  renderTask({text:t,done:false}); inp.value = ''; D.tasks = collectTasks(); save();
+  logAct('Task Added', t);
+}
+
+// ── VA TASKS ──────────────────────────────────────────
+function collectVa(who) { const id = who==='myla'?'mylaTaskList':'tonethTaskList'; return Array.from(document.querySelectorAll('#'+id+' .va-task-item')).map(el => ({text:el.querySelector('.va-task-text').textContent, done:el.classList.contains('done')})); }
+function renderVaTask(who, t) {
+  const lid = who==='myla'?'mylaTaskList':'tonethTaskList';
+  const el = document.createElement('div');
+  el.className = 'va-task-item' + (t.done ? ' done' : '');
+  el.innerHTML = `<div class="va-task-check" onclick="toggleVaTask(this.parentElement,'${who}')">✓</div><span class="va-task-text" onclick="toggleVaTask(this.parentElement,'${who}')">${t.text}</span><button class="va-task-del" onclick="removeVaTask(this,'${who}')">✕</button>`;
+  document.getElementById(lid).appendChild(el);
+}
+function toggleVaTask(el, who) { el.classList.toggle('done'); D['va_'+who] = collectVa(who); save(); }
+function removeVaTask(btn, who) { btn.closest('.va-task-item').remove(); D['va_'+who] = collectVa(who); save(); }
+function addVaTask(who) {
+  const inp = document.getElementById(who==='myla'?'mylaInput':'tonethInput'); const t = inp.value.trim(); if (!t) return;
+  renderVaTask(who, {text:t, done:false}); inp.value = ''; D['va_'+who] = collectVa(who); save();
+  logAct('VA Task Added', `${who}: ${t}`);
+}
+
+// ── WEATHER ───────────────────────────────────────────
+async function loadWeather() {
+  try {
+    const r = await fetch('https://wttr.in/Sutherland+NSW+Australia?format=j1');
+    const d = await r.json();
+    const c = d.current_condition[0];
+    const desc = c.weatherDesc[0].value, temp = c.temp_C, feels = c.FeelsLikeC, hum = c.humidity, wind = c.windspeedKmph;
+    const ic = {'Sunny':'☀️','Clear':'🌙','Partly cloudy':'⛅','Cloudy':'☁️','Overcast':'☁️','Mist':'🌫️','Rain':'🌧️','Light rain':'🌦️','Heavy rain':'⛈️','Thunder':'⛈️','Snow':'❄️','Fog':'🌫️','Drizzle':'🌦️'};
+    let icon = '🌤️';
+    for (const [k,v] of Object.entries(ic)) { if (desc.toLowerCase().includes(k.toLowerCase())) { icon = v; break; } }
+    const w = parseInt(wind);
+    const rf = w > 45 ? `<span style="color:var(--red-dust);font-weight:700">TOO WINDY ⚠</span>` : w > 25 ? `<span style="color:var(--dust);font-weight:700">BIT BREEZY</span>` : `<span style="color:var(--green-gum);font-weight:700">GOOD TO GO ✓</span>`;
+    document.getElementById('weatherContent').innerHTML = `<div class="weather-main"><div class="weather-icon">${icon}</div><div><div class="weather-temp">${temp}<span>°C</span></div><div class="weather-desc">${desc}</div><div class="weather-loc">Sutherland Shire, NSW, Australia</div></div></div><div class="weather-stats"><div class="w-stat"><div class="w-stat-label">Feels Like</div><div class="w-stat-val">${feels}°C</div></div><div class="w-stat"><div class="w-stat-label">Humidity</div><div class="w-stat-val">${hum}%</div></div><div class="w-stat"><div class="w-stat-label">Wind</div><div class="w-stat-val">${wind}km/h</div></div><div class="w-stat"><div class="w-stat-label">On the Tools</div><div class="w-stat-val" style="font-size:0.58rem;font-family:'Barlow Condensed',sans-serif;font-weight:700">${rf}</div></div></div>`;
+  } catch(e) { document.getElementById('weatherContent').innerHTML = '<div class="weather-loading">No signal — check network</div>'; }
+}
+
+// ── DEVOTIONAL ────────────────────────────────────────
+function loadDevotional() {
+  const VV=[{v:"I can do all things through Christ who strengthens me.",r:"Philippians 4:13"},{v:"For I know the plans I have for you — plans to prosper you and not to harm you.",r:"Jeremiah 29:11"},{v:"The Lord is my shepherd; I shall not want.",r:"Psalm 23:1"},{v:"Trust in the Lord with all your heart and lean not on your own understanding.",r:"Proverbs 3:5"},{v:"Be strong and courageous. Do not be afraid; do not be discouraged.",r:"Joshua 1:9"},{v:"And we know that in all things God works for the good of those who love him.",r:"Romans 8:28"},{v:"The Lord will fight for you; you need only to be still.",r:"Exodus 14:14"},{v:"Cast all your anxiety on him because he cares for you.",r:"1 Peter 5:7"},{v:"God is our refuge and strength, an ever-present help in trouble.",r:"Psalm 46:1"},{v:"With God all things are possible.",r:"Matthew 19:26"},{v:"Do not be anxious about anything, but in every situation present your requests to God.",r:"Philippians 4:6"},{v:"The Lord your God is with you, the Mighty Warrior who saves.",r:"Zephaniah 3:17"},{v:"Commit to the Lord whatever you do, and he will establish your plans.",r:"Proverbs 16:3"},{v:"Be still and know that I am God.",r:"Psalm 46:10"},{v:"Give thanks to the Lord, for he is good; his love endures forever.",r:"Psalm 107:1"},{v:"Delight yourself in the Lord, and he will give you the desires of your heart.",r:"Psalm 37:4"},{v:"Let us not become weary in doing good, for at the proper time we will reap a harvest.",r:"Galatians 6:9"},{v:"He gives strength to the weary and increases the power of the weak.",r:"Isaiah 40:29"},{v:"Seek first his kingdom and his righteousness, and all these things will be given to you.",r:"Matthew 6:33"},{v:"For nothing will be impossible with God.",r:"Luke 1:37"},{v:"My grace is sufficient for you, for my power is made perfect in weakness.",r:"2 Corinthians 12:9"},{v:"The Lord is close to the brokenhearted and saves those who are crushed in spirit.",r:"Psalm 34:18"},{v:"Your word is a lamp for my feet, a light on my path.",r:"Psalm 119:105"},{v:"This is the day the Lord has made; let us rejoice and be glad in it.",r:"Psalm 118:24"},{v:"Ask and it will be given to you; seek and you will find.",r:"Matthew 7:7"},{v:"The righteous person may have many troubles, but the Lord delivers him from them all.",r:"Psalm 34:19"},{v:"For God so loved the world that he gave his one and only Son.",r:"John 3:16"},{v:"I am the way, the truth, and the life.",r:"John 14:6"},{v:"The name of the Lord is a fortified tower; the righteous run to it and are safe.",r:"Proverbs 18:10"},{v:"I have learned, in whatever state I am, to be content.",r:"Philippians 4:11"},{v:"The Lord bless you and keep you; the Lord make his face shine on you.",r:"Numbers 6:24-25"}];
+  const n = new Date();
+  const day = Math.floor((n - new Date(n.getFullYear(),0,0)) / 86400000);
+  const {v, r} = VV[day % VV.length];
+  const ds = n.toLocaleDateString('en-AU', {weekday:'long', day:'numeric', month:'long', year:'numeric'}).toUpperCase();
+  document.getElementById('devotionalBody').innerHTML = `<div class="devotional-verse">"${v}"</div><div class="devotional-ref">— ${r}</div><div class="devotional-date">📖 ${ds}</div>`;
+}
+
+// ── KAI ───────────────────────────────────────────────
+const kA = {biz:0, tax:0, pers:0}, kS = {biz:false, tax:false, pers:false};
+function setKai(a) {
+  const imap = {biz:'kaiBizIn', tax:'kaiTaxIn', pers:'kaiPersIn'};
+  const vmap = {biz:'kaiBiz', tax:'kaiTax', pers:'kaiPers'};
+  const tmap = {biz:'kaiBizTs', tax:'kaiTaxTs', pers:'kaiPersTs'};
+  const val = parseFloat(document.getElementById(imap[a]).value.replace(/[$,]/g,''));
+  if (isNaN(val)) return;
+  kA[a] = val; kS[a] = true;
+  document.getElementById(vmap[a]).textContent = '$' + val.toLocaleString('en-AU');
+  const n = new Date();
+  const ts = 'Updated ' + n.toLocaleTimeString('en-AU',{hour12:true,hour:'numeric',minute:'2-digit'}) + ' · ' + n.toLocaleDateString('en-AU',{day:'numeric',month:'short'});
+  document.getElementById(tmap[a]).textContent = ts;
+  document.getElementById(imap[a]).value = '';
+  updateKaiTotal();
+  if (!D.kai) D.kai = {};
+  D.kai[a] = {val, set:true, ts};
+  save();
+  logAct('KAI Updated', `${a}: $${val.toLocaleString('en-AU')}`);
+}
+function updateKaiTotal() {
+  if (!kS.biz && !kS.tax && !kS.pers) return;
+  document.getElementById('kaiTotal').textContent = '$' + (kA.biz + kA.tax + kA.pers).toLocaleString('en-AU');
+}
+
+// ── JOBS ──────────────────────────────────────────────
+function mkJobId() { return 'job_' + Date.now(); }
+function collectJobs() {
+  return Array.from(document.querySelectorAll('#jobBody tr')).map(tr => {
+    const tds = tr.querySelectorAll('td');
+    const sels = tr.querySelectorAll('.dyn-sel');
+    return {
+      id:       tr.dataset.jobId || mkJobId(),
+      quote:    tds[0].textContent,
+      name:     tds[1].textContent,
+      addr:     tds[2].textContent,
+      value:    tds[3].textContent,
+      stage:    sels[0] ? sels[0].value : 'in-progress',
+      invoice:  sels[1] ? sels[1].value : 'not-invoiced',
+      driveUrl: tr.dataset.driveUrl || ''
+    };
+  });
+}
+
+function makeStageSelect(val) {
+  const opts = [
+    ['in-progress','In Progress'],['needs-qdraft','Needs Q-Draft'],['quoted','Quoted'],
+    ['quote-accepted','Quote Accepted'],['deposit-paid','Deposit Paid'],['materials-ordered','Materials Ordered'],
+    ['materials-onsite','Materials On-Site'],['works-commenced','Works Commenced'],['progress-sent','Progress Sent'],
+    ['progress-paid','Progress Paid'],['practical-completion','Practical Completion'],['final-sent','Final Invoice Sent'],
+    ['final-paid','Final Paid'],['complete','Complete ✓'],['waiting-ronny','Waiting Ronny'],['waiting-client','Waiting Client']
+  ];
+  return `<select class="dyn-sel" onchange="onJobSelChange(this,'SC')">${opts.map(o=>`<option value="${o[0]}"${o[0]===val?' selected':''}>${o[1]}</option>`).join('')}</select>`;
+}
+
+function makeInvoiceSelect(val) {
+  const opts = [
+    ['not-invoiced','Not Invoiced'],['deposit-sent','Deposit Sent'],['deposit-paid','Deposit Paid'],
+    ['progress-sent','Progress Sent'],['progress-paid','Progress Paid'],['final-sent','Final Sent'],
+    ['final-paid','Final Paid'],['on-hold','On Hold']
+  ];
+  return `<select class="dyn-sel" onchange="onJobSelChange(this,'IC')">${opts.map(o=>`<option value="${o[0]}"${o[0]===val?' selected':''}>${o[1]}</option>`).join('')}</select>`;
+}
+
+function onJobSelChange(sel, mapName) {
+  styleSel(sel, mapName === 'SC' ? SC : IC);
+  D.jobs = collectJobs(); save();
+}
+
+function renderJob(j) {
+  const tr = document.createElement('tr');
+  tr.dataset.jobId   = j.id || mkJobId();
+  tr.dataset.driveUrl = j.driveUrl || '';
+  const hasDrive    = j.driveUrl && j.driveUrl.trim();
+  const stageHtml   = makeStageSelect(j.stage   || 'in-progress');
+  const invoiceHtml = makeInvoiceSelect(j.invoice || 'not-invoiced');
+  tr.innerHTML = `
+    <td style="color:var(--muted);font-size:0.5rem;font-family:'Barlow Condensed',sans-serif;letter-spacing:0.08em">${j.quote}</td>
+    <td>${j.name}</td>
+    <td style="color:var(--muted);font-size:0.5rem">${j.addr}</td>
+    <td style="font-size:0.55rem">${j.value}</td>
+    <td>${stageHtml}</td>
+    <td>${invoiceHtml}</td>
+    <td><button class="jbtn" onclick="openComments('${tr.dataset.jobId}','${j.name}')" title="Comments">💬</button></td>
+    <td><button class="jbtn${hasDrive?' has-drive':''}" id="dbtn-${tr.dataset.jobId}" onclick="openDrive('${tr.dataset.jobId}','${j.name}')" title="Drive Files">📁</button></td>
+    <td><button onclick="removeJob(this)" style="background:none;border:none;color:var(--subtle);cursor:pointer;font-size:0.72rem;" onmouseover="this.style.color='var(--red-dust)'" onmouseout="this.style.color='var(--subtle)'">✕</button></td>`;
+  document.getElementById('jobBody').appendChild(tr);
+  tr.querySelectorAll('.dyn-sel').forEach((sel, i) => styleSel(sel, i === 0 ? SC : IC));
+}
+
+function addJob() {
+  const name = document.getElementById('jobName').value.trim(); if (!name) return;
+  const j = {
+    id: mkJobId(),
+    quote:   document.getElementById('jobQuote').value.trim() || '—',
+    name,
+    addr:    document.getElementById('jobAddr').value.trim()  || '—',
+    value:   document.getElementById('jobValue').value.trim() || 'TBC',
+    stage:   document.getElementById('jobStage').value,
+    invoice: 'not-invoiced',
+    driveUrl:''
+  };
+  renderJob(j);
+  ['jobName','jobAddr','jobValue','jobQuote'].forEach(id => document.getElementById(id).value = '');
+  D.jobs = collectJobs(); save();
+  logAct('Job Added', `${j.name} — ${j.addr}`);
+}
+
+function removeJob(btn) {
+  const tr = btn.closest('tr');
+  const name = tr.querySelectorAll('td')[1].textContent;
+  tr.remove(); D.jobs = collectJobs(); save();
+  logAct('Job Removed', name);
+}
+
+// ── PO ────────────────────────────────────────────────
+function collectPOs() {
+  return Array.from(document.querySelectorAll('#poBody tr:not(#poEmpty)')).map(tr => {
+    const tds = tr.querySelectorAll('td'); const sel = tr.querySelector('.dyn-sel');
+    return {num:tds[0].textContent, addr:tds[1].textContent, name:tds[2].textContent, status:sel?sel.value:'drafted'};
+  });
+}
+function makePoSelect(val) {
+  const opts = [['drafted','Drafted'],['sent','Sent'],['in-progress','In Progress'],['works-complete','Works Complete'],['invoice-received','Inv. Received'],['paid','Paid ✓'],['cancelled','Cancelled']];
+  return `<select class="dyn-sel" onchange="styleSel(this,PC);D.pos=collectPOs();save()">${opts.map(o=>`<option value="${o[0]}"${o[0]===val?' selected':''}>${o[1]}</option>`).join('')}</select>`;
+}
+function renderPO(p) {
+  const emp = document.getElementById('poEmpty'); if (emp) emp.remove();
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td style="color:var(--muted);font-size:0.5rem;font-family:'Barlow Condensed',sans-serif;font-weight:700">${p.num}</td><td style="font-size:0.5rem">${p.addr}</td><td style="font-size:0.5rem">${p.name}</td><td>${makePoSelect(p.status)}</td><td><button onclick="removePO(this)" style="background:none;border:none;color:var(--subtle);cursor:pointer;font-size:0.68rem;" onmouseover="this.style.color='var(--red-dust)'" onmouseout="this.style.color='var(--subtle)'">✕</button></td>`;
+  document.getElementById('poBody').appendChild(tr);
+  tr.querySelectorAll('.dyn-sel').forEach(s => styleSel(s, PC));
+}
+function addPO() {
+  const num = document.getElementById('poNum').value.trim(); if (!num) return;
+  renderPO({num, addr:document.getElementById('poAddr').value.trim()||'—', name:document.getElementById('poName').value.trim()||'—', status:document.getElementById('poStatus').value});
+  ['poNum','poAddr','poName'].forEach(id => document.getElementById(id).value = '');
+  D.pos = collectPOs(); save();
+}
+function removePO(btn) {
+  const tbody = document.getElementById('poBody'); btn.closest('tr').remove();
+  if (tbody.rows.length === 0) tbody.innerHTML = '<tr id="poEmpty"><td colspan="5" style="text-align:center;color:var(--muted);font-size:0.48rem;font-family:\'Barlow Condensed\',sans-serif;letter-spacing:0.1em;padding:10px 0;">No POs yet — add one below</td></tr>';
+  D.pos = collectPOs(); save();
+}
+
+// ── MOKO ──────────────────────────────────────────────
+const vibes = ["Just getting warmed up, mate! 🔥","Solid start — keep stackin'! 💪","Three active — build the pipeline! 🏗","On fire out there! 🚀","Halfway there — push hard! 💥","Almost at target, don't blink! ⚡","TARGET SMASHED. Bloody legend. 🏆","OVER TARGET. Absolute unit! 👑"];
+let mokoRev = 0, mokoTarget = 0;
+function getVibe(p) { if(p===0)return vibes[0];if(p<25)return vibes[1];if(p<45)return vibes[2];if(p<60)return vibes[3];if(p<75)return vibes[4];if(p<95)return vibes[5];if(p<=105)return vibes[6];return vibes[7]; }
+function saveMoko() { D.moko = {rev:mokoRev, target:mokoTarget, quotes:document.getElementById('mokoQuotes').textContent, won:document.getElementById('mokoWon').textContent}; save(); }
+function refreshMoko() { document.getElementById('mokoRev').textContent = '$' + mokoRev.toLocaleString('en-AU'); const p = mokoTarget > 0 ? Math.round(mokoRev/mokoTarget*100) : 0; document.getElementById('mokoVibe').textContent = mokoTarget>0?getVibe(p):(mokoRev>0?"Set a target to track your progress! 🎯":"Set your revenue below to track progress! 🔥"); }
+function updateMokoRev() { mokoRev = parseFloat(document.getElementById('mokoRevInput').value.replace(/[$,]/g,''))||0; refreshMoko(); updateMokoProgress(); saveMoko(); document.getElementById('mokoRevInput').value=''; }
+function updateMokoTarget() { mokoTarget = parseFloat(document.getElementById('mokoTargetInput').value.replace(/[$,]/g,''))||0; updateMokoProgress(); saveMoko(); document.getElementById('mokoTargetInput').value=''; }
+function updateMokoProgress() { const p = mokoTarget>0?Math.min(100,Math.round(mokoRev/mokoTarget*100)):0; document.getElementById('mokoBar').style.width=p+'%'; document.getElementById('mokoBarLabel').textContent=mokoTarget>0?`$${mokoRev.toLocaleString()} of $${mokoTarget.toLocaleString()} · ${p}%`:`$${mokoRev.toLocaleString()} earned — set a target`; document.getElementById('mokoVibe').textContent=mokoTarget>0?getVibe(p):(mokoRev>0?"Set a target! 🎯":"Set your revenue below! 🔥"); }
+function updateMokoStats() { const q=document.getElementById('mokoQInput').value,w=document.getElementById('mokoWInput').value; if(q)document.getElementById('mokoQuotes').textContent=q; if(w)document.getElementById('mokoWon').textContent=w; document.getElementById('mokoQInput').value=''; document.getElementById('mokoWInput').value=''; saveMoko(); }
+
+// ── NOTES ─────────────────────────────────────────────
+document.getElementById('notesArea').addEventListener('input', function() { D.notes = this.value; save(); });
+
+// ── PANELS ────────────────────────────────────────────
+function togglePanel(key) {
+  const el = document.getElementById('panel-' + key);
+  if (!el) return;
+  const visible = el.style.display !== 'none';
+  el.style.display = visible ? 'none' : '';
+  if (!D.panels) D.panels = {};
+  D.panels[key] = !visible;
+  save();
+  logAct('Panel Toggled', `${key}: ${!visible ? 'shown' : 'hidden'}`);
+}
+
+// ── COMMENTS ─────────────────────────────────────────
+function openComments(jobId, jobName) {
+  _commentJobId = jobId;
+  document.getElementById('commentJobLabel').textContent = jobName;
+  document.getElementById('commentsModal').style.display = 'flex';
+  loadComments(jobId);
+}
+
+async function loadComments(jobId) {
+  const list = document.getElementById('commentsList');
+  list.innerHTML = '<div class="comment-empty">Loading...</div>';
+  try {
+    const res = await fetch(`${SHEET}?action=comments&jobId=${encodeURIComponent(jobId)}`);
+    const data = await res.json();
+    if (!data.length) { list.innerHTML = '<div class="comment-empty">No comments yet — be the first!</div>'; return; }
+    list.innerHTML = '';
+    data.forEach(c => {
+      const d = document.createElement('div');
+      d.className = 'comment-item';
+      const ts = new Date(c.ts).toLocaleString('en-AU', {day:'numeric',month:'short',hour:'numeric',minute:'2-digit',hour12:true});
+      d.innerHTML = `<div class="comment-meta"><span class="comment-author">${c.name}</span> &nbsp;·&nbsp; ${ts}</div><div class="comment-text">${c.text}</div>`;
+      list.appendChild(d);
+    });
+    list.scrollTop = list.scrollHeight;
+  } catch(e) { list.innerHTML = '<div class="comment-empty">Failed to load comments.</div>'; }
+}
+
+async function submitComment() {
+  const inp = document.getElementById('commentInput');
+  const t = inp.value.trim(); if (!t || !CU) return;
+  inp.value = ''; inp.disabled = true;
+  try {
+    await fetch(`${SHEET}?action=add-comment&jobId=${encodeURIComponent(_commentJobId)}&u=${encodeURIComponent(CU.username)}&n=${encodeURIComponent(CU.name)}&t=${encodeURIComponent(t)}`);
+    loadComments(_commentJobId);
+    // mark button with green if not already
+    const btn = document.getElementById('dbtn-' + _commentJobId);
+    if (btn) { /* drive btn unchanged */ }
+    const jbtn = document.querySelector(`[onclick="openComments('${_commentJobId}','${document.getElementById('commentJobLabel').textContent}')"]`);
+    if (jbtn) jbtn.classList.add('has-comments');
+    logAct('Comment Added', `Job ${_commentJobId}`);
+  } catch(e) {}
+  inp.disabled = false;
+}
+
+// ── DRIVE ─────────────────────────────────────────────
+function openDrive(jobId, jobName) {
+  _driveJobId = jobId;
+  document.getElementById('driveJobLabel').textContent = jobName;
+  document.getElementById('driveModal').style.display = 'flex';
+  renderDriveModal(jobId, jobName);
+}
+
+function renderDriveModal(jobId, jobName) {
+  const job = (D.jobs||[]).find(j => j.id === jobId);
+  const url = job ? job.driveUrl : '';
+  const content = document.getElementById('driveContent');
+  if (url && url.trim()) {
+    content.innerHTML = `
+      <div class="drive-linked">
+        <p style="font-family:'Barlow Condensed',sans-serif;font-size:0.58rem;color:var(--muted);letter-spacing:0.08em;">This job has a linked Google Drive folder. Click below to open it — you can upload photos, docs, and files directly in Drive.</p>
+        <a href="${url}" target="_blank" class="drive-open-btn">📁 Open Job Folder in Google Drive →</a>
+        <button class="drive-unlink-btn" onclick="unlinkDrive('${jobId}')">Unlink folder</button>
+      </div>`;
+  } else {
+    content.innerHTML = `
+      <div class="drive-no-folder">
+        <p style="font-family:'Barlow Condensed',sans-serif;font-size:0.58rem;color:var(--muted);letter-spacing:0.08em;">No Drive folder linked yet. Create a new folder in your RDU Admin Drive, or paste an existing folder URL below.</p>
+        <button class="drive-create-btn" id="driveCreateBtn" onclick="createDriveFolder('${jobId}','${jobName}')">📁 Create New Drive Folder for this Job</button>
+        <div class="drive-or">— or paste existing folder URL —</div>
+        <div class="drive-link-row">
+          <input class="drive-link-input" id="driveLinkInput" placeholder="https://drive.google.com/drive/folders/...">
+          <button class="drive-link-btn" onclick="linkDriveManual('${jobId}')">Link</button>
+        </div>
+        <div class="drive-status" id="driveStatus"></div>
+      </div>`;
+  }
+}
+
+async function createDriveFolder(jobId, jobName) {
+  const btn = document.getElementById('driveCreateBtn');
+  const stat = document.getElementById('driveStatus');
+  btn.disabled = true; btn.textContent = 'Creating folder...';
+  if (stat) stat.textContent = '';
+  try {
+    const job = (D.jobs||[]).find(j => j.id === jobId);
+    const addr = job ? job.addr : '';
+    const res = await fetch(`${SHEET}?action=create-folder&jobName=${encodeURIComponent(jobName)}&jobAddr=${encodeURIComponent(addr)}`);
+    const data = await res.json();
+    if (data.ok) {
+      saveDriveUrl(jobId, data.url);
+      logAct('Drive Folder Created', `${jobName}`);
+    } else { if(stat){stat.textContent='Error creating folder.';stat.className='drive-status err';} btn.disabled=false; btn.textContent='📁 Create New Drive Folder for this Job'; }
+  } catch(e) { if(stat){stat.textContent='Network error.';stat.className='drive-status err';} btn.disabled=false; btn.textContent='📁 Create New Drive Folder for this Job'; }
+}
+
+function linkDriveManual(jobId) {
+  const url = document.getElementById('driveLinkInput').value.trim();
+  if (!url || !url.startsWith('https://')) { const s = document.getElementById('driveStatus'); if(s){s.textContent='Enter a valid https:// URL';s.className='drive-status err';} return; }
+  saveDriveUrl(jobId, url);
+  logAct('Drive Folder Linked', jobId);
+}
+
+function saveDriveUrl(jobId, url) {
+  const tr = document.querySelector(`#jobBody tr[data-job-id="${jobId}"]`);
+  if (tr) { tr.dataset.driveUrl = url; const btn = document.getElementById('dbtn-' + jobId); if(btn) btn.classList.add('has-drive'); }
+  D.jobs = collectJobs();
+  const j = D.jobs.find(x => x.id === jobId); if (j) j.driveUrl = url;
+  save();
+  renderDriveModal(jobId, document.getElementById('driveJobLabel').textContent);
+}
+
+function unlinkDrive(jobId) {
+  saveDriveUrl(jobId, '');
+  const btn = document.getElementById('dbtn-' + jobId); if (btn) btn.classList.remove('has-drive');
+  logAct('Drive Folder Unlinked', jobId);
+}
+
+// ── SETTINGS ──────────────────────────────────────────
+const PANEL_LABELS = {
+  launcher:'Quick Launch', weather:'Weather', myla:'Myla Tasks', toneth:'Toneth Tasks',
+  kai:'KAI — Bank Balances', devotional:'Daily Devotional', tasks:'Super Human Tasks',
+  jobs:'MAHI — Live Projects', po:'PO — Subcontractors', moko:'MOKO — Scoreboard'
+};
+
+function openSettings() {
+  document.getElementById('settingsModal').style.display = 'flex';
+  showSettingsTab('panels', document.getElementById('tab-panels'));
+}
+
+function showSettingsTab(tab, btn) {
+  document.querySelectorAll('.mtab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  const body = document.getElementById('settingsBody');
+  if (tab === 'panels') renderPanelsTab(body);
+  else if (tab === 'team') renderTeamTab(body);
+  else if (tab === 'activity') renderActivityTab(body);
+  else if (tab === 'account') renderAccountTab(body);
+}
+
+function renderPanelsTab(body) {
+  if (CU && CU.role !== 'admin') { body.innerHTML = '<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:0.6rem;color:var(--muted);padding:12px;text-align:center;letter-spacing:0.1em;">Admin access only</div>'; return; }
+  let html = '<div class="settings-section"><div class="settings-section-title">Panel Visibility</div>';
+  Object.entries(PANEL_LABELS).forEach(([key, label]) => {
+    const vis = document.getElementById('panel-' + key) ? document.getElementById('panel-' + key).style.display !== 'none' : true;
+    html += `<div class="ptog-row"><span class="ptog-label">${label}</span><label class="toggle-sw"><input type="checkbox" ${vis?'checked':''} onchange="togglePanel('${key}')"><span class="toggle-track"></span></label></div>`;
+  });
+  html += '</div>';
+  body.innerHTML = html;
+}
+
+async function renderTeamTab(body) {
+  if (CU && CU.role !== 'admin') { body.innerHTML = '<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:0.6rem;color:var(--muted);padding:12px;text-align:center;letter-spacing:0.1em;">Admin access only</div>'; return; }
+  body.innerHTML = '<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:0.52rem;color:var(--muted);text-align:center;padding:12px;letter-spacing:0.1em;">Loading team...</div>';
+  try {
+    const res = await fetch(`${SHEET}?action=users`);
+    const users = await res.json();
+    let html = '<div class="settings-section"><div class="settings-section-title">Team Members — Click name or password to edit</div><table class="team-table"><thead><tr><th>Username</th><th>Name</th><th>Role</th><th>Password</th><th>Save</th></tr></thead><tbody>';
+    users.forEach(u => {
+      html += `<tr>
+        <td style="color:var(--muted)">${u.username}</td>
+        <td><input class="team-input" id="tn-${u.username}" value="${u.name}" placeholder="Display name"></td>
+        <td><select class="team-input" id="tr-${u.username}"><option value="admin"${u.role==='admin'?' selected':''}>Admin</option><option value="va"${u.role==='va'?' selected':''}>VA</option><option value="crew"${u.role==='crew'?' selected':''}>Crew</option></select></td>
+        <td><input class="team-input" id="tp-${u.username}" type="password" placeholder="New password"></td>
+        <td><button class="team-save-btn" onclick="saveTeamMember('${u.username}')">Save</button></td>
+      </tr>`;
+    });
+    html += '</tbody></table></div>';
+    html += '<div id="teamSaveStatus" style="font-family:\'Barlow Condensed\',sans-serif;font-size:0.5rem;color:var(--green-gum);min-height:14px;margin-top:6px;letter-spacing:0.1em;"></div>';
+    body.innerHTML = html;
+  } catch(e) { body.innerHTML = '<div style="color:var(--red-dust);font-size:0.58rem;padding:12px;">Failed to load team.</div>'; }
+}
+
+async function saveTeamMember(username) {
+  const name = document.getElementById('tn-' + username).value.trim();
+  const role = document.getElementById('tr-' + username).value;
+  const pass = document.getElementById('tp-' + username).value.trim();
+  const stat = document.getElementById('teamSaveStatus');
+  try {
+    let url = `${SHEET}?action=update-user&username=${encodeURIComponent(username)}&name=${encodeURIComponent(name)}&role=${encodeURIComponent(role)}`;
+    if (pass) url += `&password=${encodeURIComponent(pass)}`;
+    const res = await fetch(url); const data = await res.json();
+    if (stat) { stat.textContent = data.ok ? `✓ ${name} updated` : '✗ Error saving'; stat.style.color = data.ok ? 'var(--green-gum)' : 'var(--red-dust)'; }
+    if (data.ok) { document.getElementById('tp-' + username).value = ''; logAct('User Updated', username); }
+  } catch(e) { if(stat){stat.textContent='Network error';stat.style.color='var(--red-dust)';} }
+}
+
+async function renderActivityTab(body) {
+  body.innerHTML = '<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:0.52rem;color:var(--muted);text-align:center;padding:12px;letter-spacing:0.1em;">Loading activity...</div>';
+  try {
+    const res = await fetch(`${SHEET}?action=activity&limit=50`);
+    const data = await res.json();
+    if (!data.length) { body.innerHTML = '<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:0.56rem;color:var(--muted);text-align:center;padding:16px;letter-spacing:0.1em;">No activity logged yet.</div>'; return; }
+    let html = '<div class="settings-section"><div class="settings-section-title">Recent Activity (last 50 events)</div>';
+    data.forEach(a => {
+      const ts = new Date(a.ts).toLocaleString('en-AU', {day:'numeric',month:'short',hour:'numeric',minute:'2-digit',hour12:true});
+      html += `<div class="activity-row"><div class="activity-dot"></div><div><div class="activity-event">${a.event}${a.details ? ' — ' + a.details : ''}</div><div class="activity-meta">${a.name} · ${ts}</div></div></div>`;
+    });
+    html += '</div>';
+    body.innerHTML = html;
+  } catch(e) { body.innerHTML = '<div style="color:var(--red-dust);font-size:0.58rem;padding:12px;">Failed to load activity.</div>'; }
+}
+
+function renderAccountTab(body) {
+  const u = CU || {};
+  body.innerHTML = `
+    <div class="acct-pill">
+      <div class="acct-avatar">👤</div>
+      <div><div class="acct-name">${u.name || '—'}</div><div class="acct-role">${u.role || '—'} · ${u.username || '—'}</div></div>
+    </div>
+    <div class="settings-section">
+      <div class="settings-section-title">Change Your Password</div>
+      <div class="acct-form">
+        <input class="acct-input" id="newPw1" type="password" placeholder="New password">
+        <input class="acct-input" id="newPw2" type="password" placeholder="Confirm new password">
+        <button class="acct-btn" onclick="changeMyPassword()">Update Password</button>
+        <div class="acct-status" id="pwStatus"></div>
+      </div>
+    </div>
+    <button class="logout-btn" onclick="doLogout()">🚪 Logout</button>`;
+}
+
+async function changeMyPassword() {
+  const p1 = document.getElementById('newPw1').value;
+  const p2 = document.getElementById('newPw2').value;
+  const stat = document.getElementById('pwStatus');
+  if (!p1) { stat.textContent = 'Enter a new password.'; stat.className = 'acct-status err'; return; }
+  if (p1 !== p2) { stat.textContent = 'Passwords do not match.'; stat.className = 'acct-status err'; return; }
+  try {
+    const res = await fetch(`${SHEET}?action=update-user&username=${encodeURIComponent(CU.username)}&password=${encodeURIComponent(p1)}&name=${encodeURIComponent(CU.name)}&role=${encodeURIComponent(CU.role)}`);
+    const data = await res.json();
+    if (data.ok) { stat.textContent = '✓ Password updated.'; stat.className = 'acct-status ok'; document.getElementById('newPw1').value=''; document.getElementById('newPw2').value=''; logAct('Password Changed', CU.username); }
+    else { stat.textContent = 'Error updating password.'; stat.className = 'acct-status err'; }
+  } catch(e) { stat.textContent = 'Network error.'; stat.className = 'acct-status err'; }
+}
+
+// ── MODALS ────────────────────────────────────────────
+function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+document.querySelectorAll('.modal-ov').forEach(m => { m.addEventListener('click', e => { if (e.target === m) m.style.display = 'none'; }); });
+
+// ── INIT ──────────────────────────────────────────────
+if (!checkSession()) {
+  syncUI('ok', '☁ Ready — please log in');
+}
+</script>
+</body>
+</html>
