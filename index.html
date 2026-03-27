@@ -1140,8 +1140,8 @@ function syncFSToMain(){
 function collectPOs(){return Array.from(document.querySelectorAll('#poBody tr:not(#poEmpty)')).map(tr=>{const tds=tr.querySelectorAll('td');const sel=tr.querySelector('.dyn-sel');return{num:tds[0].textContent,addr:tds[1].textContent,name:tds[2].textContent,status:sel?sel.value:'drafted'};});}
 function makePoSel(val){const opts=getDd('po');let h=`<select class="dyn-sel" onchange="styleSel(this);D.pos=collectPOs();save()">`;opts.forEach(o=>h+=`<option value="${o.v}"${o.v===val?' selected':''}>${o.l}</option>`);if(val&&!opts.find(o=>o.v===val))h+=`<option value="${val}" selected>${val}</option>`;return h+'</select>';}
 function renderPO(p){const emp=document.getElementById('poEmpty');if(emp)emp.remove();const tr=document.createElement('tr');tr.innerHTML=`<td style="color:var(--muted);font-size:0.5rem;font-family:'Barlow Condensed',sans-serif;font-weight:700">${p.num}</td><td style="font-size:0.5rem">${p.addr}</td><td style="font-size:0.5rem">${p.name}</td><td>${makePoSel(p.status)}</td><td><button onclick="removePO(this)" style="background:none;border:none;color:var(--subtle);cursor:pointer;font-size:0.68rem;" onmouseover="this.style.color='var(--red-dust)'" onmouseout="this.style.color='var(--subtle)'">✕</button></td>`;document.getElementById('poBody').appendChild(tr);tr.querySelectorAll('.dyn-sel').forEach(s=>styleSel(s));}
-function addPO(){const num=document.getElementById('poNum').value.trim();if(!num)return;renderPO({num,addr:document.getElementById('poAddr').value.trim()||'—',name:document.getElementById('poName').value.trim()||'—',status:document.getElementById('poStatus').value});['poNum','poAddr','poName'].forEach(id=>document.getElementById(id).value='');D.pos=collectPOs();save();}
-function removePO(btn){const tb=document.getElementById('poBody');btn.closest('tr').remove();if(tb.rows.length===0)tb.innerHTML='<tr id="poEmpty"><td colspan="5" style="text-align:center;color:var(--muted);font-size:0.48rem;font-family:\'Barlow Condensed\',sans-serif;letter-spacing:0.1em;padding:10px 0;">No POs yet</td></tr>';D.pos=collectPOs();save();}
+function addPO(){const num=document.getElementById('poNum').value.trim();if(!num)return;renderPO({num,addr:document.getElementById('poAddr').value.trim()||'—',name:document.getElementById('poName').value.trim()||'—',status:document.getElementById('poStatus').value});['poNum','poAddr','poName'].forEach(id=>document.getElementById(id).value='');pushNotif('📋',`PO added: <strong>${num}</strong>`);D.pos=collectPOs();save();}
+function removePO(btn){const tb=document.getElementById('poBody');btn.closest('tr').remove();if(tb.rows.length===0)tb.innerHTML='<tr id="poEmpty"><td colspan="5" style="text-align:center;color:var(--muted);font-size:0.48rem;font-family:\'Barlow Condensed\',sans-serif;letter-spacing:0.1em;padding:10px 0;">No POs yet</td></tr>';pushNotif('📋',`PO added: <strong>${num}</strong>`);D.pos=collectPOs();save();}
 
 // ── NOTES ─────────────────────────────────────────────
 document.getElementById('notesArea').addEventListener('input',function(){D.notes=this.value;save();});
@@ -1162,11 +1162,12 @@ function renderCustomPanels(){
   panels.forEach(cp=>{
     const div=document.createElement('div');div.className='panel custom-panel';
     const adminBtns=CU&&CU.role==='admin'?`<button class="panel-btn" onclick="removeCustomPanel('${cp.id}')" title="Remove panel">✕</button>`:'';
+    const expandBtn=`<button class="expand-btn" onclick="openCustomPFS('${cp.id}')" title="Fullscreen">&#9974;</button>`;
     if(cp.type==='notes'){
-      div.innerHTML=`<div class="panel-label">${cp.title}${adminBtns}</div><textarea class="custom-panel-notes-area" placeholder="Notes..." onchange="saveCustomContent('${cp.id}',this.value)">${cp.content||''}</textarea>`;
+      div.innerHTML=`<div class="panel-label">${cp.title}${expandBtn}${adminBtns}</div><textarea class="custom-panel-notes-area" placeholder="Notes..." onchange="saveCustomContent('${cp.id}',this.value)">${cp.content||''}</textarea>`;
     }else if(cp.type==='list'){
       const items=(cp.items||[]).map((item,i)=>`<div class="task-item${item.done?' done':''}"><div class="task-check" onclick="toggleCPItem('${cp.id}',${i})">✓</div><span class="task-text">${item.text}</span><button class="task-del" onclick="removeCPItem('${cp.id}',${i})">✕</button></div>`).join('');
-      div.innerHTML=`<div class="panel-label">${cp.title}${adminBtns}</div><div class="task-list" style="flex:1;overflow-y:auto">${items}</div><div class="task-add-row"><input class="task-add-input" id="cpi-${cp.id}" placeholder="Add item..."><button class="task-add-btn" onclick="addCPItem('${cp.id}')">+ Add</button></div>`;
+      div.innerHTML=`<div class="panel-label">${cp.title}${expandBtn}${adminBtns}</div><div class="task-list" style="flex:1;overflow-y:auto">${items}</div><div class="task-add-row"><input class="task-add-input" id="cpi-${cp.id}" placeholder="Add item..."><button class="task-add-btn" onclick="addCPItem('${cp.id}')">+ Add</button></div>`;
     }
     wrap.appendChild(div);
   });
@@ -1174,8 +1175,8 @@ function renderCustomPanels(){
 function saveCustomContent(id,val){const p=(D.customPanels||[]).find(x=>x.id===id);if(p){p.content=val;save();}}
 function toggleCPItem(id,i){const p=(D.customPanels||[]).find(x=>x.id===id);if(p&&p.items){p.items[i].done=!p.items[i].done;save();renderCustomPanels();}}
 function removeCPItem(id,i){const p=(D.customPanels||[]).find(x=>x.id===id);if(p&&p.items){p.items.splice(i,1);save();renderCustomPanels();}}
-function addCPItem(id){const inp=document.getElementById('cpi-'+id);if(!inp)return;const t=inp.value.trim();if(!t)return;const p=(D.customPanels||[]).find(x=>x.id===id);if(p){if(!p.items)p.items=[];p.items.push({text:t,done:false});inp.value='';save();renderCustomPanels();}}
-function removeCustomPanel(id){D.customPanels=(D.customPanels||[]).filter(x=>x.id!==id);save();renderCustomPanels();updateGridRows();if(document.getElementById('settingsModal').style.display!=='none')renderPanelsTab(document.getElementById('settingsBody'));}
+function addCPItem(id){const inp=document.getElementById('cpi-'+id);if(!inp)return;const t=inp.value.trim();if(!t)return;const p=(D.customPanels||[]).find(x=>x.id===id);if(p){if(!p.items)p.items=[];p.items.push({text:t,done:false});inp.value='';save();renderCustomPanels();pushNotif('📝',`Item added: <strong>${t}</strong>`);}}
+function removeCustomPanel(id){D.customPanels=(D.customPanels||[]).filter(x=>x.id!==id);save();renderCustomPanels();pushNotif('📝',`Item added: <strong>${t}</strong>`);updateGridRows();if(document.getElementById('settingsModal').style.display!=='none')renderPanelsTab(document.getElementById('settingsBody'));}
 
 // ── PANEL VISIBILITY ──────────────────────────────────
 const PANEL_DEFS=[
@@ -1270,7 +1271,7 @@ function addCustomPanel(){
   const type=document.getElementById('cpType').value;
   if(!D.customPanels)D.customPanels=[];
   D.customPanels.push({id:'cp'+Date.now(),title,type,content:'',items:[]});
-  save();renderCustomPanels();updateGridRows();
+  save();renderCustomPanels();pushNotif('📌',`Panel added: <strong>${title}</strong>`);updateGridRows();
   document.getElementById('cpTitle').value='';
   renderPanelsTab(document.getElementById('settingsBody'));
   logAct('Custom Panel Added',title);
@@ -1377,6 +1378,7 @@ function closeModal(id){document.getElementById(id).style.display='none';}
 document.querySelectorAll('.modal-ov').forEach(m=>{m.addEventListener('click',e=>{if(e.target===m)m.style.display='none';});});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.modal-ov').forEach(m=>m.style.display='none');const fs=document.getElementById('mahiFS');if(fs.style.display!=='none')closeMahiFS();}});
 
+
 // ── INIT ──────────────────────────────────────────────
 
 // ══════════════════════════════════════════════════════
@@ -1444,6 +1446,23 @@ function showDash(){
   const panels=D.panels||{};
   Object.keys(panels).forEach(k=>{const el=document.getElementById('panel-'+k);if(el&&!panels[k])el.style.display='none';});
   loadNotifs();
+  // Push daily summary notification on login
+  (function(){
+    const today = new Date().toDateString();
+    const lastKey = 'rdu_notif_day_' + CU.username;
+    if(localStorage.getItem(lastKey) !== today){
+      localStorage.setItem(lastKey, today);
+      const jobs = (D.jobs||[]).length;
+      const tasks = (D.tasks||[]).filter(t=>!t.done).length;
+      const mylaT = (D.va_myla||[]).filter(t=>!t.done).length;
+      const tonethT = (D.va_toneth||[]).filter(t=>!t.done).length;
+      setTimeout(()=>{
+        pushNotif('👋', `Welcome back <strong>${CU.name}</strong> — ${jobs} active jobs, ${tasks} tasks pending`);
+        if(mylaT>0) pushNotif('🟣', `Myla has <strong>${mylaT}</strong> task${mylaT>1?'s':''} pending`);
+        if(tonethT>0) pushNotif('🟣', `Toneth has <strong>${tonethT}</strong> task${tonethT>1?'s':''} pending`);
+      }, 500);
+    }
+  })();
   fetchCloud(true);setInterval(()=>fetchCloud(false),60000);
   loadWeather();setInterval(loadWeather,600000);
   updateClock();setInterval(updateClock,1000);
@@ -1548,7 +1567,13 @@ function openPFS(key){
   } else if(key==='launcher'){renderPFSLauncher();}
   else if(key==='notes'){document.getElementById('pfs-notes-area').value=D.notes||'';}
   else if(key==='weather'){const b=document.getElementById('pfs-weather-body');if(_wxHTML)b.innerHTML=_wxHTML;}
-  else if(key==='devotional'){const b=document.getElementById('pfs-devotional-body');if(_devHTML)b.innerHTML=_devHTML;}
+  else if(key==='devotional'){
+    const b=document.getElementById('pfs-devotional-body');
+    const src=document.getElementById('devotionalBody');
+    if(src&&src.innerHTML){b.innerHTML=src.innerHTML;}
+    else if(_devHTML){b.innerHTML=_devHTML;}
+    else{b.innerHTML='<div style="color:var(--muted);text-align:center;padding:20px;font-size:0.6rem">Loading devotional...</div>';loadDevotional();setTimeout(()=>{const s2=document.getElementById('devotionalBody');if(s2)b.innerHTML=s2.innerHTML;},600);}
+  }
 }
 function closePFS(key){
   if(key==='jobs'){D.jobs=collectJobsFromEl('pfs-jobs-body');save();document.getElementById('jobBody').innerHTML='';(D.jobs||[]).forEach(j=>renderJob(j));}
@@ -1567,7 +1592,7 @@ function renderPFSTasks(){
 }
 function addTaskPFS(){const i=document.getElementById('pfs-newTask');const t=i.value.trim();if(!t)return;D.tasks.push({text:t,done:false});i.value='';save();document.getElementById('taskList').innerHTML='';D.tasks.forEach(x=>renderTask(x));renderPFSTasks();pushNotif('⚡',`Task: <strong>${t}</strong>`);}
 function renderPFSVa(w){
-  const bid=w==='myla'?'pfs-mb':'pfs-to';
+  const bid=w==='myla'?'pfs-myla-body':'pfs-toneth-body';
   const b=document.getElementById(bid);b.innerHTML='';
   (D['va_'+w]||[]).forEach((t,i)=>{
     const div=document.createElement('div');div.className='fs-vatask'+(t.done?' done':'');
@@ -1575,7 +1600,7 @@ function renderPFSVa(w){
     b.appendChild(div);
   });
 }
-function addVaPFS(w){const inp=document.getElementById(w==='myla'?'pfs-mt':'pfs-tt');const t=inp.value.trim();if(!t)return;if(!D['va_'+w])D['va_'+w]=[];D['va_'+w].push({text:t,done:false});inp.value='';save();document.getElementById(w==='myla'?'mylaTaskList':'tonethTaskList').innerHTML='';(D['va_'+w]||[]).forEach(x=>renderVaTask(w,x));renderPFSVa(w);}
+function addVaPFS(w){const inp=document.getElementById(w==='myla'?'pfs-mylaTask':'pfs-tonethTask');const t=inp.value.trim();if(!t)return;if(!D['va_'+w])D['va_'+w]=[];D['va_'+w].push({text:t,done:false});inp.value='';save();document.getElementById(w==='myla'?'mylaTaskList':'tonethTaskList').innerHTML='';(D['va_'+w]||[]).forEach(x=>renderVaTask(w,x));renderPFSVa(w);}
 function renderPFSLauncher(){
   const b=document.getElementById('pfs-launcher-body');b.innerHTML='';
   (D.apps||DEFAULT_APPS).forEach(app=>{
@@ -1770,6 +1795,37 @@ document.addEventListener('keydown',e=>{
     document.getElementById('mentionPopup')?.classList.remove('open');
   }
 });
+
+function openCustomPFS(id){
+  const cp=(D.customPanels||[]).find(x=>x.id===id);if(!cp)return;
+  let el=document.getElementById('pfs-custom-'+id);
+  if(!el){
+    el=document.createElement('div');
+    el.id='pfs-custom-'+id;
+    el.className='pfs';
+    el.style.display='none';
+    el.innerHTML=`
+      <div class="pfs-head">
+        <div class="pfs-title">&#9974; ${cp.title}</div>
+        <button class="pfs-close" onclick="closeCustomPFS('${id}')">&#10005; CLOSE</button>
+      </div>
+      <div class="pfs-body" style="flex:1;overflow-y:auto;padding:16px">
+        <div id="pfs-custom-body-${id}"></div>
+        ${cp.type==='list'?`<div class="pfs-add-row" style="margin-top:12px;display:flex;gap:8px"><input class="pfs-input" id="pfs-ci-${id}" placeholder="Add item..."><button class="pfs-add-btn" onclick="addCPItem('${id}')">+ ADD</button></div>`:''}
+      </div>`;
+    document.body.appendChild(el);
+  }
+  el.style.display='flex';
+  const body=document.getElementById('pfs-custom-body-'+id);
+  if(!body)return;
+  if(cp.type==='notes'){
+    body.innerHTML=`<textarea style="width:100%;height:300px;background:var(--surface2);border:1.5px solid var(--border);border-radius:6px;color:var(--text-light);padding:10px;font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;resize:none" onchange="saveCustomContent('${id}',this.value)">${cp.content||''}</textarea>`;
+  } else if(cp.type==='list'){
+    const items=(cp.items||[]).map((item,i)=>`<div class="fs-task${item.done?' done':''}"><div class="fs-task-chk" onclick="toggleCPItem('${id}',${i})">✓</div><span class="fs-task-txt">${item.text}</span><button class="fs-del" onclick="removeCPItem('${id}',${i})">✕</button></div>`).join('');
+    body.innerHTML=items||'<div style="color:var(--muted);text-align:center;padding:20px;font-size:0.6rem">No items yet</div>';
+  }
+}
+function closeCustomPFS(id){const el=document.getElementById('pfs-custom-'+id);if(el)el.style.display='none';}
 
 // ── INIT ──────────────────────────────────────────
 if(!checkSession())syncUI('ok','☁ Ready — please log in')</script>
