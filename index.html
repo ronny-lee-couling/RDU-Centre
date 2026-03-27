@@ -68,12 +68,12 @@ body{background:var(--earth-deep);font-family:'Barlow',sans-serif;color:var(--te
 .modal-body{flex:1;overflow-y:auto;padding:14px 16px;}
 .modal-body
 /* NOTIFICATIONS */
-.notif-wrap{position:relative;}
+.notif-wrap{position:relative;z-index:9999;}
 .notif-btn{background:rgba(212,169,106,0.12);border:1px solid rgba(212,169,106,0.35);border-radius:5px;padding:5px 9px;cursor:pointer;font-size:0.9rem;line-height:1;transition:all 0.2s;position:relative;}
 .notif-btn:hover{background:rgba(212,169,106,0.25);}
 .notif-badge{position:absolute;top:-5px;right:-5px;background:var(--red-dust);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:0.42rem;border-radius:10px;padding:1px 4px;min-width:14px;text-align:center;display:none;box-shadow:0 0 6px rgba(192,57,43,0.5);}
 .notif-badge.show{display:block;}
-.notif-panel{position:absolute;top:calc(100% + 8px);right:0;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:300;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
+.notif-panel{position:fixed;top:68px;right:16px;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:9999;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
 .notif-panel.open{display:flex;}
 .notif-head{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1.5px solid var(--border);background:linear-gradient(135deg,var(--earth-dark),var(--brown) 60%,var(--earth-dark));border-radius:6px 6px 0 0;flex-shrink:0;}
 .notif-head-title{font-family:'Bebas Neue',sans-serif;font-size:0.78rem;letter-spacing:0.12em;color:var(--tan-light);}
@@ -312,6 +312,7 @@ footer{grid-column:1/-1;display:flex;justify-content:space-between;align-items:c
 .panel::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--brown-light),var(--tan),var(--brown-light));opacity:0.6;}
 .panel-label{font-family:'Bebas Neue',sans-serif;font-size:0.82rem;letter-spacing:0.14em;color:var(--brown);text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:5px;flex-shrink:0;}
 .panel-label::after{content:'';flex:1;height:1.5px;background:linear-gradient(90deg,var(--border),transparent);}
+.expand-btn{background:rgba(74,159,212,0.1);border:1px solid rgba(74,159,212,0.35);color:var(--blue-bright);border-radius:4px;padding:2px 7px;cursor:pointer;font-size:0.6rem;font-weight:600;line-height:1;transition:all 0.15s;}
 .panel-btn{background:none;border:1px solid var(--border);color:var(--subtle);cursor:pointer;font-size:0.6rem;padding:2px 5px;line-height:1;transition:all 0.15s;flex-shrink:0;border-radius:3px;font-family:'Barlow',sans-serif;}
 .panel-btn:hover{color:var(--red-dust);border-color:var(--red-dust);background:rgba(192,57,43,0.08);}
 .panel-btn.expand{color:var(--blue-bright);border-color:rgba(74,159,212,0.4);}
@@ -322,12 +323,12 @@ footer{grid-column:1/-1;display:flex;justify-content:space-between;align-items:c
 .apps-grid{display:flex;flex-direction:column;gap:2px;flex:1;overflow-y:auto;}
 .apps-grid
 /* NOTIFICATIONS */
-.notif-wrap{position:relative;}
+.notif-wrap{position:relative;z-index:9999;}
 .notif-btn{background:rgba(212,169,106,0.12);border:1px solid rgba(212,169,106,0.35);border-radius:5px;padding:5px 9px;cursor:pointer;font-size:0.9rem;line-height:1;transition:all 0.2s;position:relative;}
 .notif-btn:hover{background:rgba(212,169,106,0.25);}
 .notif-badge{position:absolute;top:-5px;right:-5px;background:var(--red-dust);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:0.42rem;border-radius:10px;padding:1px 4px;min-width:14px;text-align:center;display:none;box-shadow:0 0 6px rgba(192,57,43,0.5);}
 .notif-badge.show{display:block;}
-.notif-panel{position:absolute;top:calc(100% + 8px);right:0;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:300;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
+.notif-panel{position:fixed;top:68px;right:16px;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:9999;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
 .notif-panel.open{display:flex;}
 .notif-head{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1.5px solid var(--border);background:linear-gradient(135deg,var(--earth-dark),var(--brown) 60%,var(--earth-dark));border-radius:6px 6px 0 0;flex-shrink:0;}
 .notif-head-title{font-family:'Bebas Neue',sans-serif;font-size:0.78rem;letter-spacing:0.12em;color:var(--tan-light);}
@@ -531,12 +532,12 @@ tr:hover td{background:var(--surface2);}
 
 
 /* NOTIFICATIONS */
-.notif-wrap{position:relative;}
+.notif-wrap{position:relative;z-index:9999;}
 .notif-btn{background:rgba(212,169,106,0.12);border:1px solid rgba(212,169,106,0.35);border-radius:5px;padding:5px 9px;cursor:pointer;font-size:0.9rem;line-height:1;transition:all 0.2s;position:relative;}
 .notif-btn:hover{background:rgba(212,169,106,0.25);}
 .notif-badge{position:absolute;top:-5px;right:-5px;background:var(--red-dust);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:0.42rem;border-radius:10px;padding:1px 4px;min-width:14px;text-align:center;display:none;box-shadow:0 0 6px rgba(192,57,43,0.5);}
 .notif-badge.show{display:block;}
-.notif-panel{position:absolute;top:calc(100% + 8px);right:0;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:300;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
+.notif-panel{position:fixed;top:68px;right:16px;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:9999;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
 .notif-panel.open{display:flex;}
 .notif-head{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1.5px solid var(--border);background:linear-gradient(135deg,var(--earth-dark),var(--brown) 60%,var(--earth-dark));border-radius:6px 6px 0 0;flex-shrink:0;}
 .notif-head-title{font-family:'Bebas Neue',sans-serif;font-size:0.78rem;letter-spacing:0.12em;color:var(--tan-light);}
@@ -783,7 +784,7 @@ tr:hover td{background:var(--surface2);}
 
   <!-- QUICK LAUNCH -->
   <div class="panel launcher" id="panel-launcher">
-    <div class="panel-label">Quick Launch<button class="panel-btn" onclick="openPFS('launcher')" style="color:var(--blue-bright);border-color:rgba(74,159,212,0.4);" title="Fullscreen">&#9974;</button>>—</button></div>
+    <div class="panel-label">Quick Launch<button class="expand-btn" onclick="openPFS('launcher')" style="color:var(--blue-bright);border-color:rgba(74,159,212,0.4);" title="Fullscreen">&#9974;</button>>—</button></div>
     <div class="apps-grid" id="appsGrid"></div>
     <div style="margin-top:8px;flex-shrink:0;">
       <div class="panel-label" style="margin-bottom:4px;font-size:0.7rem;">Notes<button class="pbtn expand" onclick="openPFS('notes')" title="Fullscreen">&#9974;</button></div>
@@ -794,17 +795,17 @@ tr:hover td{background:var(--surface2);}
   <!-- WEATHER + VA -->
   <div class="weather-va-row">
     <div class="panel weather-panel" id="panel-weather">
-      <div class="panel-label">Weather — Sutherland Shire<button class="panel-btn" onclick="openPFS('weather')" style="color:var(--blue-bright);border-color:rgba(74,159,212,0.4);" title="Fullscreen">&#9974;</button>>—</button></div>
+      <div class="panel-label">Weather — Sutherland Shire<button class="expand-btn" onclick="openPFS('weather')" style="color:var(--blue-bright);border-color:rgba(74,159,212,0.4);" title="Fullscreen">&#9974;</button>>—</button></div>
       <div id="weatherContent" class="weather-loading">Fetching...</div>
     </div>
     <div class="va-col">
       <div class="panel va-panel" id="panel-myla">
-        <div class="panel-label">Myla Tasks 🟣<button class="panel-btn" onclick="openPFS('myla')" style="color:var(--blue-bright);border-color:rgba(74,159,212,0.4);" title="Fullscreen">&#9974;</button>>—</button></div>
+        <div class="panel-label">Myla Tasks 🟣<button class="expand-btn" onclick="openPFS('myla')" style="color:var(--blue-bright);border-color:rgba(74,159,212,0.4);" title="Fullscreen">&#9974;</button>>—</button></div>
         <div class="va-task-list" id="mylaTaskList"></div>
         <div class="va-add-row"><input class="va-add-input" id="mylaInput" placeholder="Add task..." onkeydown="if(event.key==='Enter')addVaTask('myla')"><button class="va-add-btn" onclick="addVaTask('myla')">+ Add</button></div>
       </div>
       <div class="panel va-panel" id="panel-toneth">
-        <div class="panel-label">Toneth Tasks 🟣<button class="panel-btn" onclick="openPFS('toneth')" style="color:var(--blue-bright);border-color:rgba(74,159,212,0.4);" title="Fullscreen">&#9974;</button>>—</button></div>
+        <div class="panel-label">Toneth Tasks 🟣<button class="expand-btn" onclick="openPFS('toneth')" style="color:var(--blue-bright);border-color:rgba(74,159,212,0.4);" title="Fullscreen">&#9974;</button>>—</button></div>
         <div class="va-task-list" id="tonethTaskList"></div>
         <div class="va-add-row"><input class="va-add-input" id="tonethInput" placeholder="Add task..." onkeydown="if(event.key==='Enter')addVaTask('toneth')"><button class="va-add-btn" onclick="addVaTask('toneth')">+ Add</button></div>
       </div>
@@ -813,13 +814,13 @@ tr:hover td{background:var(--surface2);}
 
   <!-- DEVOTIONAL -->
   <div class="panel devotional-panel" id="panel-devotional">
-    <div class="panel-label">Daily Devotional 📖<button class="panel-btn" onclick="openPFS('devotional')" style="color:var(--blue-bright);border-color:rgba(74,159,212,0.4);" title="Fullscreen">&#9974;</button>>—</button></div>
+    <div class="panel-label">Daily Devotional 📖<button class="expand-btn" onclick="openPFS('devotional')" style="color:var(--blue-bright);border-color:rgba(74,159,212,0.4);" title="Fullscreen">&#9974;</button>>—</button></div>
     <div class="devotional-body" id="devotionalBody"></div>
   </div>
 
   <!-- TASKS -->
   <div class="panel tasks-panel" id="panel-tasks">
-    <div class="panel-label">⚡ Super Human Tasks<button class="panel-btn" onclick="openPFS('tasks')" style="color:var(--blue-bright);border-color:rgba(74,159,212,0.4);" title="Fullscreen">&#9974;</button>>—</button></div>
+    <div class="panel-label">⚡ Super Human Tasks<button class="expand-btn" onclick="openPFS('tasks')" style="color:var(--blue-bright);border-color:rgba(74,159,212,0.4);" title="Fullscreen">&#9974;</button>>—</button></div>
     <div class="task-list" id="taskList"></div>
     <div class="task-add-row"><input class="task-add-input" id="newTaskInput" placeholder="Add a task..." onkeydown="if(event.key==='Enter')addTask()"><button class="task-add-btn" onclick="addTask()">+ Add</button></div>
   </div>
@@ -830,7 +831,7 @@ tr:hover td{background:var(--surface2);}
       <div class="panel-label">
         MAHI — Live Projects 🔨
         <button class="panel-btn expand" onclick="openMahiFS()" title="Fullscreen">⛶</button>
-        <button class="panel-btn" onclick="openPFS('jobs')" style="color:var(--blue-bright);border-color:rgba(74,159,212,0.4);" title="Fullscreen">&#9974;</button>>—</button>
+        <button class="expand-btn" onclick="openPFS('jobs')" style="color:var(--blue-bright);border-color:rgba(74,159,212,0.4);" title="Fullscreen">&#9974;</button>>—</button>
       </div>
       <div class="jobs-table-wrap">
         <table><thead><tr>
@@ -850,7 +851,7 @@ tr:hover td{background:var(--surface2);}
       </div>
     </div>
     <div class="panel po-panel" id="panel-po">
-      <div class="panel-label">PO — Subcontractors 📄<button class="panel-btn" onclick="openPFS('po')" style="color:var(--blue-bright);border-color:rgba(74,159,212,0.4);" title="Fullscreen">&#9974;</button>>—</button></div>
+      <div class="panel-label">PO — Subcontractors 📄<button class="expand-btn" onclick="openPFS('po')" style="color:var(--blue-bright);border-color:rgba(74,159,212,0.4);" title="Fullscreen">&#9974;</button>>—</button></div>
       <div class="po-table-wrap">
         <table class="po-table"><thead><tr><th>PO #</th><th>Address</th><th>Name</th><th>Status</th><th style="width:14px"></th></tr></thead><tbody id="poBody"></tbody></table>
       </div>
@@ -1474,13 +1475,6 @@ function nRender(){
 function clearNotifs(){NOTIFS=[];nSave();nRender();}
 function toggleNotifPanel(){
   const p=document.getElementById('notifPanel');
-  const btn=document.getElementById('notifWrap');
-  if(p.parentElement!==document.body){
-    const rect=btn.getBoundingClientRect();
-    p.style.top=(rect.bottom+8)+'px';
-    p.style.right=(window.innerWidth-rect.right)+'px';
-    document.body.appendChild(p);
-  }
   p.classList.toggle('open');
   if(p.classList.contains('open')){NOTIFS.forEach(n=>n.unread=false);nSave();nRender();}
 }
@@ -1732,7 +1726,35 @@ async function submitComment(){
 
 // ── CLOUD SYNC ────────────────────────────────────────
 async function fetchCloud(init){
-  syncUI('ok','☁ Live sync active');
+  try{
+    if(init)syncUI('saving','Loading...');
+    const ctrl=new AbortController();
+    setTimeout(()=>ctrl.abort(),6000);
+    const res=await fetch(SHEET+'?t='+Date.now(),{cache:'no-cache',signal:ctrl.signal});
+    if(!res.ok)throw new Error();
+    const txt=await res.text();
+    if(!txt||txt.trim()[0]!=='{')throw new Error();
+    const cloud=JSON.parse(txt);
+    if(!cloud||!cloud._ts)throw new Error();
+    // Smart merge: only update if cloud is newer AND has at least as many jobs
+    const localJobs=(D.jobs||[]).length;
+    const cloudJobs=(cloud.jobs||[]).length;
+    const cloudNewer=cloud._ts>(D._ts||0);
+    if(cloudNewer&&cloudJobs>=localJobs){
+      D=cloud;lsWrite(D);renderAll();
+      syncUI('ok','☁ Synced');
+      checkNewNotifs(cloud);
+    } else {
+      // Even if we don't replace D, still sync customPanels from cloud
+      // so Toneth's panels appear for everyone
+      if(cloud.customPanels&&cloud.customPanels.length>(D.customPanels||[]).length){
+        D.customPanels=cloud.customPanels;lsWrite(D);renderCustomPanels();
+      }
+      syncUI('ok','☁ Live sync active');
+    }
+  }catch(e){
+    syncUI('ok','💾 Local data active');
+  }
 }
 
 // ── ADDTASK/ADDJOB NOTIFICATIONS ─────────────────────
