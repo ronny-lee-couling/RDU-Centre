@@ -887,15 +887,12 @@ async function fetchCloud(init){
     const cloud=JSON.parse(txt);
     // Only overwrite local if cloud is newer AND has actual data
     // Prevents blank cloud sheet from wiping user's local jobs
-    const cloudHasData = cloud && (
-      (cloud.jobs && cloud.jobs.length > 0) ||
-      (cloud.tasks && cloud.tasks.length > 0) ||
-      cloud.notes ||
-      (cloud.moko && cloud.moko.rev)
-    );
-    const localHasData = (D.jobs && D.jobs.length > 0) || (D.tasks && D.tasks.length > 0);
+    const localJobCount = (D.jobs || []).length;
+    const cloudJobCount = (cloud.jobs || []).length;
     const cloudIsNewer = cloud && cloud._ts && cloud._ts > (D._ts || 0);
-    if (cloudIsNewer && (cloudHasData || !localHasData)) {
+    // NEVER let cloud wipe local jobs — only update if cloud has equal or more jobs
+    const safeToUpdate = cloudIsNewer && (cloudJobCount >= localJobCount);
+    if (safeToUpdate) {
       D = cloud; lsWrite(D); renderAll(); syncUI('ok','☁ Cloud loaded'); checkNewNotifs(cloud);
     } else { syncUI('ok','☁ Live sync active'); }
     setTimeout(()=>syncUI('ok','☁ Live sync active'),2500);
@@ -949,7 +946,43 @@ function showDash(){
     const oc=el.getAttribute('onclick')||'';
     if(oc.includes('togglePanel'))el.style.display=isCtrl()?'':'none';
   });
-  D=lsRead()||{_ts:0,tasks:[],va_myla:[],va_toneth:[],jobs:[],pos:[],notes:'',panels:{},apps:null,dropdowns:null,customPanels:[],permissions:{},users:[]};
+  D=lsRead()||{};
+  // Seed defaults if nothing in storage
+  if(!D._ts){
+    D={
+      _ts:0,
+      tasks:[
+        {text:"Lofty's Lloyds quote",done:false},
+        {text:"Chase HCM Build progress",done:false},
+        {text:"Follow up Brad — Uplift Building",done:false}
+      ],
+      va_myla:[
+        {text:"Chase Lloyds deposit",done:false},
+        {text:"Update job tracker",done:false},
+        {text:"Follow up Uplift Building",done:false}
+      ],
+      va_toneth:[
+        {text:"Invoice HCM Build",done:false},
+        {text:"Xero reconciliation",done:false},
+        {text:"Send weekly P&L",done:false}
+      ],
+      jobs:[
+        {id:'j001',quote:'0016',name:'Lloyds Building',addr:'297 Woolooware Rd, Burraneer 2230',value:'$42,500',stage:'in-progress',invoice:'not-invoiced',driveUrl:''},
+        {id:'j002',quote:'0094A',name:'HCM Build',addr:'111 Mansfield St, Rozelle 2039',value:'$29,500',stage:'in-progress',invoice:'not-invoiced',driveUrl:''},
+        {id:'j003',quote:'0068',name:'Trustee Perpetual Disc',addr:'21 Mallacoota Cl, Prestons',value:'$13,988',stage:'in-progress',invoice:'not-invoiced',driveUrl:''},
+        {id:'j004',quote:'0020',name:'Lloyds Building',addr:'20 Northcote St, Canterbury 2193',value:'$45,000',stage:'in-progress',invoice:'not-invoiced',driveUrl:''},
+        {id:'j005',quote:'0058',name:'Alan Acumen Built',addr:'94 Wollybutt Rd, Engadine',value:'$55,616',stage:'in-progress',invoice:'not-invoiced',driveUrl:''},
+        {id:'j006',quote:'0018',name:'Lloyds',addr:'2 Clarke St, Peakhurst 2210',value:'$45,000',stage:'in-progress',invoice:'not-invoiced',driveUrl:''},
+        {id:'j007',quote:'0017',name:'Lloyds',addr:'4 Clarke St, Peakhurst 2210',value:'$45,000',stage:'in-progress',invoice:'not-invoiced',driveUrl:''},
+        {id:'j008',quote:'QU-0015',name:'Lloyds Building',addr:'9 Fairs Ave, Woolooware',value:'$45,859',stage:'in-progress',invoice:'not-invoiced',driveUrl:''},
+        {id:'j009',quote:'0021',name:'Brad — Uplift Building',addr:'41 Lower Washington Dr',value:'$3,850',stage:'in-progress',invoice:'not-invoiced',driveUrl:''}
+      ],
+      pos:[],
+      notes:'Rocky 🐾 — worksite drop 8am\nToneth: invoice HCM Build\nMyla: chase Lloyds deposit',
+      panels:{},apps:null,dropdowns:null,customPanels:[],permissions:{},users:[]
+    };
+    lsWrite(D);
+  }
   if(!D.apps)D.apps=[...DEFAULT_APPS];
   if(!D.dropdowns)D.dropdowns=JSON.parse(JSON.stringify(DEFAULT_DD));
   if(!D.customPanels)D.customPanels=[];
