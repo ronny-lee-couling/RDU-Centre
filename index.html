@@ -946,9 +946,11 @@ function showDash(){
     const oc=el.getAttribute('onclick')||'';
     if(oc.includes('togglePanel'))el.style.display=isCtrl()?'':'none';
   });
-  D=lsRead()||{};
+  const _saved = lsRead();
+  // If saved data has no jobs, ignore it and use defaults
+  D = (_saved && _saved.jobs && _saved.jobs.length > 0) ? _saved : {};
   // Seed defaults if nothing in storage
-  if(!D._ts){
+  if(!(D.jobs && D.jobs.length > 0)){
     D={
       _ts:0,
       tasks:[
