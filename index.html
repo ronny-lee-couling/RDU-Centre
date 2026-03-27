@@ -68,12 +68,12 @@ body{background:var(--earth-deep);font-family:'Barlow',sans-serif;color:var(--te
 .modal-body{flex:1;overflow-y:auto;padding:14px 16px;}
 .modal-body
 /* NOTIFICATIONS */
-.notif-wrap{position:relative;z-index:601;}
+.notif-wrap{position:relative;z-index:9999;}
 .notif-btn{background:rgba(212,169,106,0.12);border:1px solid rgba(212,169,106,0.35);border-radius:5px;padding:5px 9px;cursor:pointer;font-size:0.9rem;line-height:1;transition:all 0.2s;position:relative;}
 .notif-btn:hover{background:rgba(212,169,106,0.25);}
 .notif-badge{position:absolute;top:-5px;right:-5px;background:var(--red-dust);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:0.42rem;border-radius:10px;padding:1px 4px;min-width:14px;text-align:center;display:none;box-shadow:0 0 6px rgba(192,57,43,0.5);}
 .notif-badge.show{display:block;}
-.notif-panel{position:fixed;top:72px;right:18px;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:600;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
+.notif-panel{position:fixed;top:72px;right:18px;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:9999;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
 .notif-panel.open{display:flex;}
 .notif-head{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1.5px solid var(--border);background:linear-gradient(135deg,var(--earth-dark),var(--brown) 60%,var(--earth-dark));border-radius:6px 6px 0 0;flex-shrink:0;}
 .notif-head-title{font-family:'Bebas Neue',sans-serif;font-size:0.78rem;letter-spacing:0.12em;color:var(--tan-light);}
@@ -442,12 +442,12 @@ tr:hover td{background:var(--surface2);}
 
 
 /* NOTIFICATIONS */
-.notif-wrap{position:relative;z-index:601;}
+.notif-wrap{position:relative;z-index:9999;}
 .notif-btn{background:rgba(212,169,106,0.12);border:1px solid rgba(212,169,106,0.35);border-radius:5px;padding:5px 9px;cursor:pointer;font-size:0.9rem;line-height:1;transition:all 0.2s;position:relative;}
 .notif-btn:hover{background:rgba(212,169,106,0.25);}
 .notif-badge{position:absolute;top:-5px;right:-5px;background:var(--red-dust);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:0.42rem;border-radius:10px;padding:1px 4px;min-width:14px;text-align:center;display:none;box-shadow:0 0 6px rgba(192,57,43,0.5);}
 .notif-badge.show{display:block;}
-.notif-panel{position:fixed;top:72px;right:18px;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:600;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
+.notif-panel{position:fixed;top:72px;right:18px;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:9999;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
 .notif-panel.open{display:flex;}
 .notif-head{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1.5px solid var(--border);background:linear-gradient(135deg,var(--earth-dark),var(--brown) 60%,var(--earth-dark));border-radius:6px 6px 0 0;flex-shrink:0;}
 .notif-head-title{font-family:'Bebas Neue',sans-serif;font-size:0.78rem;letter-spacing:0.12em;color:var(--tan-light);}
@@ -885,8 +885,19 @@ async function fetchCloud(init){
     const txt=await res53.text();
     if(!txt||txt.trim()[0]!=='{')throw new Error('bad response');
     const cloud=JSON.parse(txt);
-    if(cloud&&cloud._ts&&cloud._ts>(D._ts||0)){D=cloud;lsWrite(D);renderAll();syncUI('ok','☁ Cloud loaded');checkNewNotifs(cloud);}
-    else syncUI('ok','☁ Live sync active');
+    // Only overwrite local if cloud is newer AND has actual data
+    // Prevents blank cloud sheet from wiping user's local jobs
+    const cloudHasData = cloud && (
+      (cloud.jobs && cloud.jobs.length > 0) ||
+      (cloud.tasks && cloud.tasks.length > 0) ||
+      cloud.notes ||
+      (cloud.moko && cloud.moko.rev)
+    );
+    const localHasData = (D.jobs && D.jobs.length > 0) || (D.tasks && D.tasks.length > 0);
+    const cloudIsNewer = cloud && cloud._ts && cloud._ts > (D._ts || 0);
+    if (cloudIsNewer && (cloudHasData || !localHasData)) {
+      D = cloud; lsWrite(D); renderAll(); syncUI('ok','☁ Cloud loaded'); checkNewNotifs(cloud);
+    } else { syncUI('ok','☁ Live sync active'); }
     setTimeout(()=>syncUI('ok','☁ Live sync active'),2500);
   }catch(e){
     // CORS fail is expected from GitHub Pages — just use local data
@@ -1465,15 +1476,29 @@ function nRender() {
 
 function clearNotifs() { NOTIFS = []; nSave(); nRender(); }
 
-function toggleNotifPanel() {
+function toggleNotifPanel(){
   const p = document.getElementById('notifPanel');
+  // Move to body on first use so it's never clipped by stacking contexts
+  if (p.parentElement !== document.body) {
+    const btn = document.getElementById('notifWrap');
+    const rect = btn.getBoundingClientRect();
+    p.style.top = (rect.bottom + 8) + 'px';
+    p.style.right = (window.innerWidth - rect.right) + 'px';
+    document.body.appendChild(p);
+  }
   p.classList.toggle('open');
-  if (p.classList.contains('open')) { NOTIFS.forEach(n => n.unread = false); nSave(); nRender(); }
+  if (p.classList.contains('open')) {
+    NOTIFS.forEach(n => n.unread = false);
+    nSave(); nRender();
+  }
 }
 
 document.addEventListener('click', e => {
   const w = document.getElementById('notifWrap');
-  if (w && !w.contains(e.target)) document.getElementById('notifPanel').classList.remove('open');
+  const p = document.getElementById('notifPanel');
+  if (w && p && !w.contains(e.target) && !p.contains(e.target)) {
+    p.classList.remove('open');
+  }
 });
 
 function checkNewNotifs(cloud) {
