@@ -917,21 +917,29 @@ function showDash(){
   document.getElementById('mainWrap').style.display='';
   document.getElementById('userPill').style.display='flex';
   document.getElementById('userPillName').textContent=CU.name;
-  // show panel buttons only for admin
-  document.querySelectorAll('.panel-btn').forEach(el=>el.style.display=CU.role==='admin'?'':'none');
-  D=lsRead()||{_ts:0,tasks:[],va_myla:[],va_toneth:[],jobs:[],pos:[],notes:'',panels:{},apps:null,dropdowns:null,customPanels:[],panelOrder:[]};
+  document.querySelectorAll('.ctrl-only').forEach(el=>el.style.display=isCtrl()?'':'none');
+  document.querySelectorAll('.panel-btn').forEach(el=>{
+    const oc=el.getAttribute('onclick')||'';
+    if(oc.includes('togglePanel'))el.style.display=isCtrl()?'':'none';
+  });
+  D=lsR()||{_ts:0,tasks:[],va_myla:[],va_toneth:[],jobs:[],pos:[],notes:'',panels:{},apps:null,dropdowns:null,customPanels:[],permissions:{},users:[]};
   if(!D.apps)D.apps=[...DEFAULT_APPS];
   if(!D.dropdowns)D.dropdowns=JSON.parse(JSON.stringify(DEFAULT_DD));
   if(!D.customPanels)D.customPanels=[];
-  if(!D.panelOrder)D.panelOrder=[];
+  if(!D.permissions)D.permissions={};
+  if(!D.users)D.users=[];
+  _lastJC=(D.jobs||[]).length;
+  _lastTC=(D.tasks||[]).length;
   renderAll();
   const panels=D.panels||{};
   Object.keys(panels).forEach(k=>{const el=document.getElementById('panel-'+k);if(el&&!panels[k])el.style.display='none';});
-  fetchCloud(true);setInterval(()=>fetchCloud(false),60000);
+  nLoad();
+  fetchCloud(true);setInterval(()=>fetchCloud(false),30000);
   loadWeather();setInterval(loadWeather,600000);
   updateClock();setInterval(updateClock,1000);
   loadDevotional();
 }
+
 function doLogout(){localStorage.removeItem(SES_KEY);location.reload();}
 function logAct(ev,det){if(!CU)return;fetch(`${SHEET}?action=log-activity&u=${encodeURIComponent(CU.username)}&n=${encodeURIComponent(CU.name)}&event=${encodeURIComponent(ev)}&details=${encodeURIComponent(det)}`).catch(()=>{});}
 
@@ -965,6 +973,7 @@ function populateAddSelects(){
 
 // ── RENDER ALL ────────────────────────────────────────
 function renderAll(){
+  checkNewNotifs(D);
   renderApps();
   document.getElementById('taskList').innerHTML='';(D.tasks||[]).forEach(renderTask);
   document.getElementById('mylaTaskList').innerHTML='';(D.va_myla||[]).forEach(t=>renderVaTask('myla',t));
@@ -1019,6 +1028,30 @@ async function loadWeather(){
         </div>
       </div>`;
   }catch(e){document.getElementById('weatherContent').innerHTML='<div class="weather-loading">No signal</div>';}
+
+  // cache for PFS fullscreen
+  const wb = document.getElementById('weatherContent');
+  if (wb) {
+    const icon = wb.querySelector('.weather-icon-sm')?.textContent || '🌤️';
+    const temp = wb.querySelector('.weather-temp-sm')?.textContent || '—';
+    const desc = wb.querySelector('.weather-desc-sm')?.textContent || '';
+    const badge = wb.querySelector('.weather-tools-badge');
+    const badgeCls = badge ? badge.className.replace('weather-tools-badge','').trim() : '';
+    const badgeTxt = badge ? badge.textContent : '';
+    const stats = Array.from(wb.querySelectorAll('.w-stat-sm')).map(s => ({
+      label: s.querySelector('.w-stat-sm-label')?.textContent || '',
+      val: s.querySelector('.w-stat-sm-val')?.textContent || ''
+    }));
+    _wxHTML = `<div style="display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start;">
+      <div>
+        <div style="font-size:4rem">${icon}</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:4.5rem;color:var(--brown);line-height:1">${temp}</div>
+        <div style="font-weight:700;text-transform:uppercase;color:var(--text-light);margin-top:4px;font-size:1rem">${desc}</div>
+        <div class="fs-wx-badge ${badgeCls}">${badgeTxt}</div>
+      </div>
+      <div class="fs-wx-stats">${stats.map(s => `<div class="fs-wx-stat"><div class="fs-wx-stat-label">${s.label}</div><div class="fs-wx-stat-val">${s.val}</div></div>`).join('')}</div>
+    </div>`;
+  }
 }
 
 // ── DEVOTIONAL ────────────────────────────────────────
@@ -1027,6 +1060,15 @@ function loadDevotional(){
   const n=new Date();const day=Math.floor((n-new Date(n.getFullYear(),0,0))/86400000);const{v,r}=VV[day%VV.length];
   const ds=n.toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).toUpperCase();
   document.getElementById('devotionalBody').innerHTML=`<div class="devotional-verse">"${v}"</div><div class="devotional-ref">— ${r}</div><div class="devotional-date">📖 ${ds}</div>`;
+
+  // cache for PFS
+  const db = document.getElementById('devotionalBody');
+  if (db) {
+    _devHTML = db.innerHTML
+      .replace(/class="devotional-verse"/g,'class="fs-dev-verse"')
+      .replace(/class="devotional-ref"/g,'class="fs-dev-ref"')
+      .replace(/class="devotional-date"/g,'class="fs-dev-date"');
+  }
 }
 
 // ── JOBS ──────────────────────────────────────────────
@@ -1863,70 +1905,16 @@ function setAllPerms(username, val) {
 }
 
 // ── PATCH: showDash — init notifications + role UI ────────────
-const _sD_orig = showDash;
-function showDash() {
-  _sD_orig();
-  if (!D.permissions) D.permissions = {};
-  _lastJC = (D.jobs || []).length;
-  _lastTC = (D.tasks || []).length;
-  nLoad();
-  document.querySelectorAll('.panel-btn').forEach(el => {
-    const oc = el.getAttribute('onclick') || '';
-    if (oc.includes('togglePanel')) el.style.display = isCtrl() ? '' : 'none';
-  });
-}
 
 // ── PATCH: fetchCloud — check new notifs after cloud load ─────
 const _fC_orig = fetchCloud;
 async function fetchCloud(init) {
   await _fC_orig(init);
 }
-const _rA_orig = renderAll;
-function renderAll() {
-  _rA_orig();
-  checkNewNotifs(D);
-}
 
 // ── PATCH: loadWeather — cache for PFS ───────────────────────
-const _lW_orig = loadWeather;
-async function loadWeather() {
-  await _lW_orig();
-  const wb = document.getElementById('weatherContent');
-  if (wb) {
-    const icon = wb.querySelector('.weather-icon-sm')?.textContent || '🌤️';
-    const temp = wb.querySelector('.weather-temp-sm')?.textContent || '—';
-    const desc = wb.querySelector('.weather-desc-sm')?.textContent || '';
-    const badge = wb.querySelector('.weather-tools-badge');
-    const badgeCls = badge ? badge.className.replace('weather-tools-badge','').trim() : '';
-    const badgeTxt = badge ? badge.textContent : '';
-    const stats = Array.from(wb.querySelectorAll('.w-stat-sm')).map(s => ({
-      label: s.querySelector('.w-stat-sm-label')?.textContent || '',
-      val: s.querySelector('.w-stat-sm-val')?.textContent || ''
-    }));
-    _wxHTML = `<div style="display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start;">
-      <div>
-        <div style="font-size:4rem">${icon}</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:4.5rem;color:var(--brown);line-height:1">${temp}</div>
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:700;text-transform:uppercase;color:var(--text-light);margin-top:4px">${desc}</div>
-        <div class="fs-wx-badge ${badgeCls}">${badgeTxt}</div>
-      </div>
-      <div class="fs-wx-stats">${stats.map(s => `<div class="fs-wx-stat"><div class="fs-wx-stat-label">${s.label}</div><div class="fs-wx-stat-val">${s.val}</div></div>`).join('')}</div>
-    </div>`;
-  }
-}
 
 // ── PATCH: loadDevotional — cache for PFS ────────────────────
-const _lDev_orig = loadDevotional;
-function loadDevotional() {
-  _lDev_orig();
-  const b = document.getElementById('devotionalBody');
-  if (b) {
-    _devHTML = b.innerHTML
-      .replace(/class="devotional-verse"/g, 'class="fs-dev-verse"')
-      .replace(/class="devotional-ref"/g, 'class="fs-dev-ref"')
-      .replace(/class="devotional-date"/g, 'class="fs-dev-date"');
-  }
-}
 
 // ── PATCH: openComments — load team for @mention ─────────────
 const _oC_orig = openComments;
