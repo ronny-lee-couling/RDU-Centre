@@ -66,90 +66,7 @@ body{background:var(--earth-deep);font-family:'Barlow',sans-serif;color:var(--te
 .mtab:hover{color:var(--brown);}
 .mtab.active{color:var(--blue-bright);border-bottom-color:var(--blue-bright);background:rgba(74,159,212,0.06);}
 .modal-body{flex:1;overflow-y:auto;padding:14px 16px;}
-.modal-body
-/* NOTIFICATIONS */
-.notif-wrap{position:relative;z-index:9999;}
-.notif-btn{background:rgba(212,169,106,0.12);border:1px solid rgba(212,169,106,0.35);border-radius:5px;padding:5px 9px;cursor:pointer;font-size:0.9rem;line-height:1;transition:all 0.2s;position:relative;}
-.notif-btn:hover{background:rgba(212,169,106,0.25);}
-.notif-badge{position:absolute;top:-5px;right:-5px;background:var(--red-dust);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:0.42rem;border-radius:10px;padding:1px 4px;min-width:14px;text-align:center;display:none;box-shadow:0 0 6px rgba(192,57,43,0.5);}
-.notif-badge.show{display:block;}
-.notif-panel{position:fixed;top:72px;right:18px;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:9999;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
-.notif-panel.open{display:flex;}
-.notif-head{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1.5px solid var(--border);background:linear-gradient(135deg,var(--earth-dark),var(--brown) 60%,var(--earth-dark));border-radius:6px 6px 0 0;flex-shrink:0;}
-.notif-head-title{font-family:'Bebas Neue',sans-serif;font-size:0.78rem;letter-spacing:0.12em;color:var(--tan-light);}
-.notif-clear-btn{background:none;border:1px solid rgba(212,169,106,0.3);color:var(--subtle);font-family:'Barlow Condensed',sans-serif;font-size:0.42rem;padding:2px 7px;cursor:pointer;border-radius:3px;transition:all 0.15s;}
-.notif-clear-btn:hover{color:var(--tan-light);border-color:var(--tan);}
-.notif-list{flex:1;overflow-y:auto;}
-.notif-item{display:flex;align-items:flex-start;gap:9px;padding:9px 13px;border-bottom:1px solid rgba(212,184,150,0.25);cursor:pointer;transition:background 0.12s;}
-.notif-item:hover{background:var(--surface2);}
-.notif-item.unread{background:rgba(74,159,212,0.06);border-left:3px solid var(--blue-sky);}
-.notif-icon{font-size:0.85rem;flex-shrink:0;margin-top:1px;}
-.notif-msg{font-family:'Barlow',sans-serif;font-size:0.58rem;color:var(--text-light);line-height:1.4;font-weight:500;}
-.notif-time{font-family:'Barlow Condensed',sans-serif;font-size:0.38rem;color:var(--muted);letter-spacing:0.08em;margin-top:2px;text-transform:uppercase;}
-.notif-empty{font-family:'Barlow Condensed',sans-serif;font-size:0.54rem;color:var(--muted);text-align:center;padding:18px;letter-spacing:0.1em;}
-/* FULLSCREEN */
-.pfs{position:fixed;inset:0;z-index:350;background:rgba(253,246,232,0.97);display:flex;flex-direction:column;backdrop-filter:blur(10px);}
-.pfs-head{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:linear-gradient(135deg,var(--earth-dark),var(--brown) 60%,var(--earth-dark));border-bottom:2px solid var(--tan);flex-shrink:0;}
-.pfs-title{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--tan-light);letter-spacing:0.14em;}
-.pfs-meta{font-family:'Barlow Condensed',sans-serif;font-size:0.58rem;color:var(--subtle);letter-spacing:0.1em;text-transform:uppercase;margin-left:10px;}
-.pfs-close{background:rgba(192,57,43,0.15);border:1px solid rgba(192,57,43,0.4);color:var(--red-dust);font-family:'Bebas Neue',sans-serif;font-size:0.78rem;padding:6px 14px;cursor:pointer;border-radius:5px;letter-spacing:0.12em;transition:all 0.15s;}
-.pfs-close:hover{background:rgba(192,57,43,0.3);}
-.pfs-body{flex:1;overflow-y:auto;padding:24px 28px;}
-.pfs-footer{display:flex;gap:8px;padding:14px 24px;border-top:1.5px solid var(--border);background:var(--surface2);flex-shrink:0;flex-wrap:wrap;align-items:center;}
-.fs-tbl{width:100%;border-collapse:collapse;}
-.fs-tbl th{font-family:'Bebas Neue',sans-serif;font-size:0.78rem;font-weight:400;letter-spacing:0.14em;color:var(--brown);text-transform:uppercase;padding:9px 12px;border-bottom:2px solid var(--border2);text-align:left;white-space:nowrap;}
-.fs-tbl td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text-light);vertical-align:middle;font-family:'Barlow',sans-serif;font-size:0.72rem;}
-.fs-tbl tr:hover td{background:var(--surface2);}
-.fs-tbl .dyn-sel{font-size:0.6rem;padding:4px 22px 4px 10px;}
-.fs-task{display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px solid var(--border);border-radius:6px;background:var(--surface);margin-bottom:7px;}
-.fs-task.done .fs-task-txt{text-decoration:line-through;opacity:0.4;}
-.fs-task-chk{width:20px;height:20px;min-width:20px;border:1.5px solid var(--border2);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;cursor:pointer;flex-shrink:0;transition:all 0.2s;}
-.fs-task.done .fs-task-chk{background:var(--green-gum);border-color:var(--green-gum);}
-.fs-vatask.done .fs-task-chk{background:var(--purple-va);border-color:var(--purple-va);}
-.fs-task-txt{flex:1;font-family:'Barlow',sans-serif;font-size:0.82rem;color:var(--text-light);font-weight:500;}
-.fs-del{background:none;border:1px solid var(--border);color:var(--subtle);cursor:pointer;font-size:0.68rem;padding:4px 9px;border-radius:3px;transition:all 0.15s;}
-.fs-del:hover{color:var(--red-dust);border-color:var(--red-dust);}
-.fs-vatask{display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px solid rgba(124,92,191,0.3);border-radius:6px;background:var(--surface);margin-bottom:7px;border-left:4px solid var(--purple-va);}
-.fs-vatask.done .fs-task-txt{text-decoration:line-through;opacity:0.4;}
-.fs-dev-verse{font-family:'Barlow',sans-serif;font-size:1.1rem;line-height:1.85;color:var(--text-light);font-style:italic;background:var(--surface2);border-left:5px solid var(--tan);padding:22px 26px;border-radius:0 8px 8px 0;max-width:820px;margin-bottom:16px;}
-.fs-dev-ref{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--brown);letter-spacing:0.14em;}
-.fs-dev-date{font-family:'Barlow Condensed',sans-serif;font-size:0.6rem;letter-spacing:0.14em;color:var(--muted);text-transform:uppercase;margin-top:8px;}
-.fs-notes-area{width:100%;min-height:280px;background:var(--surface2);border:1.5px solid var(--border);border-radius:6px;color:var(--text);font-family:'Barlow',sans-serif;font-size:0.88rem;padding:16px 18px;resize:none;outline:none;line-height:1.7;}
-.fs-notes-area:focus{border-color:var(--blue-sky);background:var(--surface);}
-.fs-wx-badge{display:inline-flex;align-items:center;padding:7px 16px;border-radius:22px;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.12em;border:2px solid;margin-top:14px;}
-.fs-wx-badge.good{background:rgba(90,138,60,0.12);color:var(--green-gum);border-color:rgba(90,138,60,0.4);}
-.fs-wx-badge.windy{background:rgba(192,57,43,0.1);color:var(--red-dust);border-color:rgba(192,57,43,0.3);}
-.fs-wx-badge.breezy{background:var(--tan-dim);color:var(--dust);border-color:rgba(196,137,58,0.4);}
-.fs-wx-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px;}
-.fs-wx-stat{background:var(--surface2);border:1.5px solid var(--border);padding:16px;border-radius:8px;border-left:4px solid var(--blue-sky);}
-.fs-wx-stat-label{font-family:'Barlow Condensed',sans-serif;font-size:0.52rem;letter-spacing:0.14em;color:var(--muted);font-weight:700;text-transform:uppercase;margin-bottom:4px;}
-.fs-wx-stat-val{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--brown);}
-/* @MENTION */
-.mention-popup{position:absolute;background:var(--surface);border:1.5px solid var(--border);border-radius:6px;box-shadow:var(--shadow-lg);z-index:500;min-width:180px;display:none;overflow:hidden;bottom:calc(100% + 4px);left:0;}
-.mention-popup.open{display:block;}
-.mention-item{display:flex;align-items:center;gap:8px;padding:7px 11px;cursor:pointer;font-family:'Barlow',sans-serif;font-size:0.6rem;color:var(--text-light);font-weight:500;transition:background 0.12s;}
-.mention-item:hover,.mention-item.sel{background:var(--surface2);}
-.mention-av{width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,var(--purple-va),#9b6fd4);display:flex;align-items:center;justify-content:center;font-size:0.5rem;color:#fff;flex-shrink:0;}
-/* PERMISSIONS */
-.perm-card{border:1.5px solid var(--border);border-radius:7px;margin-bottom:10px;overflow:hidden;}
-.perm-card-head{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--surface2);border-bottom:1px solid var(--border);cursor:pointer;user-select:none;}
-.perm-card-head:hover{background:rgba(212,184,150,0.3);}
-.perm-uname{font-family:'Bebas Neue',sans-serif;font-size:0.82rem;letter-spacing:0.1em;color:var(--brown);display:flex;align-items:center;gap:7px;}
-.role-badge{font-family:'Barlow Condensed',sans-serif;font-size:0.4rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:2px 7px;border-radius:10px;}
-.role-owner{background:rgba(255,215,0,0.18);color:#c49a00;border:1px solid rgba(255,215,0,0.4);}
-.role-admin{background:rgba(74,159,212,0.15);color:var(--blue-bright);border:1px solid rgba(74,159,212,0.4);}
-.role-member{background:rgba(90,138,60,0.12);color:var(--green-gum);border:1px solid rgba(90,138,60,0.35);}
-.perm-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;padding:8px 12px 10px;background:var(--surface);}
-.perm-item{display:flex;align-items:center;justify-content:space-between;padding:5px 6px;border-bottom:1px solid rgba(212,184,150,0.18);}
-.perm-item:nth-last-child(-n+2){border-bottom:none;}
-.perm-item-lbl{font-family:'Barlow',sans-serif;font-size:0.55rem;color:var(--text-light);font-weight:500;}
-.perm-item-sub{font-family:'Barlow Condensed',sans-serif;font-size:0.38rem;color:var(--muted);display:block;}
-/* comment @mention tweak */
-.comment-text .at{color:var(--purple-va);font-weight:700;}
-.comment-add-wrap{padding:10px 15px;border-top:1px solid var(--border);background:var(--surface2);flex-shrink:0;border-radius:0 0 6px 6px;}
-.comment-input-row{display:flex;gap:6px;position:relative;}
-.comment-hint{font-family:'Barlow Condensed',sans-serif;font-size:0.38rem;color:var(--muted);letter-spacing:0.06em;margin-top:4px;}
-::-webkit-scrollbar{width:3px;}
+.modal-body::-webkit-scrollbar{width:3px;}
 .modal-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
 
 /* ── MAHI FULLSCREEN ─────────────────────────────────── */
@@ -275,7 +192,7 @@ body{background:var(--earth-deep);font-family:'Barlow',sans-serif;color:var(--te
 .wrap.has-custom .custom-panels-wrap{grid-row:4;}
 
 /* ── HEADER ───────────────────────────────────────────── */
-header{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,var(--earth-dark) 0%,var(--brown) 50%,var(--earth-dark) 100%);border:2px solid var(--tan);border-radius:6px;padding:0 14px;box-shadow:var(--shadow-lg),inset 0 1px 0 rgba(240,213,160,0.2);animation:fadeDown 0.5s ease both;position:relative;overflow:visible;}
+header{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,var(--earth-dark) 0%,var(--brown) 50%,var(--earth-dark) 100%);border:2px solid var(--tan);border-radius:6px;padding:0 14px;box-shadow:var(--shadow-lg),inset 0 1px 0 rgba(240,213,160,0.2);animation:fadeDown 0.5s ease both;position:relative;overflow:hidden;}
 header::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--horizon),var(--tan-light),var(--horizon),transparent);}
 header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--tan),transparent);opacity:0.4;}
 .logo-block{display:flex;align-items:center;gap:10px;}
@@ -440,89 +357,6 @@ tr:hover td{background:var(--surface2);}
 .custom-panel-notes-area{flex:1;background:var(--surface2);border:1.5px solid var(--border);border-radius:4px;color:var(--text);font-family:'Barlow',sans-serif;font-size:0.56rem;padding:6px 8px;resize:none;outline:none;line-height:1.6;transition:border-color 0.15s;width:100%;}
 .custom-panel-notes-area:focus{border-color:var(--blue-sky);background:var(--surface);}
 
-
-/* NOTIFICATIONS */
-.notif-wrap{position:relative;z-index:9999;}
-.notif-btn{background:rgba(212,169,106,0.12);border:1px solid rgba(212,169,106,0.35);border-radius:5px;padding:5px 9px;cursor:pointer;font-size:0.9rem;line-height:1;transition:all 0.2s;position:relative;}
-.notif-btn:hover{background:rgba(212,169,106,0.25);}
-.notif-badge{position:absolute;top:-5px;right:-5px;background:var(--red-dust);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:0.42rem;border-radius:10px;padding:1px 4px;min-width:14px;text-align:center;display:none;box-shadow:0 0 6px rgba(192,57,43,0.5);}
-.notif-badge.show{display:block;}
-.notif-panel{position:fixed;top:72px;right:18px;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:9999;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
-.notif-panel.open{display:flex;}
-.notif-head{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1.5px solid var(--border);background:linear-gradient(135deg,var(--earth-dark),var(--brown) 60%,var(--earth-dark));border-radius:6px 6px 0 0;flex-shrink:0;}
-.notif-head-title{font-family:'Bebas Neue',sans-serif;font-size:0.78rem;letter-spacing:0.12em;color:var(--tan-light);}
-.notif-clear-btn{background:none;border:1px solid rgba(212,169,106,0.3);color:var(--subtle);font-family:'Barlow Condensed',sans-serif;font-size:0.42rem;padding:2px 7px;cursor:pointer;border-radius:3px;transition:all 0.15s;}
-.notif-clear-btn:hover{color:var(--tan-light);border-color:var(--tan);}
-.notif-list{flex:1;overflow-y:auto;}
-.notif-item{display:flex;align-items:flex-start;gap:9px;padding:9px 13px;border-bottom:1px solid rgba(212,184,150,0.25);cursor:pointer;transition:background 0.12s;}
-.notif-item:hover{background:var(--surface2);}
-.notif-item.unread{background:rgba(74,159,212,0.06);border-left:3px solid var(--blue-sky);}
-.notif-icon{font-size:0.85rem;flex-shrink:0;margin-top:1px;}
-.notif-msg{font-family:'Barlow',sans-serif;font-size:0.58rem;color:var(--text-light);line-height:1.4;font-weight:500;}
-.notif-time{font-family:'Barlow Condensed',sans-serif;font-size:0.38rem;color:var(--muted);letter-spacing:0.08em;margin-top:2px;text-transform:uppercase;}
-.notif-empty{font-family:'Barlow Condensed',sans-serif;font-size:0.54rem;color:var(--muted);text-align:center;padding:18px;letter-spacing:0.1em;}
-/* FULLSCREEN */
-.pfs{position:fixed;inset:0;z-index:350;background:rgba(253,246,232,0.97);display:flex;flex-direction:column;backdrop-filter:blur(10px);}
-.pfs-head{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:linear-gradient(135deg,var(--earth-dark),var(--brown) 60%,var(--earth-dark));border-bottom:2px solid var(--tan);flex-shrink:0;}
-.pfs-title{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--tan-light);letter-spacing:0.14em;}
-.pfs-meta{font-family:'Barlow Condensed',sans-serif;font-size:0.58rem;color:var(--subtle);letter-spacing:0.1em;text-transform:uppercase;margin-left:10px;}
-.pfs-close{background:rgba(192,57,43,0.15);border:1px solid rgba(192,57,43,0.4);color:var(--red-dust);font-family:'Bebas Neue',sans-serif;font-size:0.78rem;padding:6px 14px;cursor:pointer;border-radius:5px;letter-spacing:0.12em;transition:all 0.15s;}
-.pfs-close:hover{background:rgba(192,57,43,0.3);}
-.pfs-body{flex:1;overflow-y:auto;padding:24px 28px;}
-.pfs-footer{display:flex;gap:8px;padding:14px 24px;border-top:1.5px solid var(--border);background:var(--surface2);flex-shrink:0;flex-wrap:wrap;align-items:center;}
-.fs-tbl{width:100%;border-collapse:collapse;}
-.fs-tbl th{font-family:'Bebas Neue',sans-serif;font-size:0.78rem;font-weight:400;letter-spacing:0.14em;color:var(--brown);text-transform:uppercase;padding:9px 12px;border-bottom:2px solid var(--border2);text-align:left;white-space:nowrap;}
-.fs-tbl td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text-light);vertical-align:middle;font-family:'Barlow',sans-serif;font-size:0.72rem;}
-.fs-tbl tr:hover td{background:var(--surface2);}
-.fs-tbl .dyn-sel{font-size:0.6rem;padding:4px 22px 4px 10px;}
-.fs-task{display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px solid var(--border);border-radius:6px;background:var(--surface);margin-bottom:7px;}
-.fs-task.done .fs-task-txt{text-decoration:line-through;opacity:0.4;}
-.fs-task-chk{width:20px;height:20px;min-width:20px;border:1.5px solid var(--border2);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;cursor:pointer;flex-shrink:0;transition:all 0.2s;}
-.fs-task.done .fs-task-chk{background:var(--green-gum);border-color:var(--green-gum);}
-.fs-vatask.done .fs-task-chk{background:var(--purple-va);border-color:var(--purple-va);}
-.fs-task-txt{flex:1;font-family:'Barlow',sans-serif;font-size:0.82rem;color:var(--text-light);font-weight:500;}
-.fs-del{background:none;border:1px solid var(--border);color:var(--subtle);cursor:pointer;font-size:0.68rem;padding:4px 9px;border-radius:3px;transition:all 0.15s;}
-.fs-del:hover{color:var(--red-dust);border-color:var(--red-dust);}
-.fs-vatask{display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px solid rgba(124,92,191,0.3);border-radius:6px;background:var(--surface);margin-bottom:7px;border-left:4px solid var(--purple-va);}
-.fs-vatask.done .fs-task-txt{text-decoration:line-through;opacity:0.4;}
-.fs-dev-verse{font-family:'Barlow',sans-serif;font-size:1.1rem;line-height:1.85;color:var(--text-light);font-style:italic;background:var(--surface2);border-left:5px solid var(--tan);padding:22px 26px;border-radius:0 8px 8px 0;max-width:820px;margin-bottom:16px;}
-.fs-dev-ref{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--brown);letter-spacing:0.14em;}
-.fs-dev-date{font-family:'Barlow Condensed',sans-serif;font-size:0.6rem;letter-spacing:0.14em;color:var(--muted);text-transform:uppercase;margin-top:8px;}
-.fs-notes-area{width:100%;min-height:280px;background:var(--surface2);border:1.5px solid var(--border);border-radius:6px;color:var(--text);font-family:'Barlow',sans-serif;font-size:0.88rem;padding:16px 18px;resize:none;outline:none;line-height:1.7;}
-.fs-notes-area:focus{border-color:var(--blue-sky);background:var(--surface);}
-.fs-wx-badge{display:inline-flex;align-items:center;padding:7px 16px;border-radius:22px;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.12em;border:2px solid;margin-top:14px;}
-.fs-wx-badge.good{background:rgba(90,138,60,0.12);color:var(--green-gum);border-color:rgba(90,138,60,0.4);}
-.fs-wx-badge.windy{background:rgba(192,57,43,0.1);color:var(--red-dust);border-color:rgba(192,57,43,0.3);}
-.fs-wx-badge.breezy{background:var(--tan-dim);color:var(--dust);border-color:rgba(196,137,58,0.4);}
-.fs-wx-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px;}
-.fs-wx-stat{background:var(--surface2);border:1.5px solid var(--border);padding:16px;border-radius:8px;border-left:4px solid var(--blue-sky);}
-.fs-wx-stat-label{font-family:'Barlow Condensed',sans-serif;font-size:0.52rem;letter-spacing:0.14em;color:var(--muted);font-weight:700;text-transform:uppercase;margin-bottom:4px;}
-.fs-wx-stat-val{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--brown);}
-/* @MENTION */
-.mention-popup{position:absolute;background:var(--surface);border:1.5px solid var(--border);border-radius:6px;box-shadow:var(--shadow-lg);z-index:500;min-width:180px;display:none;overflow:hidden;bottom:calc(100% + 4px);left:0;}
-.mention-popup.open{display:block;}
-.mention-item{display:flex;align-items:center;gap:8px;padding:7px 11px;cursor:pointer;font-family:'Barlow',sans-serif;font-size:0.6rem;color:var(--text-light);font-weight:500;transition:background 0.12s;}
-.mention-item:hover,.mention-item.sel{background:var(--surface2);}
-.mention-av{width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,var(--purple-va),#9b6fd4);display:flex;align-items:center;justify-content:center;font-size:0.5rem;color:#fff;flex-shrink:0;}
-/* PERMISSIONS */
-.perm-card{border:1.5px solid var(--border);border-radius:7px;margin-bottom:10px;overflow:hidden;}
-.perm-card-head{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--surface2);border-bottom:1px solid var(--border);cursor:pointer;user-select:none;}
-.perm-card-head:hover{background:rgba(212,184,150,0.3);}
-.perm-uname{font-family:'Bebas Neue',sans-serif;font-size:0.82rem;letter-spacing:0.1em;color:var(--brown);display:flex;align-items:center;gap:7px;}
-.role-badge{font-family:'Barlow Condensed',sans-serif;font-size:0.4rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:2px 7px;border-radius:10px;}
-.role-owner{background:rgba(255,215,0,0.18);color:#c49a00;border:1px solid rgba(255,215,0,0.4);}
-.role-admin{background:rgba(74,159,212,0.15);color:var(--blue-bright);border:1px solid rgba(74,159,212,0.4);}
-.role-member{background:rgba(90,138,60,0.12);color:var(--green-gum);border:1px solid rgba(90,138,60,0.35);}
-.perm-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;padding:8px 12px 10px;background:var(--surface);}
-.perm-item{display:flex;align-items:center;justify-content:space-between;padding:5px 6px;border-bottom:1px solid rgba(212,184,150,0.18);}
-.perm-item:nth-last-child(-n+2){border-bottom:none;}
-.perm-item-lbl{font-family:'Barlow',sans-serif;font-size:0.55rem;color:var(--text-light);font-weight:500;}
-.perm-item-sub{font-family:'Barlow Condensed',sans-serif;font-size:0.38rem;color:var(--muted);display:block;}
-/* comment @mention tweak */
-.comment-text .at{color:var(--purple-va);font-weight:700;}
-.comment-add-wrap{padding:10px 15px;border-top:1px solid var(--border);background:var(--surface2);flex-shrink:0;border-radius:0 0 6px 6px;}
-.comment-input-row{display:flex;gap:6px;position:relative;}
-.comment-hint{font-family:'Barlow Condensed',sans-serif;font-size:0.38rem;color:var(--muted);letter-spacing:0.06em;margin-top:4px;}
 ::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-track{background:var(--surface2);}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
 </style>
 </head>
@@ -584,48 +418,6 @@ tr:hover td{background:var(--surface2);}
   </div>
 </div>
 
-<!-- FULLSCREEN PANELS -->
-<div class="pfs" id="pfs-jobs" style="display:none">
-  <div class="pfs-head"><div class="pfs-title">&#9974; MAHI<span class="pfs-meta" id="pfs-jm"></span></div><button class="pfs-close" onclick="closePFS('jobs')">&#10005; Close</button></div>
-  <div class="pfs-body"><table class="fs-tbl"><thead><tr><th style="width:68px">Quote #</th><th>Client</th><th>Address</th><th style="width:78px">Value</th><th style="width:138px">Status</th><th style="width:108px">Invoice</th><th style="width:26px">&#128172;</th><th style="width:26px">&#128193;</th><th style="width:18px"></th></tr></thead><tbody id="pfs-jb"></tbody></table></div>
-  <div class="pfs-footer"><input class="add-input" id="pfs-jq" placeholder="Quote #" style="width:68px;flex:none;"><input class="add-input" id="pfs-jn" placeholder="Client..." style="flex:2"><input class="add-input" id="pfs-ja" placeholder="Address..." style="flex:2.5"><input class="add-input" id="pfs-jv" placeholder="$Value..." style="width:78px;flex:none;"><select id="pfs-js" class="add-input" style="flex:1.5"></select><button class="add-btn" onclick="addJobPFS()">+ Add Job</button></div>
-</div>
-<div class="pfs" id="pfs-tasks" style="display:none">
-  <div class="pfs-head"><div class="pfs-title">&#9974; Super Human Tasks<span class="pfs-meta" id="pfs-tm"></span></div><button class="pfs-close" onclick="closePFS('tasks')">&#10005; Close</button></div>
-  <div class="pfs-body" id="pfs-tb"></div>
-  <div class="pfs-footer"><input class="add-input" id="pfs-nt" placeholder="Add a task..." style="flex:1" onkeydown="if(event.key==='Enter')addTaskPFS()"><button class="add-btn" onclick="addTaskPFS()">+ Add</button></div>
-</div>
-<div class="pfs" id="pfs-myla" style="display:none">
-  <div class="pfs-head"><div class="pfs-title">&#9974; Myla Tasks</div><button class="pfs-close" onclick="closePFS('myla')">&#10005; Close</button></div>
-  <div class="pfs-body" id="pfs-mb"></div>
-  <div class="pfs-footer"><input class="add-input" id="pfs-mt" placeholder="Add task for Myla..." style="flex:1" onkeydown="if(event.key==='Enter')addVaPFS('myla')"><button class="add-btn" onclick="addVaPFS('myla')">+ Add</button></div>
-</div>
-<div class="pfs" id="pfs-toneth" style="display:none">
-  <div class="pfs-head"><div class="pfs-title">&#9974; Toneth Tasks</div><button class="pfs-close" onclick="closePFS('toneth')">&#10005; Close</button></div>
-  <div class="pfs-body" id="pfs-to"></div>
-  <div class="pfs-footer"><input class="add-input" id="pfs-tt" placeholder="Add task for Toneth..." style="flex:1" onkeydown="if(event.key==='Enter')addVaPFS('toneth')"><button class="add-btn" onclick="addVaPFS('toneth')">+ Add</button></div>
-</div>
-<div class="pfs" id="pfs-po" style="display:none">
-  <div class="pfs-head"><div class="pfs-title">&#9974; PO &mdash; Subcontractors<span class="pfs-meta" id="pfs-pm"></span></div><button class="pfs-close" onclick="closePFS('po')">&#10005; Close</button></div>
-  <div class="pfs-body"><table class="fs-tbl"><thead><tr><th>PO #</th><th>Address</th><th>Name</th><th>Status</th><th style="width:18px"></th></tr></thead><tbody id="pfs-pb"></tbody></table></div>
-  <div class="pfs-footer"><input class="add-input" id="pfs-pn" placeholder="PO #" style="width:58px;flex:none;"><input class="add-input" id="pfs-pa" placeholder="Address..." style="flex:2"><input class="add-input" id="pfs-pc" placeholder="Sub name..." style="width:98px;flex:none;"><select id="pfs-ps" class="add-input" style="width:98px;flex:none;"></select><button class="add-btn" onclick="addPOPFS()">+ Add</button></div>
-</div>
-<div class="pfs" id="pfs-weather" style="display:none">
-  <div class="pfs-head"><div class="pfs-title">&#9974; Weather &mdash; Sutherland Shire</div><button class="pfs-close" onclick="closePFS('weather')">&#10005; Close</button></div>
-  <div class="pfs-body" id="pfs-wb"></div>
-</div>
-<div class="pfs" id="pfs-devotional" style="display:none">
-  <div class="pfs-head"><div class="pfs-title">&#9974; Daily Devotional &#128214;</div><button class="pfs-close" onclick="closePFS('devotional')">&#10005; Close</button></div>
-  <div class="pfs-body" id="pfs-db"></div>
-</div>
-<div class="pfs" id="pfs-launcher" style="display:none">
-  <div class="pfs-head"><div class="pfs-title">&#9974; Quick Launch</div><button class="pfs-close" onclick="closePFS('launcher')">&#10005; Close</button></div>
-  <div class="pfs-body" id="pfs-lb" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;align-content:start;"></div>
-</div>
-<div class="pfs" id="pfs-notes" style="display:none">
-  <div class="pfs-head"><div class="pfs-title">&#9974; Notes</div><button class="pfs-close" onclick="closePFS('notes')">&#10005; Close</button></div>
-  <div class="pfs-body"><textarea class="fs-notes-area" id="pfs-nb" placeholder="Type notes here..."></textarea></div>
-</div>
 <!-- SETTINGS MODAL -->
 <div class="modal-ov" id="settingsModal" style="display:none">
   <div class="modal-box">
@@ -635,7 +427,6 @@ tr:hover td{background:var(--surface2);}
       <button class="mtab" id="stab-launch" onclick="showSettingsTab('launch',this)">Quick Launch</button>
       <button class="mtab" id="stab-dropdowns" onclick="showSettingsTab('dropdowns',this)">Dropdowns</button>
       <button class="mtab" id="stab-team" onclick="showSettingsTab('team',this)">Team</button>
-      <button class="mtab" id="stab-perms" onclick="showSettingsTab('perms',this)">Permissions</button>
       <button class="mtab" id="stab-activity" onclick="showSettingsTab('activity',this)">Activity</button>
       <button class="mtab" id="stab-account" onclick="showSettingsTab('account',this)">Account</button>
     </div>
@@ -648,7 +439,10 @@ tr:hover td{background:var(--surface2);}
   <div class="modal-box modal-sm" style="max-height:72vh;">
     <div class="modal-head">💬 Job Comments — <span id="commentJobLabel" style="color:var(--tan)"></span><button class="modal-close" onclick="closeModal('commentsModal')">✕</button></div>
     <div id="commentsList" class="modal-body"></div>
-    <div class="comment-add-wrap"><div class="comment-input-row"><div id="mentionPopup" class="mention-popup"></div><textarea class="comment-textarea" id="commentInput" placeholder="Write a comment... type @ to mention" onkeyup="handleMentionKey(event)" onkeydown="handleMentionNav(event)"></textarea><button class="comment-post-btn" onclick="submitComment()">POST</button></div><div class="comment-hint">💡 Type @ to mention a team member</div></div>
+    <div class="comment-add-row">
+      <textarea class="comment-textarea" id="commentInput" placeholder="Add a comment..."></textarea>
+      <button class="comment-post-btn" onclick="submitComment()">POST</button>
+    </div>
   </div>
 </div>
 
@@ -676,17 +470,16 @@ tr:hover td{background:var(--surface2);}
     <div class="header-right">
       <div style="text-align:right;"><div class="live-time" id="clock">--:--:--</div><div class="live-date" id="dateDisplay">Loading...</div></div>
       <div class="user-pill" id="userPill" style="display:none"><div class="user-avatar">👤</div><span id="userPillName">—</span></div>
-      <div class="notif-wrap" id="notifWrap"><button class="notif-btn" onclick="toggleNotifPanel()" title="Notifications">🔔<span class="notif-badge" id="notifBadge">0</span></button><div class="notif-panel" id="notifPanel"><div class="notif-head"><span class="notif-head-title">🔔 Notifications</span><button class="notif-clear-btn" onclick="clearNotifs()">Clear All</button></div><div class="notif-list" id="notifList"><div class="notif-empty">All caught up! 🐾</div></div></div></div>
       <button class="settings-btn" onclick="openSettings()" title="Settings">⚙️</button>
     </div>
   </header>
 
   <!-- QUICK LAUNCH -->
   <div class="panel launcher" id="panel-launcher">
-    <div class="panel-label">Quick Launch<button class="panel-btn" onclick="openPFS('launcher')" style="color:var(--blue-bright);border-color:rgba(74,159,212,0.4);" title="Fullscreen">⛶</button><button class="panel-btn" onclick="togglePanel('launcher')" title="Hide panel">—</button></div>
+    <div class="panel-label">Quick Launch<button class="panel-btn" onclick="togglePanel('launcher')" title="Hide panel">—</button></div>
     <div class="apps-grid" id="appsGrid"></div>
     <div style="margin-top:8px;flex-shrink:0;">
-      <div class="panel-label" style="margin-bottom:4px;font-size:0.7rem;">Notes<button class="panel-btn" onclick="openPFS('notes')" style="color:var(--blue-bright);border-color:rgba(74,159,212,0.4);" title="Fullscreen">⛶</button></div>
+      <div class="panel-label" style="margin-bottom:4px;font-size:0.7rem;">Notes</div>
       <textarea class="note-input" id="notesArea" placeholder="Rocky 🐾 — worksite drop 8am&#10;Toneth: invoice HCM Build&#10;Myla: chase Lloyds deposit"></textarea>
     </div>
   </div>
@@ -694,17 +487,17 @@ tr:hover td{background:var(--surface2);}
   <!-- WEATHER + VA -->
   <div class="weather-va-row">
     <div class="panel weather-panel" id="panel-weather">
-      <div class="panel-label">Weather — Sutherland Shire<button class="panel-btn" onclick="openPFS('weather')" style="color:var(--blue-bright);border-color:rgba(74,159,212,0.4);" title="Fullscreen">⛶</button><button class="panel-btn" onclick="togglePanel('weather')" title="Hide panel">—</button></div>
+      <div class="panel-label">Weather — Sutherland Shire<button class="panel-btn" onclick="togglePanel('weather')" title="Hide panel">—</button></div>
       <div id="weatherContent" class="weather-loading">Fetching...</div>
     </div>
     <div class="va-col">
       <div class="panel va-panel" id="panel-myla">
-        <div class="panel-label">Myla Tasks 🟣<button class="panel-btn" onclick="openPFS('myla')" style="color:var(--blue-bright);border-color:rgba(74,159,212,0.4);" title="Fullscreen">⛶</button><button class="panel-btn" onclick="togglePanel('myla')" title="Hide panel">—</button></div>
+        <div class="panel-label">Myla Tasks 🟣<button class="panel-btn" onclick="togglePanel('myla')" title="Hide panel">—</button></div>
         <div class="va-task-list" id="mylaTaskList"></div>
         <div class="va-add-row"><input class="va-add-input" id="mylaInput" placeholder="Add task..." onkeydown="if(event.key==='Enter')addVaTask('myla')"><button class="va-add-btn" onclick="addVaTask('myla')">+ Add</button></div>
       </div>
       <div class="panel va-panel" id="panel-toneth">
-        <div class="panel-label">Toneth Tasks 🟣<button class="panel-btn" onclick="openPFS('toneth')" style="color:var(--blue-bright);border-color:rgba(74,159,212,0.4);" title="Fullscreen">⛶</button><button class="panel-btn" onclick="togglePanel('toneth')" title="Hide panel">—</button></div>
+        <div class="panel-label">Toneth Tasks 🟣<button class="panel-btn" onclick="togglePanel('toneth')" title="Hide panel">—</button></div>
         <div class="va-task-list" id="tonethTaskList"></div>
         <div class="va-add-row"><input class="va-add-input" id="tonethInput" placeholder="Add task..." onkeydown="if(event.key==='Enter')addVaTask('toneth')"><button class="va-add-btn" onclick="addVaTask('toneth')">+ Add</button></div>
       </div>
@@ -713,13 +506,13 @@ tr:hover td{background:var(--surface2);}
 
   <!-- DEVOTIONAL -->
   <div class="panel devotional-panel" id="panel-devotional">
-    <div class="panel-label">Daily Devotional 📖<button class="panel-btn" onclick="openPFS('devotional')" style="color:var(--blue-bright);border-color:rgba(74,159,212,0.4);" title="Fullscreen">⛶</button><button class="panel-btn" onclick="togglePanel('devotional')" title="Hide panel">—</button></div>
+    <div class="panel-label">Daily Devotional 📖<button class="panel-btn" onclick="togglePanel('devotional')" title="Hide panel">—</button></div>
     <div class="devotional-body" id="devotionalBody"></div>
   </div>
 
   <!-- TASKS -->
   <div class="panel tasks-panel" id="panel-tasks">
-    <div class="panel-label">⚡ Super Human Tasks<button class="panel-btn" onclick="openPFS('tasks')" style="color:var(--blue-bright);border-color:rgba(74,159,212,0.4);" title="Fullscreen">⛶</button><button class="panel-btn" onclick="togglePanel('tasks')" title="Hide panel">—</button></div>
+    <div class="panel-label">⚡ Super Human Tasks<button class="panel-btn" onclick="togglePanel('tasks')" title="Hide panel">—</button></div>
     <div class="task-list" id="taskList"></div>
     <div class="task-add-row"><input class="task-add-input" id="newTaskInput" placeholder="Add a task..." onkeydown="if(event.key==='Enter')addTask()"><button class="task-add-btn" onclick="addTask()">+ Add</button></div>
   </div>
@@ -730,7 +523,7 @@ tr:hover td{background:var(--surface2);}
       <div class="panel-label">
         MAHI — Live Projects 🔨
         <button class="panel-btn expand" onclick="openMahiFS()" title="Fullscreen">⛶</button>
-        <button class="panel-btn" onclick="openPFS('jobs')" style="color:var(--blue-bright);border-color:rgba(74,159,212,0.4);" title="Fullscreen">⛶</button><button class="panel-btn" onclick="togglePanel('jobs')" title="Hide panel">—</button>
+        <button class="panel-btn" onclick="togglePanel('jobs')" title="Hide panel">—</button>
       </div>
       <div class="jobs-table-wrap">
         <table><thead><tr>
@@ -750,7 +543,7 @@ tr:hover td{background:var(--surface2);}
       </div>
     </div>
     <div class="panel po-panel" id="panel-po">
-      <div class="panel-label">PO — Subcontractors 📄<button class="panel-btn" onclick="openPFS('po')" style="color:var(--blue-bright);border-color:rgba(74,159,212,0.4);" title="Fullscreen">⛶</button><button class="panel-btn" onclick="togglePanel('po')" title="Hide panel">—</button></div>
+      <div class="panel-label">PO — Subcontractors 📄<button class="panel-btn" onclick="togglePanel('po')" title="Hide panel">—</button></div>
       <div class="po-table-wrap">
         <table class="po-table"><thead><tr><th>PO #</th><th>Address</th><th>Name</th><th>Status</th><th style="width:14px"></th></tr></thead><tbody id="poBody"></tbody></table>
       </div>
@@ -781,21 +574,6 @@ tr:hover td{background:var(--surface2);}
 const SHEET='https://script.google.com/macros/s/AKfycbxREWhTD51GJeloL2iAz1aapddtaE5OATu71HBAIO86R_eByoJSujAcgkNoW6eilheEKg/exec';
 const LS_KEY='rdu_data',SES_KEY='rdu_session';
 let D={},CU=null,_commentJobId=null,_driveJobId=null;
-const DEFAULT_PERMS = {
-  addTask:true, deleteDoneTask:true, deleteAnyTask:false,
-  addJob:false, deleteJob:false, addPO:false,
-  comment:true, viewAll:true
-};
-const DEFAULT_USERS = [
-  {username:'ronny',  password:'admin2026', role:'owner',  name:'Ronny Couling'},
-  {username:'toneth', password:'rdu2026',   role:'admin',  name:'Toneth'},
-  {username:'myla',   password:'rdu2026',   role:'member', name:'Myla'},
-  {username:'harry',  password:'rdu2026',   role:'member', name:'Harry'},
-  {username:'pauly',  password:'rdu2026',   role:'member', name:'Pauly'},
-  {username:'josh',   password:'rdu2026',   role:'member', name:'Josh'},
-];
-function getUsers(){return D.users&&D.users.length?D.users:DEFAULT_USERS;}
-
 
 // ── DEFAULTS ──────────────────────────────────────────
 const DEFAULT_APPS=[
@@ -873,75 +651,52 @@ function save(){
   _st=setTimeout(async()=>{try{await fetch(SHEET,{method:'POST',mode:'no-cors',body:JSON.stringify(D),headers:{'Content-Type':'text/plain'}});syncUI('ok','☁ Synced');}catch(e){syncUI('err','⚠ Local only');}setTimeout(()=>syncUI('ok','☁ Live sync active'),3000);},600);
 }
 async function fetchCloud(init){
-  // Cloud GET disabled — CORS issue with Google Apps Script from GitHub Pages.
-  // Data saves via POST (no-cors) which works perfectly.
-  // VAs see updates when Ronny saves — data is pushed to cloud on every save.
-  // GET sync re-enabled once proper CORS headers are configured on Apps Script.
-  syncUI('ok','☁ Sync active — saving to cloud');
-  setTimeout(()=>syncUI('ok','☁ Live sync active'),1500);
+  try{
+    if(init)syncUI('saving','Loading cloud...');
+    const r=await fetch(SHEET+'?t='+Date.now());if(!r.ok)throw new Error();
+    const txt=await r.text();if(!txt||txt.length<10)throw new Error();
+    const cloud=JSON.parse(txt);
+    if(cloud&&cloud._ts&&cloud._ts>(D._ts||0)){D=cloud;lsWrite(D);renderAll();syncUI('ok','☁ Cloud loaded');}
+    else syncUI('ok','☁ Live sync active');
+    setTimeout(()=>syncUI('ok','☁ Live sync active'),2500);
+  }catch(e){syncUI('ok','💾 Local only');setTimeout(()=>syncUI('ok','💾 Saved locally'),2000);}
 }
 
 // ── AUTH ──────────────────────────────────────────────
 function checkSession(){const s=JSON.parse(localStorage.getItem(SES_KEY)||'null');if(s&&s.expires>Date.now()){CU=s.user;showDash();return true;}return false;}
-// JSONP - bypasses Google Apps Script CORS/redirect
-
-// ── LOCAL AUTH — no network call needed, zero CORS issues ──────
-// Credentials stored in D.users (synced to cloud like all other data)
-// Default users bootstrapped on first load
-
-
-function getUsers() {
-  return D.users && D.users.length ? D.users : DEFAULT_USERS;
-}
-
 async function doLogin(){
-  const u=document.getElementById('loginUser').value.trim().toLowerCase();
+  const u=document.getElementById('loginUser').value.trim();
   const p=document.getElementById('loginPass').value;
   const err=document.getElementById('loginErr');const btn=document.getElementById('loginBtn');
   if(!u||!p){err.textContent='Enter username and password.';return;}
   btn.disabled=true;btn.textContent='Checking...';err.textContent='';
-
-  // Login uses local credentials only — no network call needed
-
-  const users = getUsers();
-  const found = users.find(x => x.username.toLowerCase()===u && x.password===p);
-  if(found){
-    CU={username:found.username, role:found.role, name:found.name};
-    localStorage.setItem(SES_KEY,JSON.stringify({user:CU,expires:Date.now()+7*24*60*60*1000}));
-    showDash();
-  } else {
-    err.textContent='Incorrect username or password.';
-    btn.disabled=false;btn.textContent='LOGIN TO RDU';
-  }
+  try{
+    const res=await fetch(`${SHEET}?action=login&u=${encodeURIComponent(u)}&p=${encodeURIComponent(p)}`);
+    const data=await res.json();
+    if(data.ok){CU=data.user;localStorage.setItem(SES_KEY,JSON.stringify({user:CU,expires:Date.now()+7*24*60*60*1000}));logAct('Login','Logged in');showDash();}
+    else{err.textContent='Invalid username or password.';btn.disabled=false;btn.textContent='LOGIN TO RDU';}
+  }catch(e){err.textContent='Network error.';btn.disabled=false;btn.textContent='LOGIN TO RDU';}
 }
 function showDash(){
   document.getElementById('loginScreen').style.display='none';
   document.getElementById('mainWrap').style.display='';
   document.getElementById('userPill').style.display='flex';
   document.getElementById('userPillName').textContent=CU.name;
-  document.querySelectorAll('.ctrl-only').forEach(el=>el.style.display=isCtrl()?'':'none');
-  document.querySelectorAll('.panel-btn').forEach(el=>{
-    const oc=el.getAttribute('onclick')||'';
-    if(oc.includes('togglePanel'))el.style.display=isCtrl()?'':'none';
-  });
-  D = lsRead() || {_ts:0,tasks:[],va_myla:[],va_toneth:[],jobs:[],pos:[],notes:'',panels:{},apps:null,dropdowns:null,customPanels:[],permissions:{},users:[]};
+  // show panel buttons only for admin
+  document.querySelectorAll('.panel-btn').forEach(el=>el.style.display=CU.role==='admin'?'':'none');
+  D=lsRead()||{_ts:0,tasks:[],va_myla:[],va_toneth:[],jobs:[],pos:[],notes:'',panels:{},apps:null,dropdowns:null,customPanels:[],panelOrder:[]};
   if(!D.apps)D.apps=[...DEFAULT_APPS];
   if(!D.dropdowns)D.dropdowns=JSON.parse(JSON.stringify(DEFAULT_DD));
   if(!D.customPanels)D.customPanels=[];
-  if(!D.permissions)D.permissions={};
-  if(!D.users)D.users=[];
-  _lastJC=(D.jobs||[]).length;
-  _lastTC=(D.tasks||[]).length;
+  if(!D.panelOrder)D.panelOrder=[];
   renderAll();
   const panels=D.panels||{};
   Object.keys(panels).forEach(k=>{const el=document.getElementById('panel-'+k);if(el&&!panels[k])el.style.display='none';});
-  nLoad();
-  fetchCloud(true);setInterval(()=>fetchCloud(false),30000);
+  fetchCloud(true);setInterval(()=>fetchCloud(false),60000);
   loadWeather();setInterval(loadWeather,600000);
   updateClock();setInterval(updateClock,1000);
   loadDevotional();
 }
-
 function doLogout(){localStorage.removeItem(SES_KEY);location.reload();}
 function logAct(ev,det){if(!CU)return;fetch(`${SHEET}?action=log-activity&u=${encodeURIComponent(CU.username)}&n=${encodeURIComponent(CU.name)}&event=${encodeURIComponent(ev)}&details=${encodeURIComponent(det)}`).catch(()=>{});}
 
@@ -975,7 +730,6 @@ function populateAddSelects(){
 
 // ── RENDER ALL ────────────────────────────────────────
 function renderAll(){
-  checkNewNotifs(D);
   renderApps();
   document.getElementById('taskList').innerHTML='';(D.tasks||[]).forEach(renderTask);
   document.getElementById('mylaTaskList').innerHTML='';(D.va_myla||[]).forEach(t=>renderVaTask('myla',t));
@@ -1030,30 +784,6 @@ async function loadWeather(){
         </div>
       </div>`;
   }catch(e){document.getElementById('weatherContent').innerHTML='<div class="weather-loading">No signal</div>';}
-
-  // cache for PFS fullscreen
-  const wb = document.getElementById('weatherContent');
-  if (wb) {
-    const icon = wb.querySelector('.weather-icon-sm')?.textContent || '🌤️';
-    const temp = wb.querySelector('.weather-temp-sm')?.textContent || '—';
-    const desc = wb.querySelector('.weather-desc-sm')?.textContent || '';
-    const badge = wb.querySelector('.weather-tools-badge');
-    const badgeCls = badge ? badge.className.replace('weather-tools-badge','').trim() : '';
-    const badgeTxt = badge ? badge.textContent : '';
-    const stats = Array.from(wb.querySelectorAll('.w-stat-sm')).map(s => ({
-      label: s.querySelector('.w-stat-sm-label')?.textContent || '',
-      val: s.querySelector('.w-stat-sm-val')?.textContent || ''
-    }));
-    _wxHTML = `<div style="display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start;">
-      <div>
-        <div style="font-size:4rem">${icon}</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:4.5rem;color:var(--brown);line-height:1">${temp}</div>
-        <div style="font-weight:700;text-transform:uppercase;color:var(--text-light);margin-top:4px;font-size:1rem">${desc}</div>
-        <div class="fs-wx-badge ${badgeCls}">${badgeTxt}</div>
-      </div>
-      <div class="fs-wx-stats">${stats.map(s => `<div class="fs-wx-stat"><div class="fs-wx-stat-label">${s.label}</div><div class="fs-wx-stat-val">${s.val}</div></div>`).join('')}</div>
-    </div>`;
-  }  if(t){pushNotif('⚡',`Task added: <strong>${t}</strong>`);}
 }
 
 // ── DEVOTIONAL ────────────────────────────────────────
@@ -1062,15 +792,6 @@ function loadDevotional(){
   const n=new Date();const day=Math.floor((n-new Date(n.getFullYear(),0,0))/86400000);const{v,r}=VV[day%VV.length];
   const ds=n.toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).toUpperCase();
   document.getElementById('devotionalBody').innerHTML=`<div class="devotional-verse">"${v}"</div><div class="devotional-ref">— ${r}</div><div class="devotional-date">📖 ${ds}</div>`;
-
-  // cache for PFS
-  const db = document.getElementById('devotionalBody');
-  if (db) {
-    _devHTML = db.innerHTML
-      .replace(/class="devotional-verse"/g,'class="fs-dev-verse"')
-      .replace(/class="devotional-ref"/g,'class="fs-dev-ref"')
-      .replace(/class="devotional-date"/g,'class="fs-dev-date"');
-  }
 }
 
 // ── JOBS ──────────────────────────────────────────────
@@ -1113,7 +834,7 @@ function addJob(){
   renderJob(j);['jobName','jobAddr','jobValue','jobQuote'].forEach(id=>document.getElementById(id).value='');
   D.jobs=collectJobs();save();logAct('Job Added',`${j.name} — ${j.addr}`);
   // sync to FS if open
-  if(document.getElementById('mahiFS').style.display!=='none'){document.getElementById('mahiFSBody').innerHTML='';D.jobs.forEach(x=>renderJobRow(x,'mahiFSBody'));updateFSCount();}  if(name){pushNotif('🔨',`Job added: <strong>${name}</strong>`);}
+  if(document.getElementById('mahiFS').style.display!=='none'){document.getElementById('mahiFSBody').innerHTML='';D.jobs.forEach(x=>renderJobRow(x,'mahiFSBody'));updateFSCount();}
 }
 function removeJobRow(btn,bodyId){
   const tr=btn.closest('tr');const name=tr.querySelectorAll('td')[1].textContent;tr.remove();
@@ -1209,6 +930,14 @@ function togglePanel(key){
 }
 
 // ── COMMENTS ─────────────────────────────────────────
+function openComments(jobId,jobName){_commentJobId=jobId;document.getElementById('commentJobLabel').textContent=jobName;document.getElementById('commentsModal').style.display='flex';loadComments(jobId);}
+async function loadComments(jobId){
+  const list=document.getElementById('commentsList');list.innerHTML='<div class="comment-empty">Loading...</div>';
+  try{const res=await fetch(`${SHEET}?action=comments&jobId=${encodeURIComponent(jobId)}`);const data=await res.json();
+  if(!data.length){list.innerHTML='<div class="comment-empty">No comments yet — be the first!</div>';return;}
+  list.innerHTML='';data.forEach(c=>{const d=document.createElement('div');d.className='comment-item';const ts=new Date(c.ts).toLocaleString('en-AU',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit',hour12:true});d.innerHTML=`<div class="comment-meta"><span class="comment-author">${c.name}</span> · ${ts}</div><div class="comment-text">${c.text}</div>`;list.appendChild(d);});list.scrollTop=list.scrollHeight;}
+  catch(e){list.innerHTML='<div class="comment-empty">Failed to load.</div>';}
+}
 async function submitComment(){
   const inp=document.getElementById('commentInput');const t=inp.value.trim();if(!t||!CU)return;
   inp.value='';inp.disabled=true;
@@ -1241,6 +970,16 @@ function unlinkDrive(jobId){saveDriveUrl(jobId,'');}
 
 // ── SETTINGS ──────────────────────────────────────────
 function openSettings(){document.getElementById('settingsModal').style.display='flex';showSettingsTab('panels',document.getElementById('stab-panels'));}
+function showSettingsTab(tab,btn){
+  document.querySelectorAll('.mtab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');
+  const body=document.getElementById('settingsBody');
+  if(tab==='panels')renderPanelsTab(body);
+  else if(tab==='launch')renderLaunchTab(body);
+  else if(tab==='dropdowns')renderDropdownsTab(body);
+  else if(tab==='team')renderTeamTab(body);
+  else if(tab==='activity')renderActivityTab(body);
+  else if(tab==='account')renderAccountTab(body);
+}
 
 function renderPanelsTab(body){
   if(CU&&CU.role!=='admin'){body.innerHTML='<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:0.6rem;color:var(--muted);padding:12px;text-align:center;letter-spacing:0.1em;">Admin access only</div>';return;}
@@ -1350,7 +1089,7 @@ async function renderTeamTab(body){
   if(CU&&CU.role!=='admin'){body.innerHTML='<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:0.6rem;color:var(--muted);padding:12px;text-align:center;letter-spacing:0.1em;">Admin access only</div>';return;}
   body.innerHTML='<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:0.52rem;color:var(--muted);text-align:center;padding:12px;letter-spacing:0.1em;">Loading...</div>';
   try{
-    const res53u=await fetch(`${SHEET}?action=users`,{cache:'no-cache'});const users=await res53u.json();
+    const res=await fetch(`${SHEET}?action=users`);const users=await res.json();
     let html='<div class="settings-section"><div class="settings-section-title">Team Members</div><table class="team-table"><thead><tr><th>Username</th><th>Name</th><th>Role</th><th>New Password</th><th></th></tr></thead><tbody>';
     users.forEach(u=>{html+=`<tr><td style="color:var(--muted)">${u.username}</td><td><input class="team-input" id="tn-${u.username}" value="${u.name}"></td><td><select class="team-input" id="tr-${u.username}"><option value="admin"${u.role==='admin'?' selected':''}>Admin</option><option value="va"${u.role==='va'?' selected':''}>VA</option><option value="crew"${u.role==='crew'?' selected':''}>Crew</option></select></td><td><input class="team-input" id="tp-${u.username}" type="password" placeholder="Change..."></td><td><button class="team-save-btn" onclick="saveTeamMember('${u.username}')">Save</button></td></tr>`;});
     html+=`</tbody></table></div><div id="tss" style="font-family:'Barlow Condensed',sans-serif;font-size:0.5rem;min-height:14px;margin-top:4px;letter-spacing:0.1em;"></div>`;
@@ -1364,7 +1103,7 @@ async function saveTeamMember(u){
 }
 async function renderActivityTab(body){
   body.innerHTML='<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:0.52rem;color:var(--muted);text-align:center;padding:12px;letter-spacing:0.1em;">Loading activity...</div>';
-  try{const res53a=await fetch(`${SHEET}?action=activity&limit=60`,{cache:'no-cache'});const data=await res53a.json();if(!data.length){body.innerHTML='<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:0.56rem;color:var(--muted);text-align:center;padding:16px;letter-spacing:0.1em;">No activity logged yet.</div>';return;}let html='<div class="settings-section"><div class="settings-section-title">Recent Activity (last 60)</div>';data.forEach(a=>{const ts=new Date(a.ts).toLocaleString('en-AU',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit',hour12:true});html+=`<div class="activity-row"><div class="activity-dot"></div><div><div class="activity-event">${a.event}${a.details?' — '+a.details:''}</div><div class="activity-meta">${a.name} · ${ts}</div></div></div>`;});html+='</div>';body.innerHTML=html;}
+  try{const res=await fetch(`${SHEET}?action=activity&limit=60`);const data=await res.json();if(!data.length){body.innerHTML='<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:0.56rem;color:var(--muted);text-align:center;padding:16px;letter-spacing:0.1em;">No activity logged yet.</div>';return;}let html='<div class="settings-section"><div class="settings-section-title">Recent Activity (last 60)</div>';data.forEach(a=>{const ts=new Date(a.ts).toLocaleString('en-AU',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit',hour12:true});html+=`<div class="activity-row"><div class="activity-dot"></div><div><div class="activity-event">${a.event}${a.details?' — '+a.details:''}</div><div class="activity-meta">${a.name} · ${ts}</div></div></div>`;});html+='</div>';body.innerHTML=html;}
   catch(e){body.innerHTML='<div style="color:var(--red-dust);padding:12px;">Failed to load.</div>';}
 }
 function renderAccountTab(body){
@@ -1394,591 +1133,15 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelec
 
 // ── INIT ──────────────────────────────────────────────
 
-// ══════════════════════════════════════════════════════════════
-// RDU v5.3 — Roles, Notifications, @Mentions, Permissions, Fullscreen
-// ROLES:
-//   owner  (Ronny) — full access everywhere EXCEPT permissions tab
-//   admin  (Toneth) — full access INCLUDING permissions tab
-//   member — whatever Toneth/admin sets per-user in D.permissions
-// ══════════════════════════════════════════════════════════════
-
-// ── ROLE HELPERS ──────────────────────────────────────────────
-
-function isCtrl() { return CU && (CU.role === 'owner' || CU.role === 'admin'); }
-function isAdmin() { return CU && CU.role === 'admin'; }
-
-function can(action) {
-  if (!CU) return false;
-  if (isCtrl()) return true;
-  const p = (D.permissions || {})[CU.username] || DEFAULT_PERMS;
-  return p[action] === true;
-}
-
-// ── NOTIFICATIONS ────────────────────────────────────────────
-let NOTIFS = [], _lastJC = 0, _lastTC = 0;
-
-function nLoad() {
-  try { NOTIFS = JSON.parse(localStorage.getItem('rdu_notifs')) || []; } catch(e) { NOTIFS = []; }
-  nRender();
-}
-function nSave() { localStorage.setItem('rdu_notifs', JSON.stringify(NOTIFS)); }
-
-function pushNotif(icon, msg) {
-  NOTIFS.unshift({ id: Date.now(), icon, msg, time: new Date().toISOString(), unread: true });
-  if (NOTIFS.length > 50) NOTIFS = NOTIFS.slice(0, 50);
-  nSave(); nRender();
-}
-
-function nRender() {
-  const list = document.getElementById('notifList');
-  const badge = document.getElementById('notifBadge');
-  if (!list) return;
-  const unread = NOTIFS.filter(n => n.unread).length;
-  badge.textContent = unread;
-  badge.classList.toggle('show', unread > 0);
-  if (!NOTIFS.length) { list.innerHTML = '<div class="notif-empty">All caught up! 🐾</div>'; return; }
-  list.innerHTML = '';
-  NOTIFS.forEach(n => {
-    const d = document.createElement('div');
-    d.className = 'notif-item' + (n.unread ? ' unread' : '');
-    const t = new Date(n.time);
-    const ts = t.toLocaleTimeString('en-AU',{hour:'numeric',minute:'2-digit',hour12:true}) + ' · ' + t.toLocaleDateString('en-AU',{day:'numeric',month:'short'});
-    d.innerHTML = `<span class="notif-icon">${n.icon}</span><div><div class="notif-msg">${n.msg}</div><div class="notif-time">${ts}</div></div>`;
-    d.onclick = () => { n.unread = false; nSave(); nRender(); };
-    list.appendChild(d);
-  });
-}
-
-function clearNotifs() { NOTIFS = []; nSave(); nRender(); }
-
-function toggleNotifPanel(){
-  const p = document.getElementById('notifPanel');
-  // Move to body on first use so it's never clipped by stacking contexts
-  if (p.parentElement !== document.body) {
-    const btn = document.getElementById('notifWrap');
-    const rect = btn.getBoundingClientRect();
-    p.style.top = (rect.bottom + 8) + 'px';
-    p.style.right = (window.innerWidth - rect.right) + 'px';
-    document.body.appendChild(p);
-  }
-  p.classList.toggle('open');
-  if (p.classList.contains('open')) {
-    NOTIFS.forEach(n => n.unread = false);
-    nSave(); nRender();
-  }
-}
-
-document.addEventListener('click', e => {
-  const w = document.getElementById('notifWrap');
-  const p = document.getElementById('notifPanel');
-  if (w && p && !w.contains(e.target) && !p.contains(e.target)) {
-    p.classList.remove('open');
-  }
-});
-
-function checkNewNotifs(cloud) {
-  const nj = (cloud.jobs||[]).length, nt = (cloud.tasks||[]).length;
-  if (_lastJC > 0 && nj > _lastJC) {
-    const j = (cloud.jobs||[]).slice(-1)[0];
-    pushNotif('🔨', `New job added: <strong>${j ? j.name : 'a project'}</strong>`);
-  }
-  if (_lastTC > 0 && nt > _lastTC) {
-    const t = (cloud.tasks||[]).slice(-1)[0];
-    pushNotif('⚡', `New task: <strong>${t ? t.text : 'a task'}</strong>`);
-  }
-  _lastJC = nj; _lastTC = nt;
-}
-
-// ── @MENTION ─────────────────────────────────────────────────
-let _teamNames = [], _mIdx = -1, _mMatches = [];
-
-async function loadTeamNames() {
-  try {
-    const r = await fetch(`${SHEET}?action=users`);
-    _teamNames = (await r.json()).map(u => ({ username: u.username, name: u.name }));
-  } catch(e) { _teamNames = []; }
-}
-
-function handleMentionKey(e) {
-  const ta = document.getElementById('commentInput');
-  const val = ta.value, pos = ta.selectionStart;
-  const at = val.lastIndexOf('@', pos - 1);
-  const popup = document.getElementById('mentionPopup');
-  if (at >= 0 && pos - at <= 20) {
-    const q = val.slice(at + 1, pos).toLowerCase();
-    _mMatches = _teamNames.filter(u => u.name.toLowerCase().startsWith(q) || u.username.toLowerCase().startsWith(q));
-    if (_mMatches.length) {
-      popup.innerHTML = '';
-      _mIdx = -1;
-      _mMatches.forEach((u, i) => {
-        const d = document.createElement('div');
-        d.className = 'mention-item';
-        d.innerHTML = `<div class="mention-av">${u.name[0]}</div>${u.name}`;
-        d.onclick = () => insertMention(u.name, at, pos);
-        popup.appendChild(d);
-      });
-      popup.classList.add('open');
-      return;
-    }
-  }
-  popup.classList.remove('open');
-  _mIdx = -1; _mMatches = [];
-}
-
-function handleMentionNav(e) {
-  const popup = document.getElementById('mentionPopup');
-  if (!popup.classList.contains('open')) return;
-  const items = popup.querySelectorAll('.mention-item');
-  if (e.key === 'ArrowDown') { e.preventDefault(); _mIdx = Math.min(_mIdx + 1, _mMatches.length - 1); }
-  else if (e.key === 'ArrowUp') { e.preventDefault(); _mIdx = Math.max(_mIdx - 1, 0); }
-  else if (e.key === 'Enter' && _mIdx >= 0) {
-    e.preventDefault();
-    const ta = document.getElementById('commentInput'), pos = ta.selectionStart;
-    insertMention(_mMatches[_mIdx].name, ta.value.lastIndexOf('@', pos - 1), pos);
-    return;
-  } else if (e.key === 'Escape') { popup.classList.remove('open'); return; }
-  items.forEach((el, i) => el.classList.toggle('sel', i === _mIdx));
-}
-
-function insertMention(name, at, pos) {
-  const ta = document.getElementById('commentInput');
-  ta.value = ta.value.slice(0, at) + '@' + name + ' ' + ta.value.slice(pos);
-  ta.selectionStart = ta.selectionEnd = at + name.length + 2;
-  document.getElementById('mentionPopup').classList.remove('open');
-  ta.focus();
-}
-
-// ── FULLSCREEN SYSTEM ─────────────────────────────────────────
-let _wxHTML = '', _devHTML = '';
-
-function openPFS(key) {
-  const el = document.getElementById('pfs-' + key);
-  if (!el) return;
-  el.style.display = 'flex';
-  if (key === 'jobs') {
-    const b = document.getElementById('pfs-jb'); b.innerHTML = '';
-    (D.jobs || []).forEach(j => renderJobRowEl(j, b));
-    document.getElementById('pfs-jm').textContent = (D.jobs||[]).length + ' jobs';
-    bldSel(document.getElementById('pfs-js'), 'stage', 'in-progress');
-  } else if (key === 'tasks') { renderPFSTasks(); }
-  else if (key === 'myla') { renderPFSVa('myla'); }
-  else if (key === 'toneth') { renderPFSVa('toneth'); }
-  else if (key === 'po') {
-    const b = document.getElementById('pfs-pb'); b.innerHTML = '';
-    (D.pos || []).forEach(p => renderPORowEl(p, b));
-    document.getElementById('pfs-pm').textContent = (D.pos||[]).length + ' POs';
-    bldSel(document.getElementById('pfs-ps'), 'po', 'drafted');
-  } else if (key === 'launcher') { renderPFSLauncher(); }
-  else if (key === 'notes') { document.getElementById('pfs-nb').value = D.notes || ''; }
-  else if (key === 'weather') { const b = document.getElementById('pfs-wb'); if (_wxHTML) b.innerHTML = _wxHTML; }
-  else if (key === 'devotional') { const b = document.getElementById('pfs-db'); if (_devHTML) b.innerHTML = _devHTML; }
-}
-
-function closePFS(key) {
-  if (key === 'jobs') {
-    D.jobs = collectJobsFromEl('pfs-jb');
-    save();
-    document.getElementById('jobBody').innerHTML = '';
-    (D.jobs || []).forEach(j => renderJob(j));
-  } else if (key === 'po') {
-    D.pos = collectPOsFromEl('pfs-pb');
-    save();
-    renderPOList('poBody');
-  } else if (key === 'notes') {
-    D.notes = document.getElementById('pfs-nb').value;
-    save();
-    document.getElementById('notesArea').value = D.notes;
-  }
-  document.getElementById('pfs-' + key).style.display = 'none';
-}
-
-function renderPFSLauncher() {
-  const b = document.getElementById('pfs-lb');
-  b.innerHTML = '';
-  (D.apps || DEFAULT_APPS).forEach(app => {
-    const a = document.createElement('a');
-    a.href = app.url; a.target = '_blank';
-    a.style.cssText = 'display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;text-decoration:none;color:var(--text-light);font-size:0.72rem;font-weight:700;letter-spacing:0.04em;transition:all 0.15s;';
-    a.innerHTML = `<span style="font-size:1.4rem">${app.icon || '🔗'}</span>${app.name}`;
-    a.onmouseover = () => { a.style.background = 'var(--surface2)'; a.style.borderColor = 'var(--border2)'; };
-    a.onmouseout = () => { a.style.background = 'var(--surface)'; a.style.borderColor = 'var(--border)'; };
-    b.appendChild(a);
-  });
-}
-
-function renderPFSTasks() {
-  const b = document.getElementById('pfs-tb');
-  b.innerHTML = '';
-  (D.tasks || []).forEach((t, i) => {
-    const div = document.createElement('div');
-    div.className = 'fs-task' + (t.done ? ' done' : '');
-    const chk = document.createElement('div');
-    chk.className = 'fs-task-chk';
-    chk.textContent = '✓';
-    chk.onclick = () => { D.tasks[i].done = !D.tasks[i].done; save(); syncTaskList(); renderPFSTasks(); };
-    const txt = document.createElement('span');
-    txt.className = 'fs-task-txt';
-    txt.textContent = t.text;
-    const del = document.createElement('button');
-    del.className = 'fs-del';
-    del.textContent = '✕';
-    del.onclick = () => { D.tasks.splice(i, 1); save(); syncTaskList(); renderPFSTasks(); };
-    div.append(chk, txt, del);
-    b.appendChild(div);
-  });
-  document.getElementById('pfs-tm').textContent = (D.tasks||[]).length + ' tasks';
-}
-
-function renderPFSVa(w) {
-  const b = document.getElementById(w === 'myla' ? 'pfs-mb' : 'pfs-to');
-  b.innerHTML = '';
-  (D['va_' + w] || []).forEach((t, i) => {
-    const div = document.createElement('div');
-    div.className = 'fs-vatask' + (t.done ? ' done' : '');
-    const chk = document.createElement('div');
-    chk.className = 'fs-task-chk';
-    chk.textContent = '✓';
-    chk.onclick = () => { D['va_' + w][i].done = !D['va_' + w][i].done; save(); syncVaList(w); renderPFSVa(w); };
-    const txt = document.createElement('span');
-    txt.className = 'fs-task-txt';
-    txt.textContent = t.text;
-    const del = document.createElement('button');
-    del.className = 'fs-del';
-    del.textContent = '✕';
-    del.onclick = () => { D['va_' + w].splice(i, 1); save(); syncVaList(w); renderPFSVa(w); };
-    div.append(chk, txt, del);
-    b.appendChild(div);
-  });
-}
-
-function addTaskPFS() {
-  const inp = document.getElementById('pfs-nt');
-  const t = inp.value.trim(); if (!t) return;
-  D.tasks.push({ text: t, done: false });
-  inp.value = ''; save(); syncTaskList(); renderPFSTasks();
-  pushNotif('⚡', `Task added: <strong>${t}</strong>`);
-}
-
-function addVaPFS(w) {
-  const inp = document.getElementById(w === 'myla' ? 'pfs-mt' : 'pfs-tt');
-  const t = inp.value.trim(); if (!t) return;
-  if (!D['va_' + w]) D['va_' + w] = [];
-  D['va_' + w].push({ text: t, done: false });
-  inp.value = ''; save(); syncVaList(w); renderPFSVa(w);
-  pushNotif('🟣', `${w} task added: <strong>${t}</strong>`);
-}
-
-function syncTaskList() {
-  document.getElementById('taskList').innerHTML = '';
-  (D.tasks || []).forEach(t => renderTask(t));
-}
-function syncVaList(w) {
-  const lid = w === 'myla' ? 'mylaTaskList' : 'tonethTaskList';
-  document.getElementById(lid).innerHTML = '';
-  (D['va_' + w] || []).forEach(t => renderVaTask(w, t));
-}
-
-// ── JOBS PFS ─────────────────────────────────────────────────
-function collectJobsFromEl(bodyId) {
-  return Array.from(document.querySelectorAll(`#${bodyId} tr`)).map(tr => {
-    const sels = tr.querySelectorAll('.dyn-sel');
-    return {
-      id: tr.dataset.jobId || mkId(),
-      quote: tr.cells[0] ? tr.cells[0].textContent : '—',
-      name: tr.cells[1] ? tr.cells[1].textContent : '—',
-      addr: tr.cells[2] ? tr.cells[2].textContent : '—',
-      value: tr.cells[3] ? tr.cells[3].textContent : '—',
-      stage: sels[0] ? sels[0].value : 'in-progress',
-      invoice: sels[1] ? sels[1].value : 'not-invoiced',
-      driveUrl: tr.dataset.driveUrl || ''
-    };
-  });
-}
-
-function renderJobRowEl(j, tbody) {
-  const bid = tbody.id;
-  const tr = document.createElement('tr');
-  tr.dataset.jobId = j.id || mkId();
-  tr.dataset.driveUrl = j.driveUrl || '';
-  const hasDrive = j.driveUrl && j.driveUrl.trim();
-  const onCh = `D.jobs=collectJobsFromEl('${bid}');save()`;
-  const ss = mkSel('stage', j.stage || 'in-progress').replace("D.jobs=collectJobs();save()", onCh);
-  const si = mkSel('invoice', j.invoice || 'not-invoiced').replace("D.jobs=collectJobs();save()", onCh);
-  const jid = tr.dataset.jobId;
-  const jn = j.name.replace(/'/g, '&#39;');
-  tr.innerHTML = [
-    `<td style="color:var(--muted);font-size:0.5rem">${j.quote}</td>`,
-    `<td>${j.name}</td>`,
-    `<td style="color:var(--muted);font-size:0.5rem">${j.addr}</td>`,
-    `<td style="font-size:0.55rem">${j.value}</td>`,
-    `<td>${ss}</td><td>${si}</td>`,
-    `<td><button class="jbtn" onclick="openComments('${jid}','${jn}')">💬</button></td>`,
-    `<td><button class="jbtn${hasDrive ? ' has-drive' : ''}" id="dbtn-${jid}" onclick="openDrive('${jid}','${jn}')">📁</button></td>`,
-    `<td><button onclick="removeJobRowEl(this,'${bid}')" style="background:none;border:none;color:var(--subtle);cursor:pointer;font-size:0.72rem" onmouseover="this.style.color='var(--red-dust)'" onmouseout="this.style.color='var(--subtle)'">✕</button></td>`
-  ].join('');
-  tbody.appendChild(tr);
-  tr.querySelectorAll('.dyn-sel').forEach(s => sS(s));
-}
-
-function removeJobRowEl(btn, bid) {
-  btn.closest('tr').remove();
-  D.jobs = collectJobsFromEl(bid);
-  save();
-  if (bid === 'pfs-jb') { document.getElementById('jobBody').innerHTML = ''; (D.jobs||[]).forEach(j => renderJob(j)); }
-  document.getElementById('pfs-jm').textContent = (D.jobs||[]).length + ' jobs';
-}
-
-function addJobPFS() {
-  const name = document.getElementById('pfs-jn').value.trim(); if (!name) return;
-  const j = {
-    id: mkId(),
-    quote: document.getElementById('pfs-jq').value.trim() || '—',
-    name,
-    addr: document.getElementById('pfs-ja').value.trim() || '—',
-    value: document.getElementById('pfs-jv').value.trim() || 'TBC',
-    stage: document.getElementById('pfs-js').value,
-    invoice: 'not-invoiced',
-    driveUrl: ''
-  };
-  renderJobRowEl(j, document.getElementById('pfs-jb'));
-  ['pfs-jq','pfs-jn','pfs-ja','pfs-jv'].forEach(id => document.getElementById(id).value = '');
-  D.jobs = collectJobsFromEl('pfs-jb');
-  save();
-  document.getElementById('pfs-jm').textContent = D.jobs.length + ' jobs';
-  document.getElementById('jobBody').innerHTML = '';
-  (D.jobs || []).forEach(j2 => renderJob(j2));
-  pushNotif('🔨', `Job added: <strong>${j.name}</strong>`);
-  logAct('Job Added', j.name);
-}
-
-// ── PO PFS ───────────────────────────────────────────────────
-function collectPOsFromEl(bid) {
-  return Array.from(document.querySelectorAll(`#${bid} tr:not(#poEmpty)`)).map(tr => ({
-    num: tr.cells[0] ? tr.cells[0].textContent : '',
-    addr: tr.cells[1] ? tr.cells[1].textContent : '',
-    name: tr.cells[2] ? tr.cells[2].textContent : '',
-    status: tr.querySelector('.dyn-sel') ? tr.querySelector('.dyn-sel').value : 'drafted'
-  }));
-}
-
-function renderPORowEl(p, tbody) {
-  const bid = tbody.id;
-  const emp = document.getElementById('poEmpty');
-  if (emp && bid === 'poBody') emp.remove();
-  const tr = document.createElement('tr');
-  tr.innerHTML = [
-    `<td style="color:var(--muted);font-size:0.5rem;font-weight:700">${p.num}</td>`,
-    `<td style="font-size:0.5rem">${p.addr}</td>`,
-    `<td style="font-size:0.5rem">${p.name}</td>`,
-    `<td>${makePoSel(p.status)}</td>`,
-    `<td><button onclick="removePORowEl(this,'${bid}')" style="background:none;border:none;color:var(--subtle);cursor:pointer;font-size:0.68rem" onmouseover="this.style.color='var(--red-dust)'" onmouseout="this.style.color='var(--subtle)'">✕</button></td>`
-  ].join('');
-  tbody.appendChild(tr);
-  tr.querySelectorAll('.dyn-sel').forEach(s => sS(s));
-}
-
-function removePORowEl(btn, bid) {
-  const tbody = document.getElementById(bid);
-  btn.closest('tr').remove();
-  if (bid === 'poBody' && tbody.rows.length === 0) {
-    tbody.innerHTML = '<tr id="poEmpty"><td colspan="5" style="text-align:center;color:var(--muted);font-size:0.48rem;letter-spacing:0.1em;padding:10px 0">No POs yet</td></tr>';
-  }
-  D.pos = collectPOsFromEl(bid); save();
-  if (bid === 'pfs-pb') renderPOList('poBody');
-}
-
-function renderPOList(bid) {
-  document.getElementById(bid).innerHTML = '';
-  if (!(D.pos||[]).length) {
-    document.getElementById(bid).innerHTML = '<tr id="poEmpty"><td colspan="5" style="text-align:center;color:var(--muted);font-size:0.48rem;letter-spacing:0.1em;padding:10px 0">No POs yet</td></tr>';
-    return;
-  }
-  (D.pos || []).forEach(p => renderPORowEl(p, document.getElementById(bid)));
-}
-
-function addPOPFS() {
-  const num = document.getElementById('pfs-pn').value.trim(); if (!num) return;
-  renderPORowEl({
-    num,
-    addr: document.getElementById('pfs-pa').value.trim() || '—',
-    name: document.getElementById('pfs-pc').value.trim() || '—',
-    status: document.getElementById('pfs-ps').value
-  }, document.getElementById('pfs-pb'));
-  ['pfs-pn','pfs-pa','pfs-pc'].forEach(id => document.getElementById(id).value = '');
-  D.pos = collectPOsFromEl('pfs-pb'); save();
-  document.getElementById('pfs-pm').textContent = D.pos.length + ' POs';
-  renderPOList('poBody');
-}
-
-// ── PATCH: showSettingsTab — add perms case ───────────────────
-function showSettingsTab(tab, btn) {
-  document.querySelectorAll('.mtab').forEach(t => t.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-  const body = document.getElementById('settingsBody');
-  // Permissions tab: only admin (Toneth) — owner (Ronny) cannot manage perms
-  if (tab === 'perms' && !isAdmin()) {
-    body.innerHTML = '<div style="color:var(--muted);padding:16px;text-align:center;font-size:0.6rem;letter-spacing:0.1em;">Only Toneth (Admin) can manage member permissions.</div>';
-    return;
-  }
-  if (tab === 'panels') renderPanelsTab(body);
-  else if (tab === 'launch') renderLaunchTab(body);
-  else if (tab === 'dropdowns') renderDropdownsTab(body);
-  else if (tab === 'team') renderTeamTab(body);
-  else if (tab === 'perms') renderPermsTab(body);
-  else if (tab === 'activity') renderActivityTab(body);
-  else if (tab === 'account') renderAccountTab(body);
-}
-
-
-// ── PERMISSIONS TAB ───────────────────────────────────────────
-// Only admin (Toneth) can see/use this. Owner (Ronny) cannot manage member perms.
-async function renderPermsTab(body) {
-  if (!isAdmin()) {
-    body.innerHTML = '<div style="color:var(--muted);padding:16px;text-align:center;font-size:0.6rem;letter-spacing:0.1em;">Only Toneth (Admin) can manage member permissions.</div>';
-    return;
-  }
-  body.innerHTML = '<div style="color:var(--muted);text-align:center;padding:12px;font-size:0.52rem;letter-spacing:0.1em;">Loading...</div>';
-  try {
-    const res = await fetch(`${SHEET}?action=users`);
-    const users = await res.json();
-    // Toneth (admin) can set permissions for EVERYONE including Ronny
-    // Sort: owner first, then admin, then members
-    const members = users.filter(u => u.username !== CU.username); // exclude self
-    members.sort((a,b) => {
-      const order = {owner:0, admin:1, member:2};
-      return (order[a.role]||2) - (order[b.role]||2);
-    });
-    if (!members.length) {
-      body.innerHTML = '<div style="color:var(--muted);padding:16px;text-align:center;font-size:0.6rem;letter-spacing:0.1em;">No other users found.</div>';
-      return;
-    }
-    const PL = [
-      { key:'addTask',        label:'Add Tasks',        sub:'Add items to task lists' },
-      { key:'deleteDoneTask', label:'Delete Done Tasks', sub:'Remove completed tasks only' },
-      { key:'deleteAnyTask',  label:'Delete Any Task',  sub:'Remove any task regardless of status' },
-      { key:'addJob',         label:'Add Jobs',         sub:'Add new jobs to MAHI' },
-      { key:'deleteJob',      label:'Delete Jobs',      sub:'Remove jobs from MAHI' },
-      { key:'addPO',          label:'Add POs',          sub:'Add subcontractor POs' },
-      { key:'comment',        label:'Comment on Jobs',  sub:'Post comments on job entries' },
-      { key:'viewAll',        label:'View All Panels',  sub:'See all dashboard panels' },
-    ];
-    let html = '<div style="color:var(--muted);margin-bottom:10px;font-size:0.52rem;letter-spacing:0.08em;line-height:1.6;">Set permissions per member. Quick Launch is always accessible to everyone.</div>';
-    members.forEach(u => {
-      const perms = (D.permissions && D.permissions[u.username]) || DEFAULT_PERMS;
-      html += `<div class="perm-card">
-        <div class="perm-card-head" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? '' : 'none'">
-          <div class="perm-uname">${u.name} <span class="role-badge role-${u.role}">${u.role}</span></div>
-          <span style="font-size:0.44rem;color:var(--muted)">&#9660; expand</span>
-        </div>
-        <div style="display:none">
-          <div class="perm-grid">`;
-      PL.forEach(({ key, label, sub }) => {
-        html += `<div class="perm-item">
-          <div><div class="perm-item-lbl">${label}</div><span class="perm-item-sub">${sub}</span></div>
-          <label class="toggle-sw"><input type="checkbox" ${perms[key] ? 'checked' : ''} onchange="setPerm('${u.username}','${key}',this.checked)"><span class="toggle-track"></span></label>
-        </div>`;
-      });
-      html += `</div>
-          <div style="padding:6px 12px 10px;display:flex;gap:8px;align-items:center;">
-            <button class="s-btn sm" onclick="setAllPerms('${u.username}',true)">Enable All</button>
-            <button class="s-btn sm red" onclick="setAllPerms('${u.username}',false)">Disable All</button>
-            <div class="s-status ok" id="pstat-${u.username}" style="margin-left:auto"></div>
-          </div>
-        </div>
-      </div>`;
-    });
-    body.innerHTML = html;
-  } catch(e) {
-    body.innerHTML = '<div style="color:var(--red-dust);padding:12px;">Failed to load team.</div>';
-  }
-}
-
-function setPerm(username, key, val) {
-  if (!D.permissions) D.permissions = {};
-  if (!D.permissions[username]) D.permissions[username] = { ...DEFAULT_PERMS };
-  D.permissions[username][key] = val;
-  save();
-  const s = document.getElementById(`pstat-${username}`);
-  if (s) { s.textContent = '✓ Saved'; s.className = 's-status ok'; setTimeout(() => s.textContent = '', 2000); }
-  logAct('Perm Changed', `${username}: ${key}=${val}`);
-}
-
-function setAllPerms(username, val) {
-  if (!D.permissions) D.permissions = {};
-  D.permissions[username] = Object.fromEntries(Object.keys(DEFAULT_PERMS).map(k => [k, val]));
-  save();
-  renderPermsTab(document.getElementById('settingsBody'));
-  logAct('All Perms', `${username}=${val ? 'on' : 'off'}`);
-}
-
-// ── PATCH: showDash — init notifications + role UI ────────────
-
-
-// ── PATCH: loadWeather — cache for PFS ───────────────────────
-
-// ── PATCH: loadDevotional — cache for PFS ────────────────────
-
-// ── PATCH: openComments — load team for @mention ─────────────
-function openComments(jobId, jobName) {
-  if (!can('comment') && !isCtrl()) { alert("You don't have permission to comment."); return; }
-  _commentJobId = jobId;
-  document.getElementById('commentJobLabel').textContent = jobName;
-  document.getElementById('commentsModal').style.display = 'flex';
-  loadComments(jobId);
-  loadTeamNames();
-}
-
-
-// ── PATCH: submitComment — notifications + mention highlight ──
-async function submitComment() {
-  const inp = document.getElementById('commentInput');
-  const txt = inp.value.trim();
-  if (!txt || !CU) return;
-  document.getElementById('mentionPopup').classList.remove('open');
-  inp.value = ''; inp.disabled = true;
-  try {
-    await fetch(`${SHEET}?action=add-comment&jobId=${encodeURIComponent(_commentJobId)}&u=${encodeURIComponent(CU.username)}&n=${encodeURIComponent(CU.name)}&t=${encodeURIComponent(txt)}`,{mode:'no-cors'});
-    loadComments(_commentJobId);
-    const mentions = txt.match(/@\S+/g) || [];
-    const msg = mentions.length
-      ? `<strong>${CU.name}</strong> mentioned ${mentions.join(', ')}`
-      : `<strong>${CU.name}</strong> commented on a job`;
-    pushNotif('💬', msg);
-    logAct('Comment Added', `Job ${_commentJobId}`);
-  } catch(e) {}
-  inp.disabled = false;
-}
-
-
-// ── PATCH: addJob — fire notification ─────────────────────────
-
-// ── PATCH: addTask — fire notification ───────────────────────
-
-// ── ESC closes fullscreen + popups ───────────────────────────
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    document.querySelectorAll('.pfs').forEach(p => p.style.display = 'none');
-    document.getElementById('mentionPopup')?.classList.remove('open');
-  }
-});
-
-
-// ── ONE-TIME DATA RESTORE ─────────────────────────────────────────
-// Runs once per browser — restores data from backup if flag not set
-(function() {
-  const RESTORE_FLAG = 'rdu_restored_v53b';
-  if (!localStorage.getItem(RESTORE_FLAG)) {
-    const seed = {"tasks": [{"text": "BRETT NASH DRAFT QUOTE(XERO)", "done": false}, {"text": "Sujan outstanding payment.", "done": false}, {"text": "BNI NSW-South Gala Awards Night 2026 Form", "done": false}, {"text": "Morning Routine", "done": true}, {"text": "Night Time Routine", "done": false}, {"text": "Lloyd - Letter of Acceptance.", "done": false}, {"text": "Christopher Igoe Gutters", "done": false}, {"text": "Loretta Ryde Follow Up", "done": false}, {"text": "Daniel :catchup at Archivore office 17th April", "done": false}, {"text": "Quote for 37 Narooma Dr Prestons", "done": false}, {"text": "Rocky Training Friday 10am", "done": false}, {"text": "Saturday 10am Pack Walk", "done": false}, {"text": "Sebastian 1-2-1 Thurs 11am", "done": true}, {"text": "HCM Janalli Quote", "done": false}, {"text": "HCM small Build Quote", "done": false}, {"text": "Alan Acumen Built Quote", "done": false}, {"text": "Jamie updating C order drft", "done": false}, {"text": "gardener", "done": false}, {"text": "Scents With Caitlin", "done": false}, {"text": "holden insurance harry interlock'", "done": false}, {"text": "linkt tag", "done": false}, {"text": "pay for dr shen appt", "done": false}, {"text": "Acumen built quote add restoration and guttering", "done": false}, {"text": "icare Workers Insurance: Payment is overdue", "done": false}, {"text": "Payment Reminder : Cool Coolers Pty Ltd", "done": false}, {"text": "Invoice INV-4764 from Dust Devilz", "done": false}, {"text": "Reminder: Call Sam on Monday (0423 335 845)", "done": false}], "va_myla": [{"text": "Maria 1-2-1 With Clients Book in", "done": true}, {"text": "Excite Safety Roof Report", "done": false}, {"text": "harry purchase order woolooware road", "done": true}, {"text": "HCM Progress Claim", "done": true}, {"text": "Book Gala Night Accommodation & Ronny Suit Hire", "done": false}, {"text": "LLOYDS - L/O ,P/0 & MUD MAP SIGNED", "done": false}], "va_toneth": [{"text": "Develop the Workflow", "done": false}, {"text": "Develop Builder Friendly Workflow PDF", "done": false}, {"text": "37 narooma take off and quote", "done": false}], "jobs": [{"id": "j001", "quote": "0016", "name": "Lloyds Building and Development Pty Ltd", "addr": "297 Woolooware Rd, Burraneer 2230", "value": "42,500.00", "invoice": "not-invoiced", "stage": "in-progress", "driveUrl": ""}, {"id": "j002", "quote": "0094A", "name": "HCM Build", "addr": "111 Mansfield St, Rozelle, 2039", "value": "29,500.00", "invoice": "progress-sent", "stage": "in-progress", "driveUrl": ""}, {"id": "j003", "quote": "0068", "name": "The Trustee for Perpetual Discretionary Aggregate Deductible Fund", "addr": "21 Mallacoota Close, Prestons, NSW, 2171", "value": "13,988.17", "invoice": "not-invoiced", "stage": "in-progress", "driveUrl": ""}, {"id": "j004", "quote": "0020", "name": "Lloyds Building and Development Pty Ltd", "addr": "20 Northcote St Canterbury NSW 2193", "value": "45,000.00", "invoice": "not-invoiced", "stage": "in-progress", "driveUrl": ""}, {"id": "j005", "quote": "0058", "name": "Alan Acumen Built", "addr": "94 Wollybutt Road, Engadine, NSW, Australia", "value": "55,616.00", "invoice": "not-invoiced", "stage": "in-progress", "driveUrl": ""}, {"id": "j006", "quote": "0018", "name": "Lloyds", "addr": "2 Clarke St, Peakhurst 2210 Dwelling 1", "value": "45,000.00", "invoice": "not-invoiced", "stage": "in-progress", "driveUrl": ""}, {"id": "j007", "quote": "0017", "name": "Lloyds", "addr": "4 Clarke St, Peakhurst 2210 Dwelling 1", "value": "45,000.00", "invoice": "not-invoiced", "stage": "in-progress", "driveUrl": ""}, {"id": "j008", "quote": "QU-0015", "name": "Lloyds Building and Development Pty Ltd", "addr": "9 Fairs Avenue, Woolooware", "value": "45,859.00", "invoice": "not-invoiced", "stage": "in-progress", "driveUrl": ""}], "pos": [], "kai": {}, "moko": {"rev": 0, "target": 0, "quotes": "0", "won": "0"}, "notes": "", "panels": {}, "apps": null, "dropdowns": null, "customPanels": [], "permissions": {}, "users": [], "_ts": 1774586000000};
-    // Only restore if current data has no jobs
-    const existing = JSON.parse(localStorage.getItem('rdu_data') || 'null');
-    if (!existing || !(existing.jobs && existing.jobs.length > 0)) {
-      localStorage.setItem('rdu_data', JSON.stringify(seed));
-      console.log('RDU: Data restored from backup — ' + seed.jobs.length + ' jobs loaded');
-    }
-    localStorage.setItem(RESTORE_FLAG, '1');
+// ── RESTORE v53d — force-writes correct data on first load ──────
+(function(){
+  if(!localStorage.getItem('rdu_v53d')){
+    localStorage.setItem('rdu_data', JSON.stringify({"tasks": [{"text": "BRETT NASH DRAFT QUOTE(XERO)", "done": false}, {"text": "Sujan outstanding payment.", "done": false}, {"text": "BNI NSW-South Gala Awards Night 2026 Form", "done": false}, {"text": "Morning Routine", "done": true}, {"text": "Night Time Routine", "done": false}, {"text": "Lloyd - Letter of Acceptance.", "done": false}, {"text": "Christopher Igoe Gutters", "done": false}, {"text": "Loretta Ryde Follow Up", "done": false}, {"text": "Daniel :catchup at Archivore office 17th April", "done": false}, {"text": "Quote for 37 Narooma Dr Prestons", "done": false}, {"text": "Rocky Training Friday 10am", "done": false}, {"text": "Saturday 10am Pack Walk", "done": false}, {"text": "Sebastian 1-2-1 Thurs 11am", "done": true}, {"text": "HCM Janalli Quote", "done": false}, {"text": "HCM small Build Quote", "done": false}, {"text": "Alan Acumen Built Quote", "done": false}, {"text": "Jamie updating C order drft", "done": false}, {"text": "gardener", "done": false}, {"text": "Scents With Caitlin", "done": false}, {"text": "holden insurance harry interlock'", "done": false}, {"text": "linkt tag", "done": false}, {"text": "pay for dr shen appt", "done": false}, {"text": "Acumen built quote add restoration and guttering", "done": false}, {"text": "icare Workers Insurance: Payment is overdue", "done": false}, {"text": "Payment Reminder : Cool Coolers Pty Ltd", "done": false}, {"text": "Invoice INV-4764 from Dust Devilz", "done": false}, {"text": "Reminder: Call Sam on Monday (0423 335 845)", "done": false}], "va_myla": [{"text": "Maria 1-2-1 With Clients Book in", "done": true}, {"text": "Excite Safety Roof Report", "done": false}, {"text": "harry purchase order woolooware road", "done": true}, {"text": "HCM Progress Claim", "done": true}, {"text": "Book Gala Night Accommodation & Ronny Suit Hire", "done": false}, {"text": "LLOYDS - L/O ,P/0 & MUD MAP SIGNED", "done": false}], "va_toneth": [{"text": "Develop the Workflow", "done": false}, {"text": "Develop Builder Friendly Workflow PDF", "done": false}, {"text": "37 narooma take off and quote", "done": false}], "jobs": [{"id": "j001", "quote": "0016", "name": "Lloyds Building and Development Pty Ltd", "addr": "297 Woolooware Rd, Burraneer 2230", "value": "$42,500", "invoice": "not-invoiced", "stage": "in-progress", "driveUrl": ""}, {"id": "j002", "quote": "0094A", "name": "HCM Build", "addr": "111 Mansfield St, Rozelle 2039", "value": "$29,500", "invoice": "progress-sent", "stage": "in-progress", "driveUrl": ""}, {"id": "j003", "quote": "0068", "name": "The Trustee for Perpetual Discretionary Aggregate Deductible Fund", "addr": "21 Mallacoota Close, Prestons NSW 2171", "value": "$13,988", "invoice": "not-invoiced", "stage": "in-progress", "driveUrl": ""}, {"id": "j004", "quote": "0020", "name": "Lloyds Building and Development Pty Ltd", "addr": "20 Northcote St, Canterbury NSW 2193", "value": "$45,000", "invoice": "not-invoiced", "stage": "in-progress", "driveUrl": ""}, {"id": "j005", "quote": "0058", "name": "Alan Acumen Built", "addr": "94 Wollybutt Road, Engadine NSW", "value": "$55,616", "invoice": "not-invoiced", "stage": "in-progress", "driveUrl": ""}, {"id": "j006", "quote": "0018", "name": "Lloyds", "addr": "2 Clarke St, Peakhurst 2210", "value": "$45,000", "invoice": "not-invoiced", "stage": "in-progress", "driveUrl": ""}, {"id": "j007", "quote": "0017", "name": "Lloyds", "addr": "4 Clarke St, Peakhurst 2210", "value": "$45,000", "invoice": "not-invoiced", "stage": "in-progress", "driveUrl": ""}, {"id": "j008", "quote": "QU-0015", "name": "Lloyds Building and Development Pty Ltd", "addr": "9 Fairs Ave, Woolooware", "value": "$45,859", "invoice": "not-invoiced", "stage": "in-progress", "driveUrl": ""}], "pos": [], "kai": {}, "moko": {"rev": 0, "target": 0, "quotes": "0", "won": "0"}, "notes": "Rocky 🐾 — worksite drop 8am\nToneth: invoice HCM Build\nMyla: chase Lloyds deposit", "panels": {}, "apps": null, "dropdowns": null, "customPanels": [], "permissions": {}, "users": [], "_ts": 1774587000001}));
+    localStorage.setItem('rdu_v53d','1');
+    console.log('RDU: Restored 8 jobs + 27 tasks');
   }
 })();
-// ─────────────────────────────────────────────────────────────────
+// ──────────────────────────────────────────────────────────────
 if(!checkSession())syncUI('ok','☁ Ready — please log in');
 </script>
 </body>
