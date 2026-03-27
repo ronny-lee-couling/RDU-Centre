@@ -777,7 +777,7 @@ tr:hover td{background:var(--surface2);}
     <div class="header-right">
       <div style="text-align:right;"><div class="live-time" id="clock">--:--:--</div><div class="live-date" id="dateDisplay">Loading...</div></div>
       <div class="user-pill" id="userPill" style="display:none"><div class="user-avatar">👤</div><span id="userPillName">—</span></div>
-      <div class="notif-wrap" id="notifWrap" style="position:relative"><button class="notif-btn" onclick="toggleNotifPanel()" title="Notifications" style="background:rgba(212,169,106,0.12);border:1px solid rgba(212,169,106,0.35);border-radius:5px;padding:5px 9px;cursor:pointer;font-size:0.9rem;line-height:1;position:relative">🔔<span id="notifBadge" style="position:absolute;top:-5px;right:-5px;background:#c0392b;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:0.42rem;border-radius:10px;padding:1px 4px;min-width:14px;text-align:center;display:none">0</span></button><div id="notifPanel" class="notif-panel" style="position:fixed;top:72px;right:18px;z-index:9999;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);display:none;flex-direction:column;max-height:360px;overflow:hidden"><div class="notif-head" style="display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1.5px solid var(--border);background:linear-gradient(135deg,var(--earth-dark),var(--brown) 60%,var(--earth-dark));border-radius:6px 6px 0 0;flex-shrink:0"><span style="font-family:'Bebas Neue',sans-serif;font-size:0.78rem;letter-spacing:0.12em;color:var(--tan-light)">🔔 Notifications</span><button onclick="clearNotifs()" style="background:none;border:1px solid rgba(212,169,106,0.3);color:var(--subtle);font-family:'Barlow Condensed',sans-serif;font-size:0.42rem;padding:2px 7px;cursor:pointer;border-radius:3px">Clear All</button></div><div id="notifList" style="flex:1;overflow-y:auto"><div style="font-family:'Barlow Condensed',sans-serif;font-size:0.54rem;color:var(--muted);text-align:center;padding:18px;letter-spacing:0.1em">All caught up! 🐾</div></div></div></div>
+      <div class="notif-wrap" id="notifWrap" style="position:relative"><button class="notif-btn" onclick="toggleNotifPanel()" title="Notifications" style="background:rgba(212,169,106,0.12);border:1px solid rgba(212,169,106,0.35);border-radius:5px;padding:5px 9px;cursor:pointer;font-size:0.9rem;line-height:1;position:relative">🔔<span id="notifBadge" style="position:absolute;top:-5px;right:-5px;background:#c0392b;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:0.42rem;border-radius:10px;padding:1px 4px;min-width:14px;text-align:center;display:none">0</span></button><div id="notifPanel" class="notif-panel" style="position:fixed;top:72px;right:18px;z-index:9999;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);flex-direction:column;max-height:360px;overflow:hidden"><div class="notif-head" style="display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1.5px solid var(--border);background:linear-gradient(135deg,var(--earth-dark),var(--brown) 60%,var(--earth-dark));border-radius:6px 6px 0 0;flex-shrink:0"><span style="font-family:'Bebas Neue',sans-serif;font-size:0.78rem;letter-spacing:0.12em;color:var(--tan-light)">🔔 Notifications</span><button onclick="clearNotifs()" style="background:none;border:1px solid rgba(212,169,106,0.3);color:var(--subtle);font-family:'Barlow Condensed',sans-serif;font-size:0.42rem;padding:2px 7px;cursor:pointer;border-radius:3px">Clear All</button></div><div id="notifList" style="flex:1;overflow-y:auto"><div style="font-family:'Barlow Condensed',sans-serif;font-size:0.54rem;color:var(--muted);text-align:center;padding:18px;letter-spacing:0.1em">All caught up! 🐾</div></div></div></div>
       <button class="settings-btn" onclick="openSettings()" title="Settings">⚙️</button>
     </div>
   </header>
@@ -1459,7 +1459,7 @@ function nRender(){
   const badge=document.getElementById('notifBadge');
   if(!list)return;
   const unread=NOTIFS.filter(n=>n.unread).length;
-  badge.textContent=unread;badge.classList.toggle('show',unread>0);
+  badge.textContent=unread;badge.style.display=unread>0?'block':'none';
   if(!NOTIFS.length){list.innerHTML='<div class="notif-empty">All caught up! 🐾</div>';return;}
   list.innerHTML='';
   NOTIFS.forEach(n=>{
@@ -1475,10 +1475,11 @@ function nRender(){
 function clearNotifs(){NOTIFS=[];nSave();nRender();}
 function toggleNotifPanel(){
   const p=document.getElementById('notifPanel');
-  p.classList.toggle('open');
-  if(p.classList.contains('open')){NOTIFS.forEach(n=>n.unread=false);nSave();nRender();}
+  const isOpen = p.style.display==='flex';
+  p.style.display = isOpen ? 'none' : 'flex';
+  if(!isOpen){NOTIFS.forEach(n=>n.unread=false);nSave();nRender();}
 }
-document.addEventListener('click',e=>{const w=document.getElementById('notifWrap');const p=document.getElementById('notifPanel');if(w&&p&&!w.contains(e.target)&&!p.contains(e.target))p.classList.remove('open');});
+document.addEventListener('click',e=>{const w=document.getElementById('notifWrap');const p=document.getElementById('notifPanel');if(w&&p&&!w.contains(e.target)&&!p.contains(e.target))p.style.display='none';});
 function checkNewNotifs(cloud){
   const nj=(cloud.jobs||[]).length,nt=(cloud.tasks||[]).length;
   if(_lastJobCount>0&&nj>_lastJobCount){const j=(cloud.jobs||[]).slice(-1)[0];pushNotif('🔨','New job: <strong>'+(j?j.name:'')+'</strong>');}
