@@ -68,12 +68,12 @@ body{background:var(--earth-deep);font-family:'Barlow',sans-serif;color:var(--te
 .modal-body{flex:1;overflow-y:auto;padding:14px 16px;}
 .modal-body
 /* NOTIFICATIONS */
-.notif-wrap{position:relative;}
+.notif-wrap{position:relative;z-index:601;}
 .notif-btn{background:rgba(212,169,106,0.12);border:1px solid rgba(212,169,106,0.35);border-radius:5px;padding:5px 9px;cursor:pointer;font-size:0.9rem;line-height:1;transition:all 0.2s;position:relative;}
 .notif-btn:hover{background:rgba(212,169,106,0.25);}
 .notif-badge{position:absolute;top:-5px;right:-5px;background:var(--red-dust);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:0.42rem;border-radius:10px;padding:1px 4px;min-width:14px;text-align:center;display:none;box-shadow:0 0 6px rgba(192,57,43,0.5);}
 .notif-badge.show{display:block;}
-.notif-panel{position:fixed;top:72px;right:18px;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:300;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
+.notif-panel{position:fixed;top:72px;right:18px;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:600;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
 .notif-panel.open{display:flex;}
 .notif-head{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1.5px solid var(--border);background:linear-gradient(135deg,var(--earth-dark),var(--brown) 60%,var(--earth-dark));border-radius:6px 6px 0 0;flex-shrink:0;}
 .notif-head-title{font-family:'Bebas Neue',sans-serif;font-size:0.78rem;letter-spacing:0.12em;color:var(--tan-light);}
@@ -442,12 +442,12 @@ tr:hover td{background:var(--surface2);}
 
 
 /* NOTIFICATIONS */
-.notif-wrap{position:relative;}
+.notif-wrap{position:relative;z-index:601;}
 .notif-btn{background:rgba(212,169,106,0.12);border:1px solid rgba(212,169,106,0.35);border-radius:5px;padding:5px 9px;cursor:pointer;font-size:0.9rem;line-height:1;transition:all 0.2s;position:relative;}
 .notif-btn:hover{background:rgba(212,169,106,0.25);}
 .notif-badge{position:absolute;top:-5px;right:-5px;background:var(--red-dust);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:0.42rem;border-radius:10px;padding:1px 4px;min-width:14px;text-align:center;display:none;box-shadow:0 0 6px rgba(192,57,43,0.5);}
 .notif-badge.show{display:block;}
-.notif-panel{position:fixed;top:72px;right:18px;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:300;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
+.notif-panel{position:fixed;top:72px;right:18px;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:600;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
 .notif-panel.open{display:flex;}
 .notif-head{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1.5px solid var(--border);background:linear-gradient(135deg,var(--earth-dark),var(--brown) 60%,var(--earth-dark));border-radius:6px 6px 0 0;flex-shrink:0;}
 .notif-head-title{font-family:'Bebas Neue',sans-serif;font-size:0.78rem;letter-spacing:0.12em;color:var(--tan-light);}
@@ -1815,6 +1815,11 @@ function showSettingsTab(tab, btn) {
   document.querySelectorAll('.mtab').forEach(t => t.classList.remove('active'));
   if (btn) btn.classList.add('active');
   const body = document.getElementById('settingsBody');
+  // Permissions tab: only admin (Toneth) — owner (Ronny) cannot manage perms
+  if (tab === 'perms' && !isAdmin()) {
+    body.innerHTML = '<div style="color:var(--muted);padding:16px;text-align:center;font-size:0.6rem;letter-spacing:0.1em;">Only Toneth (Admin) can manage member permissions.</div>';
+    return;
+  }
   if (tab === 'panels') renderPanelsTab(body);
   else if (tab === 'launch') renderLaunchTab(body);
   else if (tab === 'dropdowns') renderDropdownsTab(body);
@@ -1836,9 +1841,15 @@ async function renderPermsTab(body) {
   try {
     const res = await fetch(`${SHEET}?action=users`);
     const users = await res.json();
-    const members = users.filter(u => u.role !== 'owner' && u.role !== 'admin');
+    // Toneth (admin) can set permissions for EVERYONE including Ronny
+    // Sort: owner first, then admin, then members
+    const members = users.filter(u => u.username !== CU.username); // exclude self
+    members.sort((a,b) => {
+      const order = {owner:0, admin:1, member:2};
+      return (order[a.role]||2) - (order[b.role]||2);
+    });
     if (!members.length) {
-      body.innerHTML = '<div style="color:var(--muted);padding:16px;text-align:center;font-size:0.6rem;letter-spacing:0.1em;">No members yet. Set user roles to member in the Team tab first.</div>';
+      body.innerHTML = '<div style="color:var(--muted);padding:16px;text-align:center;font-size:0.6rem;letter-spacing:0.1em;">No other users found.</div>';
       return;
     }
     const PL = [
@@ -1856,7 +1867,7 @@ async function renderPermsTab(body) {
       const perms = (D.permissions && D.permissions[u.username]) || DEFAULT_PERMS;
       html += `<div class="perm-card">
         <div class="perm-card-head" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? '' : 'none'">
-          <div class="perm-uname">${u.name} <span class="role-badge role-member">${u.role}</span></div>
+          <div class="perm-uname">${u.name} <span class="role-badge role-${u.role}">${u.role}</span></div>
           <span style="font-size:0.44rem;color:var(--muted)">&#9660; expand</span>
         </div>
         <div style="display:none">
