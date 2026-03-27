@@ -73,7 +73,7 @@ body{background:var(--earth-deep);font-family:'Barlow',sans-serif;color:var(--te
 .notif-btn:hover{background:rgba(212,169,106,0.25);}
 .notif-badge{position:absolute;top:-5px;right:-5px;background:var(--red-dust);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:0.42rem;border-radius:10px;padding:1px 4px;min-width:14px;text-align:center;display:none;box-shadow:0 0 6px rgba(192,57,43,0.5);}
 .notif-badge.show{display:block;}
-.notif-panel{position:absolute;top:calc(100% + 8px);right:0;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:300;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
+.notif-panel{position:fixed;top:72px;right:18px;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:300;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
 .notif-panel.open{display:flex;}
 .notif-head{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1.5px solid var(--border);background:linear-gradient(135deg,var(--earth-dark),var(--brown) 60%,var(--earth-dark));border-radius:6px 6px 0 0;flex-shrink:0;}
 .notif-head-title{font-family:'Bebas Neue',sans-serif;font-size:0.78rem;letter-spacing:0.12em;color:var(--tan-light);}
@@ -275,7 +275,7 @@ body{background:var(--earth-deep);font-family:'Barlow',sans-serif;color:var(--te
 .wrap.has-custom .custom-panels-wrap{grid-row:4;}
 
 /* ── HEADER ───────────────────────────────────────────── */
-header{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,var(--earth-dark) 0%,var(--brown) 50%,var(--earth-dark) 100%);border:2px solid var(--tan);border-radius:6px;padding:0 14px;box-shadow:var(--shadow-lg),inset 0 1px 0 rgba(240,213,160,0.2);animation:fadeDown 0.5s ease both;position:relative;overflow:hidden;}
+header{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,var(--earth-dark) 0%,var(--brown) 50%,var(--earth-dark) 100%);border:2px solid var(--tan);border-radius:6px;padding:0 14px;box-shadow:var(--shadow-lg),inset 0 1px 0 rgba(240,213,160,0.2);animation:fadeDown 0.5s ease both;position:relative;overflow:visible;}
 header::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--horizon),var(--tan-light),var(--horizon),transparent);}
 header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--tan),transparent);opacity:0.4;}
 .logo-block{display:flex;align-items:center;gap:10px;}
@@ -447,7 +447,7 @@ tr:hover td{background:var(--surface2);}
 .notif-btn:hover{background:rgba(212,169,106,0.25);}
 .notif-badge{position:absolute;top:-5px;right:-5px;background:var(--red-dust);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:0.42rem;border-radius:10px;padding:1px 4px;min-width:14px;text-align:center;display:none;box-shadow:0 0 6px rgba(192,57,43,0.5);}
 .notif-badge.show{display:block;}
-.notif-panel{position:absolute;top:calc(100% + 8px);right:0;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:300;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
+.notif-panel{position:fixed;top:72px;right:18px;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:300;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
 .notif-panel.open{display:flex;}
 .notif-head{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1.5px solid var(--border);background:linear-gradient(135deg,var(--earth-dark),var(--brown) 60%,var(--earth-dark));border-radius:6px 6px 0 0;flex-shrink:0;}
 .notif-head-title{font-family:'Bebas Neue',sans-serif;font-size:0.78rem;letter-spacing:0.12em;color:var(--tan-light);}
@@ -1067,7 +1067,7 @@ async function loadWeather(){
       </div>
       <div class="fs-wx-stats">${stats.map(s => `<div class="fs-wx-stat"><div class="fs-wx-stat-label">${s.label}</div><div class="fs-wx-stat-val">${s.val}</div></div>`).join('')}</div>
     </div>`;
-  }
+  }  if(t){pushNotif('⚡',`Task added: <strong>${t}</strong>`);}
 }
 
 // ── DEVOTIONAL ────────────────────────────────────────
@@ -1127,7 +1127,7 @@ function addJob(){
   renderJob(j);['jobName','jobAddr','jobValue','jobQuote'].forEach(id=>document.getElementById(id).value='');
   D.jobs=collectJobs();save();logAct('Job Added',`${j.name} — ${j.addr}`);
   // sync to FS if open
-  if(document.getElementById('mahiFS').style.display!=='none'){document.getElementById('mahiFSBody').innerHTML='';D.jobs.forEach(x=>renderJobRow(x,'mahiFSBody'));updateFSCount();}
+  if(document.getElementById('mahiFS').style.display!=='none'){document.getElementById('mahiFSBody').innerHTML='';D.jobs.forEach(x=>renderJobRow(x,'mahiFSBody'));updateFSCount();}  if(name){pushNotif('🔨',`Job added: <strong>${name}</strong>`);}
 }
 function removeJobRow(btn,bodyId){
   const tr=btn.closest('tr');const name=tr.querySelectorAll('td')[1].textContent;tr.remove();
@@ -1223,14 +1223,6 @@ function togglePanel(key){
 }
 
 // ── COMMENTS ─────────────────────────────────────────
-function openComments(jobId,jobName){_commentJobId=jobId;document.getElementById('commentJobLabel').textContent=jobName;document.getElementById('commentsModal').style.display='flex';loadComments(jobId);}
-async function loadComments(jobId){
-  const list=document.getElementById('commentsList');list.innerHTML='<div class="comment-empty">Loading...</div>';
-  try{const res53c=await fetch(`${SHEET}?action=comments&jobId=${encodeURIComponent(jobId)}`,{cache:'no-cache'});const data=await res53c.json();
-  if(!data.length){list.innerHTML='<div class="comment-empty">No comments yet — be the first!</div>';return;}
-  list.innerHTML='';data.forEach(c=>{const d=document.createElement('div');d.className='comment-item';const ts=new Date(c.ts).toLocaleString('en-AU',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit',hour12:true});d.innerHTML=`<div class="comment-meta"><span class="comment-author">${c.name}</span> · ${ts}</div><div class="comment-text">${c.text}</div>`;list.appendChild(d);});list.scrollTop=list.scrollHeight;}
-  catch(e){list.innerHTML='<div class="comment-empty">Failed to load.</div>';}
-}
 async function submitComment(){
   const inp=document.getElementById('commentInput');const t=inp.value.trim();if(!t||!CU)return;
   inp.value='';inp.disabled=true;
@@ -1263,16 +1255,6 @@ function unlinkDrive(jobId){saveDriveUrl(jobId,'');}
 
 // ── SETTINGS ──────────────────────────────────────────
 function openSettings(){document.getElementById('settingsModal').style.display='flex';showSettingsTab('panels',document.getElementById('stab-panels'));}
-function showSettingsTab(tab,btn){
-  document.querySelectorAll('.mtab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');
-  const body=document.getElementById('settingsBody');
-  if(tab==='panels')renderPanelsTab(body);
-  else if(tab==='launch')renderLaunchTab(body);
-  else if(tab==='dropdowns')renderDropdownsTab(body);
-  else if(tab==='team')renderTeamTab(body);
-  else if(tab==='activity')renderActivityTab(body);
-  else if(tab==='account')renderAccountTab(body);
-}
 
 function renderPanelsTab(body){
   if(CU&&CU.role!=='admin'){body.innerHTML='<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:0.6rem;color:var(--muted);padding:12px;text-align:center;letter-spacing:0.1em;">Admin access only</div>';return;}
@@ -1829,16 +1811,19 @@ function addPOPFS() {
 }
 
 // ── PATCH: showSettingsTab — add perms case ───────────────────
-const _sST_orig = showSettingsTab;
 function showSettingsTab(tab, btn) {
-  if (tab === 'perms') {
-    document.querySelectorAll('.mtab').forEach(t => t.classList.remove('active'));
-    if (btn) btn.classList.add('active');
-    renderPermsTab(document.getElementById('settingsBody'));
-    return;
-  }
-  _sST_orig(tab, btn);
+  document.querySelectorAll('.mtab').forEach(t => t.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const body = document.getElementById('settingsBody');
+  if (tab === 'panels') renderPanelsTab(body);
+  else if (tab === 'launch') renderLaunchTab(body);
+  else if (tab === 'dropdowns') renderDropdownsTab(body);
+  else if (tab === 'team') renderTeamTab(body);
+  else if (tab === 'perms') renderPermsTab(body);
+  else if (tab === 'activity') renderActivityTab(body);
+  else if (tab === 'account') renderAccountTab(body);
 }
+
 
 // ── PERMISSIONS TAB ───────────────────────────────────────────
 // Only admin (Toneth) can see/use this. Owner (Ronny) cannot manage member perms.
@@ -1923,42 +1908,40 @@ function setAllPerms(username, val) {
 // ── PATCH: loadDevotional — cache for PFS ────────────────────
 
 // ── PATCH: openComments — load team for @mention ─────────────
-const _oC_orig = openComments;
 function openComments(jobId, jobName) {
-  _oC_orig(jobId, jobName);
+  if (!can('comment') && !isCtrl()) { alert("You don't have permission to comment."); return; }
+  _commentJobId = jobId;
+  document.getElementById('commentJobLabel').textContent = jobName;
+  document.getElementById('commentsModal').style.display = 'flex';
+  loadComments(jobId);
   loadTeamNames();
 }
 
+
 // ── PATCH: submitComment — notifications + mention highlight ──
-const _sC_orig = submitComment;
 async function submitComment() {
-  const txt = document.getElementById('commentInput').value.trim();
+  const inp = document.getElementById('commentInput');
+  const txt = inp.value.trim();
+  if (!txt || !CU) return;
   document.getElementById('mentionPopup').classList.remove('open');
-  await _sC_orig();
-  if (txt) {
+  inp.value = ''; inp.disabled = true;
+  try {
+    await fetch(`${SHEET}?action=add-comment&jobId=${encodeURIComponent(_commentJobId)}&u=${encodeURIComponent(CU.username)}&n=${encodeURIComponent(CU.name)}&t=${encodeURIComponent(txt)}`,{mode:'no-cors'});
+    loadComments(_commentJobId);
     const mentions = txt.match(/@\S+/g) || [];
     const msg = mentions.length
-      ? `<strong>${CU ? CU.name : 'Someone'}</strong> mentioned ${mentions.join(', ')}`
-      : `<strong>${CU ? CU.name : 'Someone'}</strong> posted a comment`;
+      ? `<strong>${CU.name}</strong> mentioned ${mentions.join(', ')}`
+      : `<strong>${CU.name}</strong> commented on a job`;
     pushNotif('💬', msg);
-  }
+    logAct('Comment Added', `Job ${_commentJobId}`);
+  } catch(e) {}
+  inp.disabled = false;
 }
+
 
 // ── PATCH: addJob — fire notification ─────────────────────────
-const _aJ_orig = addJob;
-function addJob() {
-  const name = document.getElementById('jobName').value.trim();
-  _aJ_orig();
-  if (name) pushNotif('🔨', `Job added: <strong>${name}</strong>`);
-}
 
 // ── PATCH: addTask — fire notification ───────────────────────
-const _aT_orig = addTask;
-function addTask() {
-  const t = document.getElementById('newTaskInput').value.trim();
-  _aT_orig();
-  if (t) pushNotif('⚡', `Task added: <strong>${t}</strong>`);
-}
 
 // ── ESC closes fullscreen + popups ───────────────────────────
 document.addEventListener('keydown', e => {
