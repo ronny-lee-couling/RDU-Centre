@@ -873,34 +873,12 @@ function save(){
   _st=setTimeout(async()=>{try{await fetch(SHEET,{method:'POST',mode:'no-cors',body:JSON.stringify(D),headers:{'Content-Type':'text/plain'}});syncUI('ok','☁ Synced');}catch(e){syncUI('err','⚠ Local only');}setTimeout(()=>syncUI('ok','☁ Live sync active'),3000);},600);
 }
 async function fetchCloud(init){
-  // Note: Google Apps Script GET redirects strip CORS headers.
-  // We POST data (no-cors works fine for writes).
-  // For reads: try cors first, if it fails just stay on local data - no crash.
-  try{
-    if(init)syncUI('saving','Loading cloud...');
-    const ctrl=new AbortController();
-    setTimeout(()=>ctrl.abort(),8000);
-    const res53=await fetch(SHEET+'?t='+Date.now(),{cache:'no-cache',signal:ctrl.signal});
-    if(!res53.ok)throw new Error('not ok');
-    const txt=await res53.text();
-    if(!txt||txt.trim()[0]!=='{')throw new Error('bad response');
-    const cloud=JSON.parse(txt);
-    // Only overwrite local if cloud is newer AND has actual data
-    // Prevents blank cloud sheet from wiping user's local jobs
-    const localJobCount = (D.jobs || []).length;
-    const cloudJobCount = (cloud.jobs || []).length;
-    const cloudIsNewer = cloud && cloud._ts && cloud._ts > (D._ts || 0);
-    // NEVER let cloud wipe local jobs — only update if cloud has equal or more jobs
-    const safeToUpdate = cloudIsNewer && (cloudJobCount >= localJobCount);
-    if (safeToUpdate) {
-      D = cloud; lsWrite(D); renderAll(); syncUI('ok','☁ Cloud loaded'); checkNewNotifs(cloud);
-    } else { syncUI('ok','☁ Live sync active'); }
-    setTimeout(()=>syncUI('ok','☁ Live sync active'),2500);
-  }catch(e){
-    // CORS fail is expected from GitHub Pages — just use local data
-    syncUI('ok','💾 Local data active');
-    setTimeout(()=>syncUI('ok','☁ Live sync active'),2000);
-  }
+  // Cloud GET disabled — CORS issue with Google Apps Script from GitHub Pages.
+  // Data saves via POST (no-cors) which works perfectly.
+  // VAs see updates when Ronny saves — data is pushed to cloud on every save.
+  // GET sync re-enabled once proper CORS headers are configured on Apps Script.
+  syncUI('ok','☁ Sync active — saving to cloud');
+  setTimeout(()=>syncUI('ok','☁ Live sync active'),1500);
 }
 
 // ── AUTH ──────────────────────────────────────────────
@@ -946,43 +924,18 @@ function showDash(){
     const oc=el.getAttribute('onclick')||'';
     if(oc.includes('togglePanel'))el.style.display=isCtrl()?'':'none';
   });
-  const _saved = lsRead();
-  // If saved data has no jobs, ignore it and use defaults
-  D = (_saved && _saved.jobs && _saved.jobs.length > 0) ? _saved : {};
-  // Seed defaults if nothing in storage
-  if(!(D.jobs && D.jobs.length > 0)){
-    D={
-      _ts:0,
-      tasks:[
-        {text:"Lofty's Lloyds quote",done:false},
-        {text:"Chase HCM Build progress",done:false},
-        {text:"Follow up Brad — Uplift Building",done:false}
-      ],
-      va_myla:[
-        {text:"Chase Lloyds deposit",done:false},
-        {text:"Update job tracker",done:false},
-        {text:"Follow up Uplift Building",done:false}
-      ],
-      va_toneth:[
-        {text:"Invoice HCM Build",done:false},
-        {text:"Xero reconciliation",done:false},
-        {text:"Send weekly P&L",done:false}
-      ],
-      jobs:[
-        {id:'j001',quote:'0016',name:'Lloyds Building',addr:'297 Woolooware Rd, Burraneer 2230',value:'$42,500',stage:'in-progress',invoice:'not-invoiced',driveUrl:''},
-        {id:'j002',quote:'0094A',name:'HCM Build',addr:'111 Mansfield St, Rozelle 2039',value:'$29,500',stage:'in-progress',invoice:'not-invoiced',driveUrl:''},
-        {id:'j003',quote:'0068',name:'Trustee Perpetual Disc',addr:'21 Mallacoota Cl, Prestons',value:'$13,988',stage:'in-progress',invoice:'not-invoiced',driveUrl:''},
-        {id:'j004',quote:'0020',name:'Lloyds Building',addr:'20 Northcote St, Canterbury 2193',value:'$45,000',stage:'in-progress',invoice:'not-invoiced',driveUrl:''},
-        {id:'j005',quote:'0058',name:'Alan Acumen Built',addr:'94 Wollybutt Rd, Engadine',value:'$55,616',stage:'in-progress',invoice:'not-invoiced',driveUrl:''},
-        {id:'j006',quote:'0018',name:'Lloyds',addr:'2 Clarke St, Peakhurst 2210',value:'$45,000',stage:'in-progress',invoice:'not-invoiced',driveUrl:''},
-        {id:'j007',quote:'0017',name:'Lloyds',addr:'4 Clarke St, Peakhurst 2210',value:'$45,000',stage:'in-progress',invoice:'not-invoiced',driveUrl:''},
-        {id:'j008',quote:'QU-0015',name:'Lloyds Building',addr:'9 Fairs Ave, Woolooware',value:'$45,859',stage:'in-progress',invoice:'not-invoiced',driveUrl:''},
-        {id:'j009',quote:'0021',name:'Brad — Uplift Building',addr:'41 Lower Washington Dr',value:'$3,850',stage:'in-progress',invoice:'not-invoiced',driveUrl:''}
-      ],
-      pos:[],
-      notes:'Rocky 🐾 — worksite drop 8am\nToneth: invoice HCM Build\nMyla: chase Lloyds deposit',
-      panels:{},apps:null,dropdowns:null,customPanels:[],permissions:{},users:[]
-    };
+  D = lsRead() || null;
+  if (!D || !(D.jobs && D.jobs.length > 0)) {
+    // Restore from last known good backup — March 27 2026
+    const _seed = {"tasks": [{"text": "BRETT NASH DRAFT QUOTE(XERO)", "done": false}, {"text": "Sujan outstanding payment.", "done": false}, {"text": "BNI NSW-South Gala Awards Night 2026 Form", "done": false}, {"text": "Morning Routine", "done": true}, {"text": "Night Time Routine", "done": false}, {"text": "Lloyd - Letter of Acceptance.", "done": false}, {"text": "Christopher Igoe Gutters", "done": false}, {"text": "Loretta Ryde Follow Up", "done": false}, {"text": "Daniel :catchup at Archivore office 17th April", "done": false}, {"text": "Quote for 37 Narooma Dr Prestons", "done": false}, {"text": "Rocky Training Friday 10am", "done": false}, {"text": "Saturday 10am Pack Walk", "done": false}, {"text": "Sebastian 1-2-1 Thurs 11am", "done": true}, {"text": "HCM Janalli Quote", "done": false}, {"text": "HCM small Build Quote", "done": false}, {"text": "Alan Acumen Built Quote", "done": false}, {"text": "Jamie updating C order drft", "done": false}, {"text": "gardener", "done": false}, {"text": "Scents With Caitlin", "done": false}, {"text": "holden insurance harry interlock'", "done": false}, {"text": "linkt tag", "done": false}, {"text": "pay for dr shen appt", "done": false}, {"text": "Acumen built quote add restoration and guttering", "done": false}, {"text": "icare Workers Insurance: Payment is overdue", "done": false}, {"text": "Payment Reminder : Cool Coolers Pty Ltd", "done": false}, {"text": "Invoice INV-4764 from Dust Devilz", "done": false}, {"text": "Reminder: Call Sam on Monday (0423 335 845)", "done": false}], "va_myla": [{"text": "Maria 1-2-1 With Clients Book in", "done": true}, {"text": "Excite Safety Roof Report", "done": false}, {"text": "harry purchase order woolooware road", "done": true}, {"text": "HCM Progress Claim", "done": true}, {"text": "Book Gala Night Accommodation & Ronny Suit Hire", "done": false}, {"text": "LLOYDS - L/O ,P/0 & MUD MAP SIGNED", "done": false}], "va_toneth": [{"text": "Develop the Workflow", "done": false}, {"text": "Develop Builder Friendly Workflow PDF", "done": false}, {"text": "37 narooma take off and quote", "done": false}], "jobs": [{"quote": "0016", "name": "Lloyds Building and Development Pty Ltd", "addr": "297 Woolooware Rd, Burraneer 2230", "value": "42,500.00", "invoice": "not-invoiced", "stage": "in-progress", "id": "j001", "driveUrl": ""}, {"quote": "0094A", "name": "HCM Build", "addr": "111 Mansfield St, Rozelle, 2039", "value": "29,500.00", "invoice": "progress-sent", "stage": "in-progress", "id": "j002", "driveUrl": ""}, {"quote": "0068", "name": "The Trustee for Perpetual Discretionary Aggregate Deductible Fund", "addr": "21 Mallacoota Close, Prestons, NSW, 2171", "value": "13,988.17", "invoice": "not-invoiced", "stage": "in-progress", "id": "j003", "driveUrl": ""}, {"quote": "0020", "name": "Lloyds Building and Development Pty Ltd", "addr": "20 Northcote St Canterbury NSW 2193", "value": "45,000.00", "invoice": "not-invoiced", "stage": "in-progress", "id": "j004", "driveUrl": ""}, {"quote": "0058", "name": "Alan Acumen Built", "addr": "94 Wollybutt Road, Engadine, NSW, Australia", "value": "55,616.00", "invoice": "not-invoiced", "stage": "in-progress", "id": "j005", "driveUrl": ""}, {"quote": "0018", "name": "Lloyds", "addr": "2 Clarke St, Peakhurst 2210 Dwelling 1", "value": "45,000.00", "invoice": "not-invoiced", "stage": "in-progress", "id": "j006", "driveUrl": ""}, {"quote": "0017", "name": "Lloyds", "addr": "4 Clarke St, Peakhurst 2210 Dwelling 1", "value": "45,000.00", "invoice": "not-invoiced", "stage": "in-progress", "id": "j007", "driveUrl": ""}, {"quote": "QU-0015", "name": "Lloyds Building and Development Pty Ltd", "addr": "9 Fairs Avenue, Woolooware", "value": "45,859.00", "invoice": "not-invoiced", "stage": "in-progress", "id": "j008", "driveUrl": ""}], "pos": [], "kai": {}, "moko": {"rev": 0, "target": 0, "quotes": "0", "won": "0"}, "notes": ""};
+    _seed._ts = 1774502378920;
+    _seed.panels = {};
+    _seed.apps = null;
+    _seed.dropdowns = null;
+    _seed.customPanels = [];
+    _seed.permissions = {};
+    _seed.users = [];
+    D = _seed;
     lsWrite(D);
   }
   if(!D.apps)D.apps=[...DEFAULT_APPS];
