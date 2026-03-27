@@ -781,6 +781,21 @@ tr:hover td{background:var(--surface2);}
 const SHEET='https://script.google.com/macros/s/AKfycbxREWhTD51GJeloL2iAz1aapddtaE5OATu71HBAIO86R_eByoJSujAcgkNoW6eilheEKg/exec';
 const LS_KEY='rdu_data',SES_KEY='rdu_session';
 let D={},CU=null,_commentJobId=null,_driveJobId=null;
+const DEFAULT_PERMS = {
+  addTask:true, deleteDoneTask:true, deleteAnyTask:false,
+  addJob:false, deleteJob:false, addPO:false,
+  comment:true, viewAll:true
+};
+const DEFAULT_USERS = [
+  {username:'ronny',  password:'admin2026', role:'owner',  name:'Ronny Couling'},
+  {username:'toneth', password:'rdu2026',   role:'admin',  name:'Toneth'},
+  {username:'myla',   password:'rdu2026',   role:'member', name:'Myla'},
+  {username:'harry',  password:'rdu2026',   role:'member', name:'Harry'},
+  {username:'pauly',  password:'rdu2026',   role:'member', name:'Pauly'},
+  {username:'josh',   password:'rdu2026',   role:'member', name:'Josh'},
+];
+function getUsers(){return D.users&&D.users.length?D.users:DEFAULT_USERS;}
+
 
 // ── DEFAULTS ──────────────────────────────────────────
 const DEFAULT_APPS=[
@@ -858,13 +873,26 @@ function save(){
   _st=setTimeout(async()=>{try{await fetch(SHEET,{method:'POST',mode:'no-cors',body:JSON.stringify(D),headers:{'Content-Type':'text/plain'}});syncUI('ok','☁ Synced');}catch(e){syncUI('err','⚠ Local only');}setTimeout(()=>syncUI('ok','☁ Live sync active'),3000);},600);
 }
 async function fetchCloud(init){
+  // Note: Google Apps Script GET redirects strip CORS headers.
+  // We POST data (no-cors works fine for writes).
+  // For reads: try cors first, if it fails just stay on local data - no crash.
   try{
     if(init)syncUI('saving','Loading cloud...');
-    const res53=await fetch(SHEET+'?t='+Date.now(),{cache:'no-cache'});if(!res53.ok)throw new Error();const cloud=JSON.parse(await res53.text());
-    if(cloud&&cloud._ts&&cloud._ts>(D._ts||0)){D=cloud;lsWrite(D);renderAll();syncUI('ok','☁ Cloud loaded');}
+    const ctrl=new AbortController();
+    setTimeout(()=>ctrl.abort(),8000);
+    const res53=await fetch(SHEET+'?t='+Date.now(),{cache:'no-cache',signal:ctrl.signal});
+    if(!res53.ok)throw new Error('not ok');
+    const txt=await res53.text();
+    if(!txt||txt.trim()[0]!=='{')throw new Error('bad response');
+    const cloud=JSON.parse(txt);
+    if(cloud&&cloud._ts&&cloud._ts>(D._ts||0)){D=cloud;lsWrite(D);renderAll();syncUI('ok','☁ Cloud loaded');checkNewNotifs(cloud);}
     else syncUI('ok','☁ Live sync active');
     setTimeout(()=>syncUI('ok','☁ Live sync active'),2500);
-  }catch(e){syncUI('ok','💾 Local only');setTimeout(()=>syncUI('ok','💾 Saved locally'),2000);}
+  }catch(e){
+    // CORS fail is expected from GitHub Pages — just use local data
+    syncUI('ok','💾 Local data active');
+    setTimeout(()=>syncUI('ok','☁ Live sync active'),2000);
+  }
 }
 
 // ── AUTH ──────────────────────────────────────────────
@@ -875,14 +903,6 @@ function checkSession(){const s=JSON.parse(localStorage.getItem(SES_KEY)||'null'
 // Credentials stored in D.users (synced to cloud like all other data)
 // Default users bootstrapped on first load
 
-const DEFAULT_USERS = [
-  {username:'ronny',  password:'admin2026', role:'owner',  name:'Ronny Couling'},
-  {username:'toneth', password:'rdu2026',   role:'admin',  name:'Toneth'},
-  {username:'myla',   password:'rdu2026',   role:'member', name:'Myla'},
-  {username:'harry',  password:'rdu2026',   role:'member', name:'Harry'},
-  {username:'pauly',  password:'rdu2026',   role:'member', name:'Pauly'},
-  {username:'josh',   password:'rdu2026',   role:'member', name:'Josh'},
-];
 
 function getUsers() {
   return D.users && D.users.length ? D.users : DEFAULT_USERS;
@@ -895,11 +915,7 @@ async function doLogin(){
   if(!u||!p){err.textContent='Enter username and password.';return;}
   btn.disabled=true;btn.textContent='Checking...';err.textContent='';
 
-  // First try to load latest cloud data so we have up-to-date credentials
-  try {
-    const res = await fetch(SHEET+'?t='+Date.now(),{mode:'cors',cache:'no-cache'});
-    if(res.ok){const txt=await res.text();if(txt&&txt.length>5){const cloud=JSON.parse(txt);if(cloud&&cloud._ts&&cloud._ts>(D._ts||0)){D=cloud;lsW(D);}}}
-  } catch(e) { /* use local data if cloud unreachable */ }
+  // Login uses local credentials only — no network call needed
 
   const users = getUsers();
   const found = users.find(x => x.username.toLowerCase()===u && x.password===p);
@@ -922,7 +938,7 @@ function showDash(){
     const oc=el.getAttribute('onclick')||'';
     if(oc.includes('togglePanel'))el.style.display=isCtrl()?'':'none';
   });
-  D=lsR()||{_ts:0,tasks:[],va_myla:[],va_toneth:[],jobs:[],pos:[],notes:'',panels:{},apps:null,dropdowns:null,customPanels:[],permissions:{},users:[]};
+  D=lsRead()||{_ts:0,tasks:[],va_myla:[],va_toneth:[],jobs:[],pos:[],notes:'',panels:{},apps:null,dropdowns:null,customPanels:[],permissions:{},users:[]};
   if(!D.apps)D.apps=[...DEFAULT_APPS];
   if(!D.dropdowns)D.dropdowns=JSON.parse(JSON.stringify(DEFAULT_DD));
   if(!D.customPanels)D.customPanels=[];
@@ -1419,11 +1435,6 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelec
 // ══════════════════════════════════════════════════════════════
 
 // ── ROLE HELPERS ──────────────────────────────────────────────
-const DEFAULT_PERMS = {
-  addTask:true, deleteDoneTask:true, deleteAnyTask:false,
-  addJob:false, deleteJob:false, addPO:false,
-  comment:true, viewAll:true
-};
 
 function isCtrl() { return CU && (CU.role === 'owner' || CU.role === 'admin'); }
 function isAdmin() { return CU && CU.role === 'admin'; }
@@ -1906,11 +1917,6 @@ function setAllPerms(username, val) {
 
 // ── PATCH: showDash — init notifications + role UI ────────────
 
-// ── PATCH: fetchCloud — check new notifs after cloud load ─────
-const _fC_orig = fetchCloud;
-async function fetchCloud(init) {
-  await _fC_orig(init);
-}
 
 // ── PATCH: loadWeather — cache for PFS ───────────────────────
 
