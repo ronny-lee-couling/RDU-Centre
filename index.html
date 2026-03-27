@@ -860,7 +860,7 @@ function save(){
 async function fetchCloud(init){
   try{
     if(init)syncUI('saving','Loading cloud...');
-    const cloud=await gFetch(SHEET+'?t='+Date.now());
+    const res53=await fetch(SHEET+'?t='+Date.now(),{cache:'no-cache'});if(!res53.ok)throw new Error();const cloud=JSON.parse(await res53.text());
     if(cloud&&cloud._ts&&cloud._ts>(D._ts||0)){D=cloud;lsWrite(D);renderAll();syncUI('ok','☁ Cloud loaded');}
     else syncUI('ok','☁ Live sync active');
     setTimeout(()=>syncUI('ok','☁ Live sync active'),2500);
@@ -870,32 +870,47 @@ async function fetchCloud(init){
 // ── AUTH ──────────────────────────────────────────────
 function checkSession(){const s=JSON.parse(localStorage.getItem(SES_KEY)||'null');if(s&&s.expires>Date.now()){CU=s.user;showDash();return true;}return false;}
 // JSONP - bypasses Google Apps Script CORS/redirect
-function gFetch(url){
-  return new Promise((resolve,reject)=>{
-    const cb='rdu_cb_'+Date.now();
-    const s=document.createElement('script');
-    window[cb]=(data)=>{resolve(data);try{document.head.removeChild(s);}catch(e){}delete window[cb];};
-    s.src=url+'&callback='+cb;
-    s.onerror=()=>{reject(new Error('Script load failed'));delete window[cb];};
-    document.head.appendChild(s);
-    setTimeout(()=>{if(window[cb]){delete window[cb];reject(new Error('Timeout'));}},15000);
-  });
+
+// ── LOCAL AUTH — no network call needed, zero CORS issues ──────
+// Credentials stored in D.users (synced to cloud like all other data)
+// Default users bootstrapped on first load
+
+const DEFAULT_USERS = [
+  {username:'ronny',  password:'admin2026', role:'owner',  name:'Ronny Couling'},
+  {username:'toneth', password:'rdu2026',   role:'admin',  name:'Toneth'},
+  {username:'myla',   password:'rdu2026',   role:'member', name:'Myla'},
+  {username:'harry',  password:'rdu2026',   role:'member', name:'Harry'},
+  {username:'pauly',  password:'rdu2026',   role:'member', name:'Pauly'},
+  {username:'josh',   password:'rdu2026',   role:'member', name:'Josh'},
+];
+
+function getUsers() {
+  return D.users && D.users.length ? D.users : DEFAULT_USERS;
 }
 
 async function doLogin(){
-  const u=document.getElementById('loginUser').value.trim();
+  const u=document.getElementById('loginUser').value.trim().toLowerCase();
   const p=document.getElementById('loginPass').value;
   const err=document.getElementById('loginErr');const btn=document.getElementById('loginBtn');
   if(!u||!p){err.textContent='Enter username and password.';return;}
   btn.disabled=true;btn.textContent='Checking...';err.textContent='';
-  try{
-    const data=await gFetch(`${SHEET}?action=login&u=${encodeURIComponent(u)}&p=${encodeURIComponent(p)}`);
-    if(data.ok){
-      CU=data.user;
-      localStorage.setItem(SES_KEY,JSON.stringify({user:CU,expires:Date.now()+7*24*60*60*1000}));
-      logAct('Login','Logged in');showDash();
-    } else {err.textContent='Invalid username or password.';btn.disabled=false;btn.textContent='LOGIN TO RDU';}
-  }catch(e){err.textContent=e.message||'Network error — check connection.';btn.disabled=false;btn.textContent='LOGIN TO RDU';}
+
+  // First try to load latest cloud data so we have up-to-date credentials
+  try {
+    const res = await fetch(SHEET+'?t='+Date.now(),{mode:'cors',cache:'no-cache'});
+    if(res.ok){const txt=await res.text();if(txt&&txt.length>5){const cloud=JSON.parse(txt);if(cloud&&cloud._ts&&cloud._ts>(D._ts||0)){D=cloud;lsW(D);}}}
+  } catch(e) { /* use local data if cloud unreachable */ }
+
+  const users = getUsers();
+  const found = users.find(x => x.username.toLowerCase()===u && x.password===p);
+  if(found){
+    CU={username:found.username, role:found.role, name:found.name};
+    localStorage.setItem(SES_KEY,JSON.stringify({user:CU,expires:Date.now()+7*24*60*60*1000}));
+    showDash();
+  } else {
+    err.textContent='Incorrect username or password.';
+    btn.disabled=false;btn.textContent='LOGIN TO RDU';
+  }
 }
 function showDash(){
   document.getElementById('loginScreen').style.display='none';
@@ -1153,7 +1168,7 @@ function togglePanel(key){
 function openComments(jobId,jobName){_commentJobId=jobId;document.getElementById('commentJobLabel').textContent=jobName;document.getElementById('commentsModal').style.display='flex';loadComments(jobId);}
 async function loadComments(jobId){
   const list=document.getElementById('commentsList');list.innerHTML='<div class="comment-empty">Loading...</div>';
-  try{const data=await gFetch(`${SHEET}?action=comments&jobId=${encodeURIComponent(jobId)}`);
+  try{const res53c=await fetch(`${SHEET}?action=comments&jobId=${encodeURIComponent(jobId)}`,{cache:'no-cache'});const data=await res53c.json();
   if(!data.length){list.innerHTML='<div class="comment-empty">No comments yet — be the first!</div>';return;}
   list.innerHTML='';data.forEach(c=>{const d=document.createElement('div');d.className='comment-item';const ts=new Date(c.ts).toLocaleString('en-AU',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit',hour12:true});d.innerHTML=`<div class="comment-meta"><span class="comment-author">${c.name}</span> · ${ts}</div><div class="comment-text">${c.text}</div>`;list.appendChild(d);});list.scrollTop=list.scrollHeight;}
   catch(e){list.innerHTML='<div class="comment-empty">Failed to load.</div>';}
@@ -1309,7 +1324,7 @@ async function renderTeamTab(body){
   if(CU&&CU.role!=='admin'){body.innerHTML='<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:0.6rem;color:var(--muted);padding:12px;text-align:center;letter-spacing:0.1em;">Admin access only</div>';return;}
   body.innerHTML='<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:0.52rem;color:var(--muted);text-align:center;padding:12px;letter-spacing:0.1em;">Loading...</div>';
   try{
-    const users=await gFetch(`${SHEET}?action=users`);
+    const res53u=await fetch(`${SHEET}?action=users`,{cache:'no-cache'});const users=await res53u.json();
     let html='<div class="settings-section"><div class="settings-section-title">Team Members</div><table class="team-table"><thead><tr><th>Username</th><th>Name</th><th>Role</th><th>New Password</th><th></th></tr></thead><tbody>';
     users.forEach(u=>{html+=`<tr><td style="color:var(--muted)">${u.username}</td><td><input class="team-input" id="tn-${u.username}" value="${u.name}"></td><td><select class="team-input" id="tr-${u.username}"><option value="admin"${u.role==='admin'?' selected':''}>Admin</option><option value="va"${u.role==='va'?' selected':''}>VA</option><option value="crew"${u.role==='crew'?' selected':''}>Crew</option></select></td><td><input class="team-input" id="tp-${u.username}" type="password" placeholder="Change..."></td><td><button class="team-save-btn" onclick="saveTeamMember('${u.username}')">Save</button></td></tr>`;});
     html+=`</tbody></table></div><div id="tss" style="font-family:'Barlow Condensed',sans-serif;font-size:0.5rem;min-height:14px;margin-top:4px;letter-spacing:0.1em;"></div>`;
@@ -1323,7 +1338,7 @@ async function saveTeamMember(u){
 }
 async function renderActivityTab(body){
   body.innerHTML='<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:0.52rem;color:var(--muted);text-align:center;padding:12px;letter-spacing:0.1em;">Loading activity...</div>';
-  try{const data=await gFetch(`${SHEET}?action=activity&limit=60`);if(!data.length){body.innerHTML='<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:0.56rem;color:var(--muted);text-align:center;padding:16px;letter-spacing:0.1em;">No activity logged yet.</div>';return;}let html='<div class="settings-section"><div class="settings-section-title">Recent Activity (last 60)</div>';data.forEach(a=>{const ts=new Date(a.ts).toLocaleString('en-AU',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit',hour12:true});html+=`<div class="activity-row"><div class="activity-dot"></div><div><div class="activity-event">${a.event}${a.details?' — '+a.details:''}</div><div class="activity-meta">${a.name} · ${ts}</div></div></div>`;});html+='</div>';body.innerHTML=html;}
+  try{const res53a=await fetch(`${SHEET}?action=activity&limit=60`,{cache:'no-cache'});const data=await res53a.json();if(!data.length){body.innerHTML='<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:0.56rem;color:var(--muted);text-align:center;padding:16px;letter-spacing:0.1em;">No activity logged yet.</div>';return;}let html='<div class="settings-section"><div class="settings-section-title">Recent Activity (last 60)</div>';data.forEach(a=>{const ts=new Date(a.ts).toLocaleString('en-AU',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit',hour12:true});html+=`<div class="activity-row"><div class="activity-dot"></div><div><div class="activity-event">${a.event}${a.details?' — '+a.details:''}</div><div class="activity-meta">${a.name} · ${ts}</div></div></div>`;});html+='</div>';body.innerHTML=html;}
   catch(e){body.innerHTML='<div style="color:var(--red-dust);padding:12px;">Failed to load.</div>';}
 }
 function renderAccountTab(body){
