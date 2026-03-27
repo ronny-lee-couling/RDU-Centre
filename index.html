@@ -1448,6 +1448,9 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelec
 // ─────────────────────────────────────────────────────────
 
 const DEFAULT_MEMBER_PERMS={addTask:true,deleteDoneTask:true,deleteAnyTask:false,addJob:false,deleteJob:false,addPO:false,comment:true,viewAll:true,useQuickLaunch:true};
+
+const DEFAULT_USERS=[{username:'ronny',password:'admin2026',role:'owner',name:'Ronny Couling'},{username:'toneth',password:'rdu2026',role:'admin',name:'Toneth'},{username:'myla',password:'rdu2026',role:'member',name:'Myla'},{username:'harry',password:'rdu2026',role:'member',name:'Harry'},{username:'pauly',password:'rdu2026',role:'member',name:'Pauly'},{username:'josh',password:'rdu2026',role:'member',name:'Josh'}];
+function getUsers(){return D.users&&D.users.length?D.users:DEFAULT_USERS;}
 function isCtrl(){return CU&&(CU.role==='owner'||CU.role==='admin');}
 function isAdmin(){return CU&&CU.role==='admin';}
 function can(action){if(!CU)return false;if(isCtrl())return true;const p=(D.permissions||{})[CU.username]||DEFAULT_MEMBER_PERMS;return p[action]===true;}
@@ -1685,5 +1688,3 @@ if(!checkSession())syncUI('ok','☁ Ready — please log in');
 </script>
 </body>
 </html>
-const DEFAULT_USERS=[{username:'ronny',password:'admin2026',role:'owner',name:'Ronny Couling'},{username:'toneth',password:'rdu2026',role:'admin',name:'Toneth'},{username:'myla',password:'rdu2026',role:'member',name:'Myla'},{username:'harry',password:'rdu2026',role:'member',name:'Harry'},{username:'pauly',password:'rdu2026',role:'member',name:'Pauly'},{username:'josh',password:'rdu2026',role:'member',name:'Josh'}];
-function getUsers(){return D.users&&D.users.length?D.users:DEFAULT_USERS;}
