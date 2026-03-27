@@ -1500,19 +1500,21 @@ function nRender(){
 function clearNotifs(){NOTIFS=[];nSave();nRender();}
 function toggleNotifPanel(){
   const p=document.getElementById('notifPanel');
+  // Move to body on first use — escapes header overflow:hidden clipping
+  if(p.parentElement!==document.body){
+    document.body.appendChild(p);
+  }
   if(p.classList.contains('open')){
-    // Close: animate out, then hide via CSS (remove inline style so CSS display:none takes over)
     p.style.animation='notifFade 0.15s ease both';
-    setTimeout(()=>{p.classList.remove('open');p.style.display='';p.style.animation='';},140);
+    setTimeout(()=>{p.classList.remove('open');p.style.display='none';p.style.animation='';},140);
   } else {
-    // Open: clear any inline style so CSS class controls display cleanly
-    p.style.display='';
+    p.style.display='flex';
     p.style.animation='';
     p.classList.add('open');
     NOTIFS.forEach(n=>n.unread=false);nSave();nRender();
   }
 }
-document.addEventListener('click',e=>{const w=document.getElementById('notifWrap');const p=document.getElementById('notifPanel');if(w&&p&&!w.contains(e.target)&&!p.contains(e.target)&&p.classList.contains('open')){p.style.animation='notifFade 0.15s ease both';setTimeout(()=>{p.classList.remove('open');p.style.display='';p.style.animation='';},140);}});
+document.addEventListener('click',e=>{const w=document.getElementById('notifWrap');const p=document.getElementById('notifPanel');if(w&&p&&!w.contains(e.target)&&!p.contains(e.target)&&p.classList.contains('open')){p.style.animation='notifFade 0.15s ease both';setTimeout(()=>{p.classList.remove('open');p.style.display='none';p.style.animation='';},140);}});
 function checkNewNotifs(cloud){
   const nj=(cloud.jobs||[]).length,nt=(cloud.tasks||[]).length;
   if(_lastJobCount>0&&nj>_lastJobCount){const j=(cloud.jobs||[]).slice(-1)[0];pushNotif('🔨','New job: <strong>'+(j?j.name:'')+'</strong>');}
