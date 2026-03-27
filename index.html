@@ -73,7 +73,7 @@ body{background:var(--earth-deep);font-family:'Barlow',sans-serif;color:var(--te
 .notif-btn:hover{background:rgba(212,169,106,0.25);}
 .notif-badge{position:absolute;top:-5px;right:-5px;background:var(--red-dust);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:0.42rem;border-radius:10px;padding:1px 4px;min-width:14px;text-align:center;display:none;box-shadow:0 0 6px rgba(192,57,43,0.5);}
 .notif-badge.show{display:block;}
-.notif-panel{position:absolute;top:calc(100% + 8px);right:0;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:300;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
+.notif-panel{position:fixed;top:72px;right:18px;top:calc(100% + 8px);right:0;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:300;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
 .notif-panel.open{display:flex;}
 .notif-head{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1.5px solid var(--border);background:linear-gradient(135deg,var(--earth-dark),var(--brown) 60%,var(--earth-dark));border-radius:6px 6px 0 0;flex-shrink:0;}
 .notif-head-title{font-family:'Bebas Neue',sans-serif;font-size:0.78rem;letter-spacing:0.12em;color:var(--tan-light);}
@@ -327,7 +327,7 @@ footer{grid-column:1/-1;display:flex;justify-content:space-between;align-items:c
 .notif-btn:hover{background:rgba(212,169,106,0.25);}
 .notif-badge{position:absolute;top:-5px;right:-5px;background:var(--red-dust);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:0.42rem;border-radius:10px;padding:1px 4px;min-width:14px;text-align:center;display:none;box-shadow:0 0 6px rgba(192,57,43,0.5);}
 .notif-badge.show{display:block;}
-.notif-panel{position:absolute;top:calc(100% + 8px);right:0;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:300;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
+.notif-panel{position:fixed;top:72px;right:18px;top:calc(100% + 8px);right:0;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:300;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
 .notif-panel.open{display:flex;}
 .notif-head{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1.5px solid var(--border);background:linear-gradient(135deg,var(--earth-dark),var(--brown) 60%,var(--earth-dark));border-radius:6px 6px 0 0;flex-shrink:0;}
 .notif-head-title{font-family:'Bebas Neue',sans-serif;font-size:0.78rem;letter-spacing:0.12em;color:var(--tan-light);}
@@ -536,7 +536,7 @@ tr:hover td{background:var(--surface2);}
 .notif-btn:hover{background:rgba(212,169,106,0.25);}
 .notif-badge{position:absolute;top:-5px;right:-5px;background:var(--red-dust);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:0.42rem;border-radius:10px;padding:1px 4px;min-width:14px;text-align:center;display:none;box-shadow:0 0 6px rgba(192,57,43,0.5);}
 .notif-badge.show{display:block;}
-.notif-panel{position:absolute;top:calc(100% + 8px);right:0;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:300;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
+.notif-panel{position:fixed;top:72px;right:18px;top:calc(100% + 8px);right:0;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:300;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
 .notif-panel.open{display:flex;}
 .notif-head{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1.5px solid var(--border);background:linear-gradient(135deg,var(--earth-dark),var(--brown) 60%,var(--earth-dark));border-radius:6px 6px 0 0;flex-shrink:0;}
 .notif-head-title{font-family:'Bebas Neue',sans-serif;font-size:0.78rem;letter-spacing:0.12em;color:var(--tan-light);}
@@ -1276,15 +1276,21 @@ function unlinkDrive(jobId){saveDriveUrl(jobId,'');}
 // ── SETTINGS ──────────────────────────────────────────
 function openSettings(){document.getElementById('settingsModal').style.display='flex';showSettingsTab('panels',document.getElementById('stab-panels'));}
 function showSettingsTab(tab,btn){
-  document.querySelectorAll('.mtab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');
+  document.querySelectorAll('.mtab').forEach(t=>t.classList.remove('active'));
+  if(btn)btn.classList.add('active');
   const body=document.getElementById('settingsBody');
   if(tab==='panels')renderPanelsTab(body);
   else if(tab==='launch')renderLaunchTab(body);
   else if(tab==='dropdowns')renderDropdownsTab(body);
   else if(tab==='team')renderTeamTab(body);
+  else if(tab==='perms'){
+    if(!isAdmin()){body.innerHTML='<div style="color:var(--muted);padding:16px;text-align:center;font-size:0.6rem;letter-spacing:0.1em;">Only Toneth (Admin) can manage member permissions.</div>';return;}
+    renderPermsTab(body);
+  }
   else if(tab==='activity')renderActivityTab(body);
   else if(tab==='account')renderAccountTab(body);
 }
+
 
 function renderPanelsTab(body){
   if(CU&&CU.role!=='admin'){body.innerHTML='<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:0.6rem;color:var(--muted);padding:12px;text-align:center;letter-spacing:0.1em;">Admin access only</div>';return;}
@@ -1443,6 +1449,8 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelec
 
 const DEFAULT_MEMBER_PERMS={addTask:true,deleteDoneTask:true,deleteAnyTask:false,addJob:false,deleteJob:false,addPO:false,comment:true,viewAll:true,useQuickLaunch:true};
 function isCtrl(){return CU&&(CU.role==='owner'||CU.role==='admin');}
+function isAdmin(){return CU&&CU.role==='admin';}
+function can(action){if(!CU)return false;if(isCtrl())return true;const p=(D.permissions||{})[CU.username]||DEFAULT_MEMBER_PERMS;return p[action]===true;}
 function can(action){if(!CU)return false;if(isCtrl())return true;const perms=(D.permissions||{})[CU.username]||DEFAULT_MEMBER_PERMS;return perms[action]===true;}
 
 // NOTIFICATIONS
@@ -1630,10 +1638,6 @@ function setAllPerms53(username,val){if(!D.permissions)D.permissions={};D.permis
 
 // PATCH showSettingsTab to handle perms tab
 const _sST53=showSettingsTab;
-function showSettingsTab(tab,btn){
-  if(tab==='perms'){document.querySelectorAll('.mtab').forEach(t=>t.classList.remove('active'));if(btn)btn.classList.add('active');renderPermsTab(document.getElementById('settingsBody'));return;}
-  _sST53(tab,btn);
-}
 
 // PATCH showDash for role-based UI + notifs
 const _sD53=showDash;
