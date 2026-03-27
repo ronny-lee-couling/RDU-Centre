@@ -963,7 +963,7 @@ async function fetchCloud(init){
 
 // ── AUTH ──────────────────────────────────────────────
 function checkSession(){const s=JSON.parse(localStorage.getItem(SES_KEY)||'null');if(s&&s.expires>Date.now()){CU=s.user;showDash();return true;}return false;}
-function doLogin(){
+async function doLogin(){
   const u=document.getElementById('loginUser').value.trim().toLowerCase();
   const p=document.getElementById('loginPass').value;
   const err=document.getElementById('loginErr');const btn=document.getElementById('loginBtn');
@@ -983,15 +983,18 @@ function showDash(){
   document.getElementById('userPill').style.display='flex';
   document.getElementById('userPillName').textContent=CU.name;
   // show panel buttons only for admin
-  document.querySelectorAll('.panel-btn').forEach(el=>el.style.display=CU.role==='admin'?'':'none');
-  D=lsRead()||{_ts:0,tasks:[],va_myla:[],va_toneth:[],jobs:[],pos:[],notes:'',panels:{},apps:null,dropdowns:null,customPanels:[],panelOrder:[]};
+  document.querySelectorAll('.panel-btn').forEach(el=>el.style.display=isCtrl()?'':'none');
+  D=lsRead()||{_ts:0,tasks:[],va_myla:[],va_toneth:[],jobs:[],pos:[],notes:'',panels:{},apps:null,dropdowns:null,customPanels:[],panelOrder:[],permissions:{},users:[]};
   if(!D.apps)D.apps=[...DEFAULT_APPS];
   if(!D.dropdowns)D.dropdowns=JSON.parse(JSON.stringify(DEFAULT_DD));
   if(!D.customPanels)D.customPanels=[];
   if(!D.panelOrder)D.panelOrder=[];
+  if(!D.permissions)D.permissions={};
+  if(!D.users)D.users=[];
   renderAll();
   const panels=D.panels||{};
   Object.keys(panels).forEach(k=>{const el=document.getElementById('panel-'+k);if(el&&!panels[k])el.style.display='none';});
+  loadNotifs();
   fetchCloud(true);setInterval(()=>fetchCloud(false),60000);
   loadWeather();setInterval(loadWeather,600000);
   updateClock();setInterval(updateClock,1000);
@@ -1279,7 +1282,10 @@ function showSettingsTab(tab,btn){
   else if(tab==='dropdowns')renderDropdownsTab(body);
   else if(tab==='team')renderTeamTab(body);
   else if(tab==='perms'){
-    if(!isAdmin()){body.innerHTML='<div style="color:var(--muted);padding:16px;text-align:center;font-size:0.6rem;letter-spacing:0.1em;">Only Toneth (Admin) can manage member permissions.</div>';return;}
+    if(!isAdmin()){
+      body.innerHTML='<div style="color:var(--muted);padding:16px;text-align:center;font-size:0.6rem;letter-spacing:0.1em;">Only Toneth (Admin) can manage member permissions.</div>';
+      return;
+    }
     renderPermsTab(body);
   }
   else if(tab==='activity')renderActivityTab(body);
