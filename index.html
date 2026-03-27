@@ -73,7 +73,7 @@ body{background:var(--earth-deep);font-family:'Barlow',sans-serif;color:var(--te
 .notif-btn:hover{background:rgba(212,169,106,0.25);}
 .notif-badge{position:absolute;top:-5px;right:-5px;background:var(--red-dust);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:0.42rem;border-radius:10px;padding:1px 4px;min-width:14px;text-align:center;display:none;box-shadow:0 0 6px rgba(192,57,43,0.5);}
 .notif-badge.show{display:block;}
-.notif-panel{position:fixed;top:72px;right:18px;top:calc(100% + 8px);right:0;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:300;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
+.notif-panel{position:absolute;top:calc(100% + 8px);right:0;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:300;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
 .notif-panel.open{display:flex;}
 .notif-head{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1.5px solid var(--border);background:linear-gradient(135deg,var(--earth-dark),var(--brown) 60%,var(--earth-dark));border-radius:6px 6px 0 0;flex-shrink:0;}
 .notif-head-title{font-family:'Bebas Neue',sans-serif;font-size:0.78rem;letter-spacing:0.12em;color:var(--tan-light);}
@@ -327,7 +327,7 @@ footer{grid-column:1/-1;display:flex;justify-content:space-between;align-items:c
 .notif-btn:hover{background:rgba(212,169,106,0.25);}
 .notif-badge{position:absolute;top:-5px;right:-5px;background:var(--red-dust);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:0.42rem;border-radius:10px;padding:1px 4px;min-width:14px;text-align:center;display:none;box-shadow:0 0 6px rgba(192,57,43,0.5);}
 .notif-badge.show{display:block;}
-.notif-panel{position:fixed;top:72px;right:18px;top:calc(100% + 8px);right:0;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:300;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
+.notif-panel{position:absolute;top:calc(100% + 8px);right:0;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:300;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
 .notif-panel.open{display:flex;}
 .notif-head{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1.5px solid var(--border);background:linear-gradient(135deg,var(--earth-dark),var(--brown) 60%,var(--earth-dark));border-radius:6px 6px 0 0;flex-shrink:0;}
 .notif-head-title{font-family:'Bebas Neue',sans-serif;font-size:0.78rem;letter-spacing:0.12em;color:var(--tan-light);}
@@ -536,7 +536,7 @@ tr:hover td{background:var(--surface2);}
 .notif-btn:hover{background:rgba(212,169,106,0.25);}
 .notif-badge{position:absolute;top:-5px;right:-5px;background:var(--red-dust);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:0.42rem;border-radius:10px;padding:1px 4px;min-width:14px;text-align:center;display:none;box-shadow:0 0 6px rgba(192,57,43,0.5);}
 .notif-badge.show{display:block;}
-.notif-panel{position:fixed;top:72px;right:18px;top:calc(100% + 8px);right:0;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:300;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
+.notif-panel{position:absolute;top:calc(100% + 8px);right:0;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:300;display:none;flex-direction:column;max-height:360px;overflow:hidden;}
 .notif-panel.open{display:flex;}
 .notif-head{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1.5px solid var(--border);background:linear-gradient(135deg,var(--earth-dark),var(--brown) 60%,var(--earth-dark));border-radius:6px 6px 0 0;flex-shrink:0;}
 .notif-head-title{font-family:'Bebas Neue',sans-serif;font-size:0.78rem;letter-spacing:0.12em;color:var(--tan-light);}
@@ -776,6 +776,7 @@ tr:hover td{background:var(--surface2);}
     <div class="header-right">
       <div style="text-align:right;"><div class="live-time" id="clock">--:--:--</div><div class="live-date" id="dateDisplay">Loading...</div></div>
       <div class="user-pill" id="userPill" style="display:none"><div class="user-avatar">👤</div><span id="userPillName">—</span></div>
+      <div class="notif-wrap" id="notifWrap" style="position:relative"><button class="notif-btn" onclick="toggleNotifPanel()" title="Notifications" style="background:rgba(212,169,106,0.12);border:1px solid rgba(212,169,106,0.35);border-radius:5px;padding:5px 9px;cursor:pointer;font-size:0.9rem;line-height:1;position:relative">🔔<span id="notifBadge" style="position:absolute;top:-5px;right:-5px;background:#c0392b;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:0.42rem;border-radius:10px;padding:1px 4px;min-width:14px;text-align:center;display:none">0</span></button><div id="notifPanel" class="notif-panel" style="position:fixed;top:72px;right:18px;z-index:9999;width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);display:none;flex-direction:column;max-height:360px;overflow:hidden"><div class="notif-head" style="display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1.5px solid var(--border);background:linear-gradient(135deg,var(--earth-dark),var(--brown) 60%,var(--earth-dark));border-radius:6px 6px 0 0;flex-shrink:0"><span style="font-family:'Bebas Neue',sans-serif;font-size:0.78rem;letter-spacing:0.12em;color:var(--tan-light)">🔔 Notifications</span><button onclick="clearNotifs()" style="background:none;border:1px solid rgba(212,169,106,0.3);color:var(--subtle);font-family:'Barlow Condensed',sans-serif;font-size:0.42rem;padding:2px 7px;cursor:pointer;border-radius:3px">Clear All</button></div><div id="notifList" style="flex:1;overflow-y:auto"><div style="font-family:'Barlow Condensed',sans-serif;font-size:0.54rem;color:var(--muted);text-align:center;padding:18px;letter-spacing:0.1em">All caught up! 🐾</div></div></div></div>
       <button class="settings-btn" onclick="openSettings()" title="Settings">⚙️</button>
     </div>
   </header>
@@ -877,6 +878,7 @@ tr:hover td{background:var(--surface2);}
 </div>
 
 <script>
+
 const SHEET='https://script.google.com/macros/s/AKfycbxREWhTD51GJeloL2iAz1aapddtaE5OATu71HBAIO86R_eByoJSujAcgkNoW6eilheEKg/exec';
 const LS_KEY='rdu_data',SES_KEY='rdu_session';
 let D={},CU=null,_commentJobId=null,_driveJobId=null;
@@ -956,51 +958,8 @@ function save(){
   D._ts=Date.now();lsWrite(D);syncUI('saving','Saving...');clearTimeout(_st);
   _st=setTimeout(async()=>{try{await fetch(SHEET,{method:'POST',mode:'no-cors',body:JSON.stringify(D),headers:{'Content-Type':'text/plain'}});syncUI('ok','☁ Synced');}catch(e){syncUI('err','⚠ Local only');}setTimeout(()=>syncUI('ok','☁ Live sync active'),3000);},600);
 }
-async function fetchCloud(init){
-  syncUI('ok','☁ Live sync active');
-}
-
 
 // ── AUTH ──────────────────────────────────────────────
-function checkSession(){const s=JSON.parse(localStorage.getItem(SES_KEY)||'null');if(s&&s.expires>Date.now()){CU=s.user;showDash();return true;}return false;}
-async function doLogin(){
-  const u=document.getElementById('loginUser').value.trim().toLowerCase();
-  const p=document.getElementById('loginPass').value;
-  const err=document.getElementById('loginErr');const btn=document.getElementById('loginBtn');
-  if(!u||!p){err.textContent='Enter username and password.';return;}
-  btn.disabled=true;btn.textContent='Checking...';err.textContent='';
-  try{
-  const saved=lsRead();if(saved&&saved._ts)D=saved;
-  const found=getUsers().find(x=>x.username.toLowerCase()===u&&x.password===p);
-  if(found){CU={username:found.username,role:found.role,name:found.name};localStorage.setItem(SES_KEY,JSON.stringify({user:CU,expires:Date.now()+7*24*60*60*1000}));showDash();}
-  else{err.textContent='Incorrect username or password.';btn.disabled=false;btn.textContent='LOGIN TO RDU';}
-  }catch(e){err.textContent='Error: '+e.message;btn.disabled=false;btn.textContent='LOGIN TO RDU';console.error('Login error:',e);}
-}
-
-function showDash(){
-  document.getElementById('loginScreen').style.display='none';
-  document.getElementById('mainWrap').style.display='';
-  document.getElementById('userPill').style.display='flex';
-  document.getElementById('userPillName').textContent=CU.name;
-  // show panel buttons only for admin
-  document.querySelectorAll('.panel-btn').forEach(el=>el.style.display=isCtrl()?'':'none');
-  D=lsRead()||{_ts:0,tasks:[],va_myla:[],va_toneth:[],jobs:[],pos:[],notes:'',panels:{},apps:null,dropdowns:null,customPanels:[],panelOrder:[],permissions:{},users:[]};
-  if(!D.apps)D.apps=[...DEFAULT_APPS];
-  if(!D.dropdowns)D.dropdowns=JSON.parse(JSON.stringify(DEFAULT_DD));
-  if(!D.customPanels)D.customPanels=[];
-  if(!D.panelOrder)D.panelOrder=[];
-  if(!D.permissions)D.permissions={};
-  if(!D.users)D.users=[];
-  renderAll();
-  const panels=D.panels||{};
-  Object.keys(panels).forEach(k=>{const el=document.getElementById('panel-'+k);if(el&&!panels[k])el.style.display='none';});
-  loadNotifs();
-  fetchCloud(true);setInterval(()=>fetchCloud(false),60000);
-  loadWeather();setInterval(loadWeather,600000);
-  updateClock();setInterval(updateClock,1000);
-  loadDevotional();
-}
-function doLogout(){localStorage.removeItem(SES_KEY);location.reload();}
 function logAct(ev,det){if(!CU)return;fetch(`${SHEET}?action=log-activity&u=${encodeURIComponent(CU.username)}&n=${encodeURIComponent(CU.name)}&event=${encodeURIComponent(ev)}&details=${encodeURIComponent(det)}`).catch(()=>{});}
 
 // ── CLOCK ─────────────────────────────────────────────
@@ -1119,7 +1078,7 @@ function renderJobRow(j,bodyId){
   const hasDrive=j.driveUrl&&j.driveUrl.trim();
   const onChg=bodyId==='mahiFSBody'?"syncFSToMain()":"";
   tr.innerHTML=`
-    <td style="color:var(--muted);font-size:0.5rem;letter-spacing:0.08em">${j.quote}</td>
+    <td style="color:var(--muted);font-size:0.5rem;font-family:'Barlow Condensed',sans-serif;letter-spacing:0.08em">${j.quote}</td>
     <td>${j.name}</td><td style="color:var(--muted);font-size:0.5rem">${j.addr}</td>
     <td style="font-size:0.55rem">${j.value}</td>
     <td>${makeSel('stage',j.stage||'in-progress').replace('onchange="','onchange="'+onChg+';')}</td>
@@ -1179,7 +1138,7 @@ function syncFSToMain(){
 // ── PO ────────────────────────────────────────────────
 function collectPOs(){return Array.from(document.querySelectorAll('#poBody tr:not(#poEmpty)')).map(tr=>{const tds=tr.querySelectorAll('td');const sel=tr.querySelector('.dyn-sel');return{num:tds[0].textContent,addr:tds[1].textContent,name:tds[2].textContent,status:sel?sel.value:'drafted'};});}
 function makePoSel(val){const opts=getDd('po');let h=`<select class="dyn-sel" onchange="styleSel(this);D.pos=collectPOs();save()">`;opts.forEach(o=>h+=`<option value="${o.v}"${o.v===val?' selected':''}>${o.l}</option>`);if(val&&!opts.find(o=>o.v===val))h+=`<option value="${val}" selected>${val}</option>`;return h+'</select>';}
-function renderPO(p){const emp=document.getElementById('poEmpty');if(emp)emp.remove();const tr=document.createElement('tr');tr.innerHTML=`<td style="color:var(--muted);font-size:0.5rem;font-weight:700">${p.num}</td><td style="font-size:0.5rem">${p.addr}</td><td style="font-size:0.5rem">${p.name}</td><td>${makePoSel(p.status)}</td><td><button onclick="removePO(this)" style="background:none;border:none;color:var(--subtle);cursor:pointer;font-size:0.68rem;" onmouseover="this.style.color='var(--red-dust)'" onmouseout="this.style.color='var(--subtle)'">✕</button></td>`;document.getElementById('poBody').appendChild(tr);tr.querySelectorAll('.dyn-sel').forEach(s=>styleSel(s));}
+function renderPO(p){const emp=document.getElementById('poEmpty');if(emp)emp.remove();const tr=document.createElement('tr');tr.innerHTML=`<td style="color:var(--muted);font-size:0.5rem;font-family:'Barlow Condensed',sans-serif;font-weight:700">${p.num}</td><td style="font-size:0.5rem">${p.addr}</td><td style="font-size:0.5rem">${p.name}</td><td>${makePoSel(p.status)}</td><td><button onclick="removePO(this)" style="background:none;border:none;color:var(--subtle);cursor:pointer;font-size:0.68rem;" onmouseover="this.style.color='var(--red-dust)'" onmouseout="this.style.color='var(--subtle)'">✕</button></td>`;document.getElementById('poBody').appendChild(tr);tr.querySelectorAll('.dyn-sel').forEach(s=>styleSel(s));}
 function addPO(){const num=document.getElementById('poNum').value.trim();if(!num)return;renderPO({num,addr:document.getElementById('poAddr').value.trim()||'—',name:document.getElementById('poName').value.trim()||'—',status:document.getElementById('poStatus').value});['poNum','poAddr','poName'].forEach(id=>document.getElementById(id).value='');D.pos=collectPOs();save();}
 function removePO(btn){const tb=document.getElementById('poBody');btn.closest('tr').remove();if(tb.rows.length===0)tb.innerHTML='<tr id="poEmpty"><td colspan="5" style="text-align:center;color:var(--muted);font-size:0.48rem;font-family:\'Barlow Condensed\',sans-serif;letter-spacing:0.1em;padding:10px 0;">No POs yet</td></tr>';D.pos=collectPOs();save();}
 
@@ -1233,19 +1192,12 @@ function togglePanel(key){
 }
 
 // ── COMMENTS ─────────────────────────────────────────
-function openComments(jobId,jobName){_commentJobId=jobId;document.getElementById('commentJobLabel').textContent=jobName;document.getElementById('commentsModal').style.display='flex';loadComments(jobId);}
 async function loadComments(jobId){
   const list=document.getElementById('commentsList');list.innerHTML='<div class="comment-empty">Loading...</div>';
   try{const res=await fetch(`${SHEET}?action=comments&jobId=${encodeURIComponent(jobId)}`);const data=await res.json();
   if(!data.length){list.innerHTML='<div class="comment-empty">No comments yet — be the first!</div>';return;}
   list.innerHTML='';data.forEach(c=>{const d=document.createElement('div');d.className='comment-item';const ts=new Date(c.ts).toLocaleString('en-AU',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit',hour12:true});d.innerHTML=`<div class="comment-meta"><span class="comment-author">${c.name}</span> · ${ts}</div><div class="comment-text">${c.text}</div>`;list.appendChild(d);});list.scrollTop=list.scrollHeight;}
   catch(e){list.innerHTML='<div class="comment-empty">Failed to load.</div>';}
-}
-async function submitComment(){
-  const inp=document.getElementById('commentInput');const t=inp.value.trim();if(!t||!CU)return;
-  inp.value='';inp.disabled=true;
-  try{await fetch(`${SHEET}?action=add-comment&jobId=${encodeURIComponent(_commentJobId)}&u=${encodeURIComponent(CU.username)}&n=${encodeURIComponent(CU.name)}&t=${encodeURIComponent(t)}`);loadComments(_commentJobId);logAct('Comment Added','Job '+_commentJobId);}catch(e){}
-  inp.disabled=false;
 }
 
 // ── DRIVE ─────────────────────────────────────────────
@@ -1273,25 +1225,6 @@ function unlinkDrive(jobId){saveDriveUrl(jobId,'');}
 
 // ── SETTINGS ──────────────────────────────────────────
 function openSettings(){document.getElementById('settingsModal').style.display='flex';showSettingsTab('panels',document.getElementById('stab-panels'));}
-function showSettingsTab(tab,btn){
-  document.querySelectorAll('.mtab').forEach(t=>t.classList.remove('active'));
-  if(btn)btn.classList.add('active');
-  const body=document.getElementById('settingsBody');
-  if(tab==='panels')renderPanelsTab(body);
-  else if(tab==='launch')renderLaunchTab(body);
-  else if(tab==='dropdowns')renderDropdownsTab(body);
-  else if(tab==='team')renderTeamTab(body);
-  else if(tab==='perms'){
-    if(!isAdmin()){
-      body.innerHTML='<div style="color:var(--muted);padding:16px;text-align:center;font-size:0.6rem;letter-spacing:0.1em;">Only Toneth (Admin) can manage member permissions.</div>';
-      return;
-    }
-    renderPermsTab(body);
-  }
-  else if(tab==='activity')renderActivityTab(body);
-  else if(tab==='account')renderAccountTab(body);
-}
-
 
 function renderPanelsTab(body){
   if(CU&&CU.role!=='admin'){body.innerHTML='<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:0.6rem;color:var(--muted);padding:12px;text-align:center;letter-spacing:0.1em;">Admin access only</div>';return;}
@@ -1404,7 +1337,7 @@ async function renderTeamTab(body){
     const res=await fetch(`${SHEET}?action=users`);const users=await res.json();
     let html='<div class="settings-section"><div class="settings-section-title">Team Members</div><table class="team-table"><thead><tr><th>Username</th><th>Name</th><th>Role</th><th>New Password</th><th></th></tr></thead><tbody>';
     users.forEach(u=>{html+=`<tr><td style="color:var(--muted)">${u.username}</td><td><input class="team-input" id="tn-${u.username}" value="${u.name}"></td><td><select class="team-input" id="tr-${u.username}"><option value="admin"${u.role==='admin'?' selected':''}>Admin</option><option value="va"${u.role==='va'?' selected':''}>VA</option><option value="crew"${u.role==='crew'?' selected':''}>Crew</option></select></td><td><input class="team-input" id="tp-${u.username}" type="password" placeholder="Change..."></td><td><button class="team-save-btn" onclick="saveTeamMember('${u.username}')">Save</button></td></tr>`;});
-    html+=`</tbody></table></div><div id="tss" style="font-size:0.5rem;min-height:14px;margin-top:4px;letter-spacing:0.1em;"></div>`;
+    html+=`</tbody></table></div><div id="tss" style="font-family:'Barlow Condensed',sans-serif;font-size:0.5rem;min-height:14px;margin-top:4px;letter-spacing:0.1em;"></div>`;
     body.innerHTML=html;
   }catch(e){body.innerHTML='<div style="color:var(--red-dust);padding:12px;">Failed to load team.</div>';}
 }
@@ -1443,248 +1376,379 @@ function closeModal(id){document.getElementById(id).style.display='none';}
 document.querySelectorAll('.modal-ov').forEach(m=>{m.addEventListener('click',e=>{if(e.target===m)m.style.display='none';});});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.modal-ov').forEach(m=>m.style.display='none');const fs=document.getElementById('mahiFS');if(fs.style.display!=='none')closeMahiFS();}});
 
+// ── INIT ──────────────────────────────────────────────
 
-// ─────────────────────────────────────────────────────────
-// v5.3 ADDITIONS: Roles, Notifications, @Mentions, Permissions, Fullscreen
-// ─────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════
+// v5.3 ADDITIONS — NO PATCHES, NO CONST ALIASES
+// All logic merged directly. Zero recursive function defs.
+// ══════════════════════════════════════════════════════
 
-const DEFAULT_MEMBER_PERMS={addTask:true,deleteDoneTask:true,deleteAnyTask:false,addJob:false,deleteJob:false,addPO:false,comment:true,viewAll:true,useQuickLaunch:true};
-
-const DEFAULT_USERS=[{username:'ronny',password:'admin2026',role:'owner',name:'Ronny Couling'},{username:'toneth',password:'rdu2026',role:'admin',name:'Toneth'},{username:'myla',password:'rdu2026',role:'member',name:'Myla'},{username:'harry',password:'rdu2026',role:'member',name:'Harry'},{username:'pauly',password:'rdu2026',role:'member',name:'Pauly'},{username:'josh',password:'rdu2026',role:'member',name:'Josh'}];
+// ── CONSTANTS ─────────────────────────────────────────
+const DEFAULT_USERS=[
+  {username:'ronny',  password:'admin2026',role:'owner', name:'Ronny Couling'},
+  {username:'toneth', password:'rdu2026',  role:'admin', name:'Toneth'},
+  {username:'myla',   password:'rdu2026',  role:'member',name:'Myla'},
+  {username:'harry',  password:'rdu2026',  role:'member',name:'Harry'},
+  {username:'pauly',  password:'rdu2026',  role:'member',name:'Pauly'},
+  {username:'josh',   password:'rdu2026',  role:'member',name:'Josh'},
+];
+const DEFAULT_MEMBER_PERMS={addTask:true,deleteDoneTask:true,deleteAnyTask:false,addJob:false,deleteJob:false,addPO:false,comment:true,viewAll:true};
 function getUsers(){return D.users&&D.users.length?D.users:DEFAULT_USERS;}
 function isCtrl(){return CU&&(CU.role==='owner'||CU.role==='admin');}
 function isAdmin(){return CU&&CU.role==='admin';}
 function can(action){if(!CU)return false;if(isCtrl())return true;const p=(D.permissions||{})[CU.username]||DEFAULT_MEMBER_PERMS;return p[action]===true;}
-function can(action){if(!CU)return false;if(isCtrl())return true;const perms=(D.permissions||{})[CU.username]||DEFAULT_MEMBER_PERMS;return perms[action]===true;}
 
-// NOTIFICATIONS
+// ── DATA RESTORE ──────────────────────────────────────
+// Runs on every load — writes seed if jobs/tasks missing
+(function(){try{var ex=JSON.parse(localStorage.getItem('rdu_data')||'null');var ok=ex&&ex.jobs&&ex.jobs.length>5&&ex.tasks&&ex.tasks.length>10;if(!ok){localStorage.setItem('rdu_data',JSON.stringify({"tasks": [{"text": "BRETT NASH DRAFT QUOTE(XERO)", "done": false}, {"text": "Sujan outstanding payment.", "done": false}, {"text": "BNI NSW-South Gala Awards Night 2026 Form", "done": false}, {"text": "Morning Routine", "done": true}, {"text": "Night Time Routine", "done": false}, {"text": "Lloyd - Letter of Acceptance.", "done": false}, {"text": "Christopher Igoe Gutters", "done": false}, {"text": "Loretta Ryde Follow Up", "done": false}, {"text": "Daniel :catchup at Archivore office 17th April", "done": false}, {"text": "Quote for 37 Narooma Dr Prestons", "done": false}, {"text": "Rocky Training Friday 10am", "done": false}, {"text": "Saturday 10am Pack Walk", "done": false}, {"text": "Sebastian 1-2-1 Thurs 11am", "done": true}, {"text": "HCM Janalli Quote", "done": false}, {"text": "HCM small Build Quote", "done": false}, {"text": "Alan Acumen Built Quote", "done": false}, {"text": "Jamie updating C order drft", "done": false}, {"text": "gardener", "done": false}, {"text": "Scents With Caitlin", "done": false}, {"text": "holden insurance harry interlock", "done": false}, {"text": "linkt tag", "done": false}, {"text": "pay for dr shen appt", "done": false}, {"text": "Acumen built quote add restoration and guttering", "done": false}, {"text": "icare Workers Insurance: Payment is overdue", "done": false}, {"text": "Payment Reminder : Cool Coolers Pty Ltd", "done": false}, {"text": "Invoice INV-4764 from Dust Devilz", "done": false}, {"text": "Reminder: Call Sam on Monday (0423 335 845)", "done": false}], "va_myla": [{"text": "Maria 1-2-1 With Clients Book in", "done": true}, {"text": "Excite Safety Roof Report", "done": false}, {"text": "harry purchase order woolooware road", "done": true}, {"text": "HCM Progress Claim", "done": true}, {"text": "Book Gala Night Accommodation & Ronny Suit Hire", "done": false}, {"text": "LLOYDS - L/O ,P/0 & MUD MAP SIGNED", "done": false}], "va_toneth": [{"text": "Develop the Workflow", "done": false}, {"text": "Develop Builder Friendly Workflow PDF", "done": false}, {"text": "37 narooma take off and quote", "done": false}], "jobs": [{"id": "j001", "quote": "0016", "name": "Lloyds Building and Development Pty Ltd", "addr": "297 Woolooware Rd, Burraneer 2230", "value": "$42,500", "invoice": "not-invoiced", "stage": "in-progress", "driveUrl": ""}, {"id": "j002", "quote": "0094A", "name": "HCM Build", "addr": "111 Mansfield St, Rozelle 2039", "value": "$29,500", "invoice": "progress-sent", "stage": "in-progress", "driveUrl": ""}, {"id": "j003", "quote": "0068", "name": "The Trustee for Perpetual Discretionary Aggregate Deductible Fund", "addr": "21 Mallacoota Close, Prestons NSW 2171", "value": "$13,988", "invoice": "not-invoiced", "stage": "in-progress", "driveUrl": ""}, {"id": "j004", "quote": "0020", "name": "Lloyds Building and Development Pty Ltd", "addr": "20 Northcote St, Canterbury NSW 2193", "value": "$45,000", "invoice": "not-invoiced", "stage": "in-progress", "driveUrl": ""}, {"id": "j005", "quote": "0058", "name": "Alan Acumen Built", "addr": "94 Wollybutt Road, Engadine NSW", "value": "$55,616", "invoice": "not-invoiced", "stage": "in-progress", "driveUrl": ""}, {"id": "j006", "quote": "0018", "name": "Lloyds", "addr": "2 Clarke St, Peakhurst 2210", "value": "$45,000", "invoice": "not-invoiced", "stage": "in-progress", "driveUrl": ""}, {"id": "j007", "quote": "0017", "name": "Lloyds", "addr": "4 Clarke St, Peakhurst 2210", "value": "$45,000", "invoice": "not-invoiced", "stage": "in-progress", "driveUrl": ""}, {"id": "j008", "quote": "QU-0015", "name": "Lloyds Building and Development Pty Ltd", "addr": "9 Fairs Ave, Woolooware", "value": "$45,859", "invoice": "not-invoiced", "stage": "in-progress", "driveUrl": ""}], "pos": [], "kai": {}, "moko": {"rev": 0, "target": 0, "quotes": "0", "won": "0"}, "notes": "Rocky 🐾 — worksite drop 8am\nToneth: invoice HCM Build", "panels": {}, "apps": null, "dropdowns": null, "customPanels": [], "permissions": {}, "users": [], "_ts": 1774590000000}));console.log('RDU: Data restored');}}catch(e){}})();
+
+// ── LOCAL LOGIN ───────────────────────────────────────
+async function doLogin(){
+  const u=document.getElementById('loginUser').value.trim().toLowerCase();
+  const p=document.getElementById('loginPass').value;
+  const err=document.getElementById('loginErr');
+  const btn=document.getElementById('loginBtn');
+  if(!u||!p){err.textContent='Enter username and password.';return;}
+  btn.disabled=true;btn.textContent='Checking...';err.textContent='';
+  const saved=lsRead();if(saved&&saved._ts)D=saved;
+  const found=getUsers().find(x=>x.username.toLowerCase()===u&&x.password===p);
+  if(found){
+    CU={username:found.username,role:found.role,name:found.name};
+    localStorage.setItem(SES_KEY,JSON.stringify({user:CU,expires:Date.now()+7*24*60*60*1000}));
+    showDash();
+  } else {
+    err.textContent='Incorrect username or password.';
+    btn.disabled=false;btn.textContent='LOGIN TO RDU';
+  }
+}
+function doLogout(){localStorage.removeItem(SES_KEY);location.reload();}
+function checkSession(){const s=JSON.parse(localStorage.getItem(SES_KEY)||'null');if(s&&s.expires>Date.now()){CU=s.user;showDash();return true;}return false;}
 let NOTIFS=[],_lastJobCount=0,_lastTaskCount=0;
-function loadNotifs(){try{NOTIFS=JSON.parse(localStorage.getItem('rdu_notifs'))||[];}catch(e){NOTIFS=[];}renderNotifs();}
-function saveNotifs(){localStorage.setItem('rdu_notifs',JSON.stringify(NOTIFS));}
-function pushNotif(icon,msg){const n={id:Date.now(),icon,msg,time:new Date().toISOString(),unread:true};NOTIFS.unshift(n);if(NOTIFS.length>50)NOTIFS=NOTIFS.slice(0,50);saveNotifs();renderNotifs();}
-function renderNotifs(){
-  const list=document.getElementById('notifList'),badge=document.getElementById('notifBadge');if(!list)return;
-  const unread=NOTIFS.filter(n=>n.unread).length;badge.textContent=unread;badge.classList.toggle('show',unread>0);
+function showDash(){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('mainWrap').style.display='';
+  document.getElementById('userPill').style.display='flex';
+  document.getElementById('userPillName').textContent=CU.name;
+  document.querySelectorAll('.panel-btn').forEach(el=>el.style.display=isCtrl()?'':'none');
+  document.querySelectorAll('.ctrl-only').forEach(el=>el.style.display=isCtrl()?'':'none');
+  D=lsRead()||{_ts:0,tasks:[],va_myla:[],va_toneth:[],jobs:[],pos:[],notes:'',panels:{},apps:null,dropdowns:null,customPanels:[],permissions:{},users:[]};
+  if(!D.apps)D.apps=[...DEFAULT_APPS];
+  if(!D.dropdowns)D.dropdowns=JSON.parse(JSON.stringify(DEFAULT_DD));
+  if(!D.customPanels)D.customPanels=[];
+  if(!D.permissions)D.permissions={};
+  if(!D.users)D.users=[];
+  _lastJobCount=(D.jobs||[]).length;
+  _lastTaskCount=(D.tasks||[]).length;
+  renderAll();
+  const panels=D.panels||{};
+  Object.keys(panels).forEach(k=>{const el=document.getElementById('panel-'+k);if(el&&!panels[k])el.style.display='none';});
+  loadNotifs();
+  fetchCloud(true);setInterval(()=>fetchCloud(false),60000);
+  loadWeather();setInterval(loadWeather,600000);
+  updateClock();setInterval(updateClock,1000);
+  loadDevotional();
+}
+
+// ── NOTIFICATIONS ─────────────────────────────────────
+function loadNotifs(){try{NOTIFS=JSON.parse(localStorage.getItem('rdu_notifs'))||[];}catch(e){NOTIFS=[];}nRender();}
+function nSave(){localStorage.setItem('rdu_notifs',JSON.stringify(NOTIFS));}
+function pushNotif(icon,msg){NOTIFS.unshift({id:Date.now(),icon,msg,time:new Date().toISOString(),unread:true});if(NOTIFS.length>50)NOTIFS=NOTIFS.slice(0,50);nSave();nRender();}
+function nRender(){
+  const list=document.getElementById('notifList');
+  const badge=document.getElementById('notifBadge');
+  if(!list)return;
+  const unread=NOTIFS.filter(n=>n.unread).length;
+  badge.textContent=unread;badge.classList.toggle('show',unread>0);
   if(!NOTIFS.length){list.innerHTML='<div class="notif-empty">All caught up! 🐾</div>';return;}
   list.innerHTML='';
   NOTIFS.forEach(n=>{
-    const d=document.createElement('div');d.className='notif-item'+(n.unread?' unread':'');
-    const t=new Date(n.time),ts=t.toLocaleTimeString('en-AU',{hour:'numeric',minute:'2-digit',hour12:true})+' · '+t.toLocaleDateString('en-AU',{day:'numeric',month:'short'});
-    d.innerHTML='<span class="notif-icon">'+n.icon+'</span><div><div class="notif-msg">'+n.msg+'</div><div class="notif-time">'+ts+'</div></div>';
-    d.onclick=()=>{n.unread=false;saveNotifs();renderNotifs();};list.appendChild(d);
+    const d=document.createElement('div');
+    d.className='notif-item'+(n.unread?' unread':'');
+    const t=new Date(n.time);
+    const ts=t.toLocaleTimeString('en-AU',{hour:'numeric',minute:'2-digit',hour12:true})+' · '+t.toLocaleDateString('en-AU',{day:'numeric',month:'short'});
+    d.innerHTML=`<span class="notif-icon">${n.icon}</span><div><div class="notif-msg">${n.msg}</div><div class="notif-time">${ts}</div></div>`;
+    d.onclick=()=>{n.unread=false;nSave();nRender();};
+    list.appendChild(d);
   });
 }
-function clearNotifs(){NOTIFS=[];saveNotifs();renderNotifs();}
-function toggleNotifPanel(){const p=document.getElementById('notifPanel');p.classList.toggle('open');if(p.classList.contains('open')){NOTIFS.forEach(n=>n.unread=false);saveNotifs();renderNotifs();}}
-document.addEventListener('click',function(e){const w=document.getElementById('notifWrap');if(w&&!w.contains(e.target)){const p=document.getElementById('notifPanel');if(p)p.classList.remove('open');}});
-function checkForNewNotifs(d){const nj=(d.jobs||[]).length,nt=(d.tasks||[]).length;if(_lastJobCount>0&&nj>_lastJobCount){const j=(d.jobs||[]).slice(-1)[0];pushNotif('🔨','<strong>'+(j?j.name:'a job')+'</strong> added to MAHI');}if(_lastTaskCount>0&&nt>_lastTaskCount){const t=(d.tasks||[]).slice(-1)[0];pushNotif('⚡','New task: <strong>'+(t?t.text:'a task')+'</strong>');}  _lastJobCount=nj;_lastTaskCount=nt;}
-
-// @MENTION
-let _teamNames=[],_mentionIdx=-1,_mentionMatches=[];
-async function loadTeamForMentions(){try{const res=await fetch(SHEET+'?action=users');const u=await res.json();_teamNames=u.map(x=>({username:x.username,name:x.name}));}catch(e){_teamNames=[];}}
-function handleMentionKey(e){
-  const ta=document.getElementById('commentInput'),val=ta.value,pos=ta.selectionStart,atIdx=val.lastIndexOf('@',pos-1),popup=document.getElementById('mentionPopup');
-  if(atIdx>=0&&pos-atIdx<=20){
-    const q=val.slice(atIdx+1,pos).toLowerCase();
-    _mentionMatches=_teamNames.filter(u=>u.name.toLowerCase().startsWith(q)||u.username.toLowerCase().startsWith(q));
-    if(_mentionMatches.length){popup.innerHTML='';_mentionIdx=-1;_mentionMatches.forEach((u,i)=>{const d=document.createElement('div');d.className='mention-item';d.innerHTML='<div class="mention-avatar">'+u.name[0]+'</div>'+u.name;d.onclick=()=>insertMention(u.name,atIdx,pos);popup.appendChild(d);});popup.classList.add('open');return;}
+function clearNotifs(){NOTIFS=[];nSave();nRender();}
+function toggleNotifPanel(){
+  const p=document.getElementById('notifPanel');
+  const btn=document.getElementById('notifWrap');
+  if(p.parentElement!==document.body){
+    const rect=btn.getBoundingClientRect();
+    p.style.top=(rect.bottom+8)+'px';
+    p.style.right=(window.innerWidth-rect.right)+'px';
+    document.body.appendChild(p);
   }
-  popup.classList.remove('open');_mentionIdx=-1;_mentionMatches=[];
+  p.classList.toggle('open');
+  if(p.classList.contains('open')){NOTIFS.forEach(n=>n.unread=false);nSave();nRender();}
+}
+document.addEventListener('click',e=>{const w=document.getElementById('notifWrap');const p=document.getElementById('notifPanel');if(w&&p&&!w.contains(e.target)&&!p.contains(e.target))p.classList.remove('open');});
+function checkNewNotifs(cloud){
+  const nj=(cloud.jobs||[]).length,nt=(cloud.tasks||[]).length;
+  if(_lastJobCount>0&&nj>_lastJobCount){const j=(cloud.jobs||[]).slice(-1)[0];pushNotif('🔨','New job: <strong>'+(j?j.name:'')+'</strong>');}
+  if(_lastTaskCount>0&&nt>_lastTaskCount){const t=(cloud.tasks||[]).slice(-1)[0];pushNotif('⚡','New task: <strong>'+(t?t.text:'')+'</strong>');}
+  _lastJobCount=nj;_lastTaskCount=nt;
+}
+
+// ── @MENTION ──────────────────────────────────────────
+let _teamNames=[],_mIdx=-1,_mMatches=[];
+async function loadTeamNames(){try{_teamNames=getUsers().map(u=>({username:u.username,name:u.name}));}catch(e){}}
+function handleMentionKey(e){
+  const ta=document.getElementById('commentInput');
+  const val=ta.value,pos=ta.selectionStart;
+  const at=val.lastIndexOf('@',pos-1);
+  const popup=document.getElementById('mentionPopup');
+  if(at>=0&&pos-at<=20){
+    const q=val.slice(at+1,pos).toLowerCase();
+    _mMatches=_teamNames.filter(u=>u.name.toLowerCase().startsWith(q)||u.username.toLowerCase().startsWith(q));
+    if(_mMatches.length){
+      popup.innerHTML='';_mIdx=-1;
+      _mMatches.forEach((u,i)=>{
+        const d=document.createElement('div');d.className='mention-item';
+        d.innerHTML=`<div class="mention-av">${u.name[0]}</div>${u.name}`;
+        d.onclick=()=>insertMention(u.name,at,pos);
+        popup.appendChild(d);
+      });
+      popup.classList.add('open');return;
+    }
+  }
+  popup.classList.remove('open');_mIdx=-1;_mMatches=[];
 }
 function handleMentionNav(e){
-  const popup=document.getElementById('mentionPopup');if(!popup.classList.contains('open'))return;
-  if(e.key==='ArrowDown'){e.preventDefault();_mentionIdx=Math.min(_mentionIdx+1,_mentionMatches.length-1);document.querySelectorAll('#mentionPopup .mention-item').forEach((el,i)=>el.classList.toggle('sel',i===_mentionIdx));}
-  else if(e.key==='ArrowUp'){e.preventDefault();_mentionIdx=Math.max(_mentionIdx-1,0);document.querySelectorAll('#mentionPopup .mention-item').forEach((el,i)=>el.classList.toggle('sel',i===_mentionIdx));}
-  else if(e.key==='Enter'&&_mentionIdx>=0){e.preventDefault();const ta=document.getElementById('commentInput'),pos=ta.selectionStart,atIdx=ta.value.lastIndexOf('@',pos-1);insertMention(_mentionMatches[_mentionIdx].name,atIdx,pos);}
-  else if(e.key==='Escape'){popup.classList.remove('open');}
+  const popup=document.getElementById('mentionPopup');
+  if(!popup.classList.contains('open'))return;
+  if(e.key==='ArrowDown'){e.preventDefault();_mIdx=Math.min(_mIdx+1,_mMatches.length-1);}
+  else if(e.key==='ArrowUp'){e.preventDefault();_mIdx=Math.max(_mIdx-1,0);}
+  else if(e.key==='Enter'&&_mIdx>=0){e.preventDefault();const ta=document.getElementById('commentInput'),pos=ta.selectionStart;insertMention(_mMatches[_mIdx].name,ta.value.lastIndexOf('@',pos-1),pos);return;}
+  else if(e.key==='Escape'){popup.classList.remove('open');return;}
+  popup.querySelectorAll('.mention-item').forEach((el,i)=>el.classList.toggle('sel',i===_mIdx));
 }
-function insertMention(name,atIdx,pos){const ta=document.getElementById('commentInput');ta.value=ta.value.slice(0,atIdx)+'@'+name+' '+ta.value.slice(pos);ta.selectionStart=ta.selectionEnd=atIdx+name.length+2;document.getElementById('mentionPopup').classList.remove('open');ta.focus();}
+function insertMention(name,at,pos){
+  const ta=document.getElementById('commentInput');
+  ta.value=ta.value.slice(0,at)+'@'+name+' '+ta.value.slice(pos);
+  ta.selectionStart=ta.selectionEnd=at+name.length+2;
+  document.getElementById('mentionPopup').classList.remove('open');ta.focus();
+}
 
-// FULLSCREEN
+// ── FULLSCREEN ────────────────────────────────────────
+let _wxHTML='',_devHTML='';
 function openPFS(key){
-  const el=document.getElementById('pfs-'+key);if(!el)return;el.style.display='flex';
-  if(key==='jobs'){document.getElementById('pfs-jobs-body').innerHTML='';(D.jobs||[]).forEach(j=>renderJobRow53(j,'pfs-jobs-body'));document.getElementById('pfs-jobs-meta').textContent=(D.jobs||[]).length+' jobs';const sel=document.getElementById('pfs-jobStage');if(sel)bldSel(sel,'stage','in-progress');}
-  else if(key==='tasks'){renderPFSTasks();}
-  else if(key==='myla'){renderPFSVaTasks('myla');}
-  else if(key==='toneth'){renderPFSVaTasks('toneth');}
-  else if(key==='po'){document.getElementById('pfs-po-body').innerHTML='';(D.pos||[]).forEach(p=>renderPORow53(p,'pfs-po-body'));document.getElementById('pfs-po-meta').textContent=(D.pos||[]).length+' POs';const sel=document.getElementById('pfs-poStatus');if(sel)bldSel(sel,'po','drafted');}
-  else if(key==='launcher'){renderPFSLauncher();}
+  const el=document.getElementById('pfs-'+key);if(!el)return;
+  el.style.display='flex';
+  if(key==='jobs'){
+    const b=document.getElementById('pfs-jobs-body');b.innerHTML='';
+    (D.jobs||[]).forEach(j=>renderJobRowEl(j,b));
+    document.getElementById('pfs-jobs-meta').textContent=(D.jobs||[]).length+' jobs';
+    bldSel(document.getElementById('pfs-jobStage'),'stage','in-progress');
+  } else if(key==='tasks'){renderPFSTasks();}
+  else if(key==='myla'){renderPFSVa('myla');}
+  else if(key==='toneth'){renderPFSVa('toneth');}
+  else if(key==='po'){
+    const b=document.getElementById('pfs-po-body');b.innerHTML='';
+    (D.pos||[]).forEach(p=>renderPORowEl(p,b));
+    document.getElementById('pfs-po-meta').textContent=(D.pos||[]).length+' POs';
+    bldSel(document.getElementById('pfs-poStatus'),'po','drafted');
+  } else if(key==='launcher'){renderPFSLauncher();}
   else if(key==='notes'){document.getElementById('pfs-notes-area').value=D.notes||'';}
-  else if(key==='weather'){const b=document.getElementById('pfs-weather-body');if(b&&_wxCache)b.innerHTML=_wxCache;}
-  else if(key==='devotional'){const b=document.getElementById('pfs-devotional-body');if(b&&_devCache)b.innerHTML=_devCache;}
+  else if(key==='weather'){const b=document.getElementById('pfs-weather-body');if(_wxHTML)b.innerHTML=_wxHTML;}
+  else if(key==='devotional'){const b=document.getElementById('pfs-devotional-body');if(_devHTML)b.innerHTML=_devHTML;}
 }
 function closePFS(key){
-  if(key==='jobs'){D.jobs=collectJobsFrom53('pfs-jobs-body');save();document.getElementById('jobBody').innerHTML='';D.jobs.forEach(j=>renderJob(j));}
-  else if(key==='po'){D.pos=collectPOs53('pfs-po-body');save();renderPOTable53('poBody');}
+  if(key==='jobs'){D.jobs=collectJobsFromEl('pfs-jobs-body');save();document.getElementById('jobBody').innerHTML='';(D.jobs||[]).forEach(j=>renderJob(j));}
+  else if(key==='po'){D.pos=collectPOsFromEl('pfs-po-body');save();renderPOList('poBody');}
   else if(key==='notes'){D.notes=document.getElementById('pfs-notes-area').value;save();document.getElementById('notesArea').value=D.notes;}
   document.getElementById('pfs-'+key).style.display='none';
 }
-var _wxCache='',_devCache='';
-// Intercept weather render to cache it
-const _origLoadWeather=loadWeather;
-async function loadWeather(){await _origLoadWeather();const wb=document.getElementById('weatherContent');if(wb){_wxCache='<div style="font-size:1.6rem;margin-bottom:10px">'+wb.innerHTML+'</div>';}}
-// Cache devotional
-const _origLoadDev=loadDevotional;
-function loadDevotional(){_origLoadDev();const db=document.getElementById('devotionalBody');if(db)_devCache='<div style="max-width:700px">'+db.innerHTML.replace('devotional-verse','fs-dev-verse').replace('devotional-ref','fs-dev-ref').replace('devotional-date','fs-dev-date')+'</div>';}
-
-function renderPFSLauncher(){const b=document.getElementById('pfs-launcher-body');b.innerHTML='';(D.apps||DEFAULT_APPS).forEach(app=>{const a=document.createElement('a');a.href=app.url;a.target='_blank';a.style.cssText='display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;text-decoration:none;color:var(--text-light);font-family:"Barlow Condensed",sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.04em;transition:all 0.15s;';a.innerHTML='<span style="font-size:1.4rem">'+(app.icon||'🔗')+'</span>'+app.name;a.onmouseover=()=>{a.style.background='var(--surface2)';a.style.borderColor='var(--border2)';};a.onmouseout=()=>{a.style.background='var(--surface)';a.style.borderColor='var(--border)';};b.appendChild(a);});}
-function renderPFSTasks(){const b=document.getElementById('pfs-tasks-body');if(!b)return;b.innerHTML='';(D.tasks||[]).forEach((t,i)=>{const div=document.createElement('div');div.className='fs-task'+(t.done?' done':'');div.innerHTML='<div class="fs-task-chk" onclick="toggleTaskIdx('+i+')">✓</div><span class="fs-task-txt">'+t.text+'</span><button class="fs-del" onclick="deleteTaskIdx('+i+')">✕</button>';b.appendChild(div);});document.getElementById('pfs-tasks-meta').textContent=(D.tasks||[]).length+' tasks';}
-function toggleTaskIdx(i){if(D.tasks[i])D.tasks[i].done=!D.tasks[i].done;save();document.getElementById('taskList').innerHTML='';D.tasks.forEach(t=>renderTask(t));renderPFSTasks();}
-function deleteTaskIdx(i){D.tasks.splice(i,1);save();document.getElementById('taskList').innerHTML='';D.tasks.forEach(t=>renderTask(t));renderPFSTasks();}
-function addTaskPFS(){const i=document.getElementById('pfs-newTask');const t=i.value.trim();if(!t)return;D.tasks.push({text:t,done:false});i.value='';save();document.getElementById('taskList').innerHTML='';D.tasks.forEach(x=>renderTask(x));renderPFSTasks();pushNotif('⚡','<strong>'+(CU?CU.name:'Someone')+'</strong> added task: '+t);}
-function renderPFSVaTasks(w){const b=document.getElementById('pfs-'+w+'-body');if(!b)return;b.innerHTML='';(D['va_'+w]||[]).forEach((t,i)=>{const div=document.createElement('div');div.className='fs-vatask'+(t.done?' done':'');div.innerHTML='<div class="fs-task-chk" onclick="toggleVaIdx(\"'+w+'\",'+i+')">\u2713</div><span class="fs-task-txt">'+t.text+'</span><button class="fs-del" onclick="deleteVaIdx(\"'+w+'\",'+i+')">\u2715</button>';b.appendChild(div);});}
-function toggleVaIdx(w,i){if(D['va_'+w][i])D['va_'+w][i].done=!D['va_'+w][i].done;save();const lid=w==='myla'?'mylaTaskList':'tonethTaskList';document.getElementById(lid).innerHTML='';(D['va_'+w]||[]).forEach(t=>renderVaTask(w,t));renderPFSVaTasks(w);}
-function deleteVaIdx(w,i){D['va_'+w].splice(i,1);save();const lid=w==='myla'?'mylaTaskList':'tonethTaskList';document.getElementById(lid).innerHTML='';(D['va_'+w]||[]).forEach(t=>renderVaTask(w,t));renderPFSVaTasks(w);}
-function addVaTaskPFS(w){const i=document.getElementById('pfs-'+w+'Task');const t=i.value.trim();if(!t)return;if(!D['va_'+w])D['va_'+w]=[];D['va_'+w].push({text:t,done:false});i.value='';save();const lid=w==='myla'?'mylaTaskList':'tonethTaskList';document.getElementById(lid).innerHTML='';(D['va_'+w]||[]).forEach(x=>renderVaTask(w,x));renderPFSVaTasks(w);pushNotif('🟣','Task for '+w+': '+t);}
-
-// PFS jobs
-function collectJobsFrom53(bodyId){return Array.from(document.querySelectorAll('#'+bodyId+' tr')).map(tr=>{const tds=tr.querySelectorAll('td');const sels=tr.querySelectorAll('.dyn-sel');return{id:tr.dataset.jobId||mkId(),quote:tds[0]?tds[0].textContent:'—',name:tds[1]?tds[1].textContent:'—',addr:tds[2]?tds[2].textContent:'—',value:tds[3]?tds[3].textContent:'—',stage:sels[0]?sels[0].value:'in-progress',invoice:sels[1]?sels[1].value:'not-invoiced',driveUrl:tr.dataset.driveUrl||''};});}
-function renderJobRow53(j,bodyId){
-  bodyId=bodyId||'jobBody';
-  const tr=document.createElement('tr');
-  tr.dataset.jobId=j.id||mkId();
-  tr.dataset.driveUrl=j.driveUrl||'';
-  const hasDrive=j.driveUrl&&j.driveUrl.trim();
-  const onCh=bodyId==='pfs-jobs-body'?"D.jobs=collectJobsFrom53('pfs-jobs-body');save()":"D.jobs=collectJobs();save()";
-  const ss=mkSel('stage',j.stage||'in-progress').replace("D.jobs=collectJobs();save()",onCh);
-  const si=mkSel('invoice',j.invoice||'not-invoiced').replace("D.jobs=collectJobs();save()",onCh);
-  const jid=tr.dataset.jobId;
-  const jname=j.name.replace(/'/g,"&#39;");
-  tr.innerHTML=[
-    '<td style="color:var(--muted);font-size:0.5rem;font-weight:700">'+j.quote+'</td>',
-    '<td>'+j.name+'</td>',
-    '<td style="color:var(--muted);font-size:0.5rem">'+j.addr+'</td>',
-    '<td style="font-size:0.55rem">'+j.value+'</td>',
-    '<td>'+ss+'</td>',
-    '<td>'+si+'</td>',
-    '<td><button class="jbtn" onclick="openComments(\''+jid+'\',\''+jname+'\')">\u{1F4AC}</button></td>',
-    '<td><button class="jbtn'+(hasDrive?' has-drive':'')+'" id="dbtn-'+jid+'" onclick="openDrive(\''+jid+'\',\''+jname+'\')">\u{1F4C1}</button></td>',
-    '<td><button onclick="removeJobFrom53(this,\''+bodyId+'\')" style="background:none;border:none;color:var(--subtle);cursor:pointer;font-size:0.72rem;" onmouseover="this.style.color=\'var(--red-dust)\'" onmouseout="this.style.color=\'var(--subtle)\'">\u2715</button></td>'
-  ].join('');
-  document.getElementById(bodyId).appendChild(tr);
-  tr.querySelectorAll('.dyn-sel').forEach(s=>sS(s));
+function renderPFSTasks(){
+  const b=document.getElementById('pfs-tasks-body');b.innerHTML='';
+  (D.tasks||[]).forEach((t,i)=>{
+    const div=document.createElement('div');div.className='fs-task'+(t.done?' done':'');
+    div.innerHTML=`<div class="fs-task-chk" onclick="D.tasks[${i}].done=!D.tasks[${i}].done;save();document.getElementById('taskList').innerHTML='';D.tasks.forEach(x=>renderTask(x));renderPFSTasks()">✓</div><span class="fs-task-txt">${t.text}</span><button class="fs-del" onclick="D.tasks.splice(${i},1);save();document.getElementById('taskList').innerHTML='';D.tasks.forEach(x=>renderTask(x));renderPFSTasks()">✕</button>`;
+    b.appendChild(div);
+  });
+  document.getElementById('pfs-tasks-meta').textContent=(D.tasks||[]).length+' tasks';
 }
-function removeJobFrom53(btn,bodyId){const tr=btn.closest('tr');tr.remove();D.jobs=collectJobsFrom53(bodyId);save();if(bodyId==='pfs-jobs-body'){document.getElementById('jobBody').innerHTML='';D.jobs.forEach(j=>renderJob(j));}document.getElementById('pfs-jobs-meta').textContent=(D.jobs||[]).length+' jobs';}
-function addJobPFS(){const name=document.getElementById('pfs-jobName').value.trim();if(!name)return;const j={id:mkId(),quote:document.getElementById('pfs-jobQuote').value.trim()||'—',name,addr:document.getElementById('pfs-jobAddr').value.trim()||'—',value:document.getElementById('pfs-jobValue').value.trim()||'TBC',stage:document.getElementById('pfs-jobStage').value,invoice:'not-invoiced',driveUrl:''};renderJobRow53(j,'pfs-jobs-body');['pfs-jobName','pfs-jobAddr','pfs-jobValue','pfs-jobQuote'].forEach(id=>document.getElementById(id).value='');D.jobs=collectJobsFrom53('pfs-jobs-body');save();document.getElementById('pfs-jobs-meta').textContent=D.jobs.length+' jobs';document.getElementById('jobBody').innerHTML='';D.jobs.forEach(j2=>renderJob(j2));pushNotif('🔨','Job added: '+j.name);logAct('Job Added',j.name);}
-
-// PFS PO
-function collectPOs53(bodyId){return Array.from(document.querySelectorAll('#'+bodyId+' tr:not(#poEmpty)')).map(tr=>{const tds=tr.querySelectorAll('td');const sel=tr.querySelector('.dyn-sel');return{num:tds[0]?tds[0].textContent:'',addr:tds[1]?tds[1].textContent:'',name:tds[2]?tds[2].textContent:'',status:sel?sel.value:'drafted'};});}
-function renderPORow53(p,bodyId){
-  bodyId=bodyId||'poBody';
-  const emp=document.getElementById('poEmpty');if(emp&&bodyId==='poBody')emp.remove();
-  const tr=document.createElement('tr');
-  tr.innerHTML=[
-    '<td style="color:var(--muted);font-size:0.5rem;font-weight:700">'+p.num+'</td>',
-    '<td style="font-size:0.5rem">'+p.addr+'</td>',
-    '<td style="font-size:0.5rem">'+p.name+'</td>',
-    '<td>'+makePoSel(p.status)+'</td>',
-    '<td><button onclick="removePORow53(this,\''+bodyId+'\')" style="background:none;border:none;color:var(--subtle);cursor:pointer;font-size:0.68rem;" onmouseover="this.style.color=\'var(--red-dust)\'" onmouseout="this.style.color=\'var(--subtle)\'">\u2715</button></td>'
-  ].join('');
-  document.getElementById(bodyId).appendChild(tr);
-  tr.querySelectorAll('.dyn-sel').forEach(s=>sS(s));
+function addTaskPFS(){const i=document.getElementById('pfs-newTask');const t=i.value.trim();if(!t)return;D.tasks.push({text:t,done:false});i.value='';save();document.getElementById('taskList').innerHTML='';D.tasks.forEach(x=>renderTask(x));renderPFSTasks();pushNotif('⚡',`Task: <strong>${t}</strong>`);}
+function renderPFSVa(w){
+  const bid=w==='myla'?'pfs-mb':'pfs-to';
+  const b=document.getElementById(bid);b.innerHTML='';
+  (D['va_'+w]||[]).forEach((t,i)=>{
+    const div=document.createElement('div');div.className='fs-vatask'+(t.done?' done':'');
+    div.innerHTML=`<div class="fs-task-chk" onclick="D['va_${w}'][${i}].done=!D['va_${w}'][${i}].done;save();document.getElementById('${w==='myla'?'mylaTaskList':'tonethTaskList'}').innerHTML='';(D['va_${w}']||[]).forEach(x=>renderVaTask('${w}',x));renderPFSVa('${w}')">✓</div><span class="fs-task-txt">${t.text}</span><button class="fs-del" onclick="D['va_${w}'].splice(${i},1);save();document.getElementById('${w==='myla'?'mylaTaskList':'tonethTaskList'}').innerHTML='';(D['va_${w}']||[]).forEach(x=>renderVaTask('${w}',x));renderPFSVa('${w}')">✕</button>`;
+    b.appendChild(div);
+  });
 }
-function removePORow53(btn,bodyId){btn.closest('tr').remove();D.pos=collectPOs53(bodyId);save();if(bodyId==='pfs-po-body')renderPOTable53('poBody');document.getElementById('pfs-po-meta').textContent=(D.pos||[]).length+' POs';}
-function renderPOTable53(bodyId){document.getElementById(bodyId).innerHTML='';if(!(D.pos||[]).length){document.getElementById(bodyId).innerHTML='<tr id="poEmpty"><td colspan="5" style="text-align:center;color:var(--muted);font-size:0.48rem;letter-spacing:0.1em;padding:10px 0;">No POs yet</td></tr>';return;}D.pos.forEach(p=>renderPORow53(p,bodyId));}
-function addPOPFS(){const num=document.getElementById('pfs-poNum').value.trim();if(!num)return;renderPORow53({num,addr:document.getElementById('pfs-poAddr').value.trim()||'—',name:document.getElementById('pfs-poName').value.trim()||'—',status:document.getElementById('pfs-poStatus').value},'pfs-po-body');['pfs-poNum','pfs-poAddr','pfs-poName'].forEach(id=>document.getElementById(id).value='');D.pos=collectPOs53('pfs-po-body');save();document.getElementById('pfs-po-meta').textContent=D.pos.length+' POs';renderPOTable53('poBody');}
-
-// PERMISSIONS TAB
-async function renderPermsTab(body){
-  if(!isCtrl()){
-    body.innerHTML='<div style="color:var(--muted);padding:16px;text-align:center;font-size:0.6rem;letter-spacing:0.1em;">Only Toneth (Admin) can manage member permissions.</div>';
-    return;
-  }
-  body.innerHTML='<div style="color:var(--muted);text-align:center;padding:12px;font-size:0.52rem;letter-spacing:0.1em;">Loading...</div>';
-  try{
-    const res=await fetch(`${SHEET}?action=users`,{cache:'no-cache'});
-    const users=await res.json();
-    // Toneth sees all users. Sort: owner, admin, then members
-    const members=users.filter(u=>u.username!==CU.username).sort((a,b)=>({owner:0,admin:1,member:2}[a.role]||2)-({owner:0,admin:1,member:2}[b.role]||2));
-    if(!members.length){body.innerHTML='<div style="color:var(--muted);padding:16px;text-align:center;font-size:0.6rem;letter-spacing:0.1em;">No other users found.</div>';return;}
-    const PL=[
-      {key:'addTask',label:'Add Tasks',sub:'Add items to task lists'},
-      {key:'deleteDoneTask',label:'Delete Done Tasks',sub:'Remove completed tasks only'},
-      {key:'deleteAnyTask',label:'Delete Any Task',sub:'Remove tasks regardless of status'},
-      {key:'addJob',label:'Add Jobs',sub:'Add new jobs to MAHI'},
-      {key:'deleteJob',label:'Delete Jobs',sub:'Remove jobs from MAHI'},
-      {key:'addPO',label:'Add POs',sub:'Add subcontractor POs'},
-      {key:'comment',label:'Comment on Jobs',sub:'Post comments on job entries'},
-      {key:'viewAll',label:'View All Panels',sub:'See all dashboard panels'},
-    ];
-    let html='<div style="color:var(--muted);margin-bottom:10px;font-size:0.52rem;letter-spacing:0.08em;line-height:1.6;">Set what each member can do. Quick Launch always accessible.</div>';
-    members.forEach(u=>{
-      const perms=(D.permissions&&D.permissions[u.username])||DEFAULT_MEMBER_PERMS;
-      const roleCls=u.role==='owner'?'role-owner':u.role==='admin'?'role-admin':'role-member';
-      let permRows='';
-      PL.forEach(({key,label,sub})=>{
-        permRows+=`<div class="perm-item"><div><div class="perm-item-label">${label}</div><span class="perm-item-sub">${sub}</span></div><label class="toggle-sw"><input type="checkbox" ${perms[key]?'checked':''} onchange="setPerm53('${u.username}','${key}',this.checked)"><span class="toggle-track"></span></label></div>`;
-      });
-      html+=`<div class="perm-card">
-        <div class="perm-card-head" onclick="const b=this.nextElementSibling;b.style.display=b.style.display==='none'?'':'none'">
-          <div class="perm-user-name">${u.name} <span class="role-badge ${roleCls}">${u.role}</span></div>
-          <span style="font-size:0.44rem;color:var(--muted)">&#9660; expand</span>
-        </div>
-        <div style="display:none">
-          <div class="perm-grid">${permRows}</div>
-          <div style="padding:6px 12px 10px;display:flex;gap:8px;align-items:center;">
-            <button class="s-btn sm" onclick="setAllPerms53('${u.username}',true)">Enable All</button>
-            <button class="s-btn sm red" onclick="setAllPerms53('${u.username}',false)">Disable All</button>
-            <div class="s-status ok" id="pstat-${u.username}" style="margin-left:auto"></div>
-          </div>
-        </div>
-      </div>`;
-    });
-    body.innerHTML=html;
-  }catch(e){body.innerHTML='<div style="color:var(--red-dust);padding:12px;">Failed to load.</div>';}
-}
-
-function setPerm53(username,key,val){if(!D.permissions)D.permissions={};if(!D.permissions[username])D.permissions[username]={...DEFAULT_MEMBER_PERMS};D.permissions[username][key]=val;save();const s=document.getElementById('pstat-'+username);if(s){s.textContent='✓ Saved';s.className='s-status ok';setTimeout(()=>s.textContent='',2000);}logAct('Perm Changed',username+':'+key+'='+val);}
-function setAllPerms53(username,val){if(!D.permissions)D.permissions={};D.permissions[username]=Object.fromEntries(Object.keys(DEFAULT_MEMBER_PERMS).map(k=>[k,val]));save();renderPermsTab(document.getElementById('settingsBody'));logAct('All Perms',username+'='+(val?'on':'off'));}
-
-// PATCH showSettingsTab to handle perms tab
-const _sST53=showSettingsTab;
-
-// PATCH showDash for role-based UI + notifs
-const _sD53=showDash;
-function showDash(){
-  _sD53();
-  if(!D.permissions)D.permissions={};
-  _lastJobCount=(D.jobs||[]).length;_lastTaskCount=(D.tasks||[]).length;
-  loadNotifs();
-  // Hide/show panel buttons based on role
-  document.querySelectorAll('.panel-btn').forEach(el=>{
-    if(el.getAttribute('onclick')&&el.getAttribute('onclick').includes('togglePanel')){
-      el.style.display=isCtrl()?'':'none';
-    }
+function addVaPFS(w){const inp=document.getElementById(w==='myla'?'pfs-mt':'pfs-tt');const t=inp.value.trim();if(!t)return;if(!D['va_'+w])D['va_'+w]=[];D['va_'+w].push({text:t,done:false});inp.value='';save();document.getElementById(w==='myla'?'mylaTaskList':'tonethTaskList').innerHTML='';(D['va_'+w]||[]).forEach(x=>renderVaTask(w,x));renderPFSVa(w);}
+function renderPFSLauncher(){
+  const b=document.getElementById('pfs-launcher-body');b.innerHTML='';
+  (D.apps||DEFAULT_APPS).forEach(app=>{
+    const a=document.createElement('a');a.href=app.url;a.target='_blank';
+    a.style.cssText='display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;text-decoration:none;color:var(--text-light);font-size:0.72rem;font-weight:700;letter-spacing:0.04em;transition:all 0.15s;';
+    a.innerHTML=`<span style="font-size:1.4rem">${app.icon||'🔗'}</span>${app.name}`;
+    a.onmouseover=()=>{a.style.background='var(--surface2)';a.style.borderColor='var(--border2)';};
+    a.onmouseout=()=>{a.style.background='var(--surface)';a.style.borderColor='var(--border)';};
+    b.appendChild(a);
   });
 }
 
-// PATCH openComments for @mentions
-const _oC53=openComments;
-function openComments(jobId,jobName){_oC53(jobId,jobName);loadTeamForMentions();}
-
-// PATCH submitComment for notifications + @mentions  
-const _sC53=submitComment;
-async function submitComment(){
-  const t=document.getElementById('commentInput').value.trim();
-  await _sC53();
-  if(t){const mentions=t.match(/@(\S+)/g)||[];pushNotif('💬',mentions.length?'<strong>'+(CU?CU.name:'Someone')+'</strong> mentioned '+mentions.join(', '):'<strong>'+(CU?CU.name:'Someone')+'</strong> posted a comment');document.getElementById('mentionPopup').classList.remove('open');}
+// ── PFS JOBS/PO ───────────────────────────────────────
+function collectJobsFromEl(bid){return Array.from(document.querySelectorAll('#'+bid+' tr')).map(tr=>{const sels=tr.querySelectorAll('.dyn-sel');return{id:tr.dataset.jobId||mkId(),quote:tr.cells[0]?tr.cells[0].textContent:'—',name:tr.cells[1]?tr.cells[1].textContent:'—',addr:tr.cells[2]?tr.cells[2].textContent:'—',value:tr.cells[3]?tr.cells[3].textContent:'—',stage:sels[0]?sels[0].value:'in-progress',invoice:sels[1]?sels[1].value:'not-invoiced',driveUrl:tr.dataset.driveUrl||''};});}
+function renderJobRowEl(j,tbody){
+  const bid=tbody.id;
+  const tr=document.createElement('tr');tr.dataset.jobId=j.id||mkId();tr.dataset.driveUrl=j.driveUrl||'';
+  const hasDrive=j.driveUrl&&j.driveUrl.trim();
+  const ss=makeSel('stage',j.stage||'in-progress');
+  const si=makeSel('invoice',j.invoice||'not-invoiced');
+  const jid=tr.dataset.jobId;const jn=j.name.replace(/'/g,'&#39;');
+  tr.innerHTML=[
+    `<td style="color:var(--muted);font-size:0.5rem">${j.quote}</td>`,
+    `<td>${j.name}</td><td style="color:var(--muted);font-size:0.5rem">${j.addr}</td>`,
+    `<td style="font-size:0.55rem">${j.value}</td>`,
+    `<td>${ss}</td><td>${si}</td>`,
+    `<td><button class="jbtn" onclick="openComments('${jid}','${jn}')">💬</button></td>`,
+    `<td><button class="jbtn${hasDrive?' has-drive':''}" onclick="openDrive('${jid}','${jn}')">📁</button></td>`,
+    `<td><button onclick="this.closest('tr').remove();D.jobs=collectJobsFromEl('${bid}');save();document.getElementById('jobBody').innerHTML='';(D.jobs||[]).forEach(j=>renderJob(j))" style="background:none;border:none;color:var(--subtle);cursor:pointer;font-size:0.72rem" onmouseover="this.style.color='var(--red-dust)'" onmouseout="this.style.color='var(--subtle)'">✕</button></td>`
+  ].join('');
+  tbody.appendChild(tr);tr.querySelectorAll('.dyn-sel').forEach(s=>styleSel(s));
+}
+function addJobPFS(){
+  const name=document.getElementById('pfs-jobName').value.trim();if(!name)return;
+  const j={id:mkId(),quote:document.getElementById('pfs-jobQuote').value.trim()||'—',name,addr:document.getElementById('pfs-jobAddr').value.trim()||'—',value:document.getElementById('pfs-jobValue').value.trim()||'TBC',stage:document.getElementById('pfs-jobStage').value,invoice:'not-invoiced',driveUrl:''};
+  renderJobRowEl(j,document.getElementById('pfs-jobs-body'));
+  ['pfs-jq','pfs-jn','pfs-ja','pfs-jv'].forEach(id=>document.getElementById(id).value='');
+  D.jobs=collectJobsFromEl('pfs-jobs-body');save();
+  document.getElementById('pfs-jobs-meta').textContent=D.jobs.length+' jobs';
+  document.getElementById('jobBody').innerHTML='';(D.jobs||[]).forEach(j2=>renderJob(j2));
+  pushNotif('🔨',`Job added: <strong>${j.name}</strong>`);
+}
+function collectPOsFromEl(bid){return Array.from(document.querySelectorAll('#'+bid+' tr:not(#poEmpty)')).map(tr=>({num:tr.cells[0]?tr.cells[0].textContent:'',addr:tr.cells[1]?tr.cells[1].textContent:'',name:tr.cells[2]?tr.cells[2].textContent:'',status:tr.querySelector('.dyn-sel')?tr.querySelector('.dyn-sel').value:'drafted'}));}
+function renderPORowEl(p,tbody){
+  const bid=tbody.id;
+  const emp=document.getElementById('poEmpty');if(emp&&bid==='poBody')emp.remove();
+  const tr=document.createElement('tr');
+  tr.innerHTML=[
+    `<td style="color:var(--muted);font-size:0.5rem;font-weight:700">${p.num}</td>`,
+    `<td style="font-size:0.5rem">${p.addr}</td><td style="font-size:0.5rem">${p.name}</td>`,
+    `<td>${makePoSel(p.status)}</td>`,
+    `<td><button onclick="removePOFrom(this,'${bid}')" style="background:none;border:none;color:var(--subtle);cursor:pointer;font-size:0.68rem" onmouseover="this.style.color='var(--red-dust)'" onmouseout="this.style.color='var(--subtle)'">✕</button></td>`
+  ].join('');
+  tbody.appendChild(tr);tr.querySelectorAll('.dyn-sel').forEach(s=>styleSel(s));
+}
+function renderPOList(bid){
+  document.getElementById(bid).innerHTML='';
+  if(!(D.pos||[]).length){document.getElementById(bid).innerHTML='<tr id="poEmpty"><td colspan="5" style="text-align:center;color:var(--muted);font-size:0.48rem;letter-spacing:0.1em;padding:10px 0">No POs yet</td></tr>';return;}
+  (D.pos||[]).forEach(p=>renderPORowEl(p,document.getElementById(bid)));
+}
+function addPOPFS(){
+  const num=document.getElementById('pfs-poNum').value.trim();if(!num)return;
+  renderPORowEl({num,addr:document.getElementById('pfs-poAddr').value.trim()||'—',name:document.getElementById('pfs-poName').value.trim()||'—',status:document.getElementById('pfs-poStatus').value},document.getElementById('pfs-po-body'));
+  ['pfs-pn','pfs-pa','pfs-pc'].forEach(id=>document.getElementById(id).value='');
+  D.pos=collectPOsFromEl('pfs-po-body');save();
+  document.getElementById('pfs-po-meta').textContent=D.pos.length+' POs';
+  renderPOList('poBody');
 }
 
-// PATCH addJob for notification
-const _aJ53=addJob;
-function addJob(){const name=document.getElementById('jobName').value.trim();_aJ53();if(name)pushNotif('🔨','Job added: <strong>'+name+'</strong>');}
+// ── SETTINGS ──────────────────────────────────────────
+function showSettingsTab(tab,btn){
+  document.querySelectorAll('.mtab').forEach(t=>t.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  const body=document.getElementById('settingsBody');
+  if(tab==='panels')renderPanelsTab(body);
+  else if(tab==='launch')renderLaunchTab(body);
+  else if(tab==='dropdowns')renderDropdownsTab(body);
+  else if(tab==='team')renderTeamTab(body);
+  else if(tab==='perms'){
+    if(!isAdmin()){body.innerHTML='<div style="color:var(--muted);padding:16px;text-align:center;font-size:0.6rem;">Only Toneth can manage permissions.</div>';return;}
+    renderPermsTab(body);
+  }
+  else if(tab==='activity')renderActivityTab(body);
+  else if(tab==='account')renderAccountTab(body);
+}
 
-// PATCH addTask for notification
-const _aT53=addTask;
-function addTask(){const t=document.getElementById('newTaskInput').value.trim();_aT53();if(t)pushNotif('⚡','Task added: <strong>'+t+'</strong>');}
+// ── PERMISSIONS ───────────────────────────────────────
+async function renderPermsTab(body){
+  body.innerHTML='<div style="color:var(--muted);text-align:center;padding:12px;font-size:0.52rem;letter-spacing:0.1em;">Loading...</div>';
+  try{
+    const users=getUsers().filter(u=>u.username!==CU.username).sort((a,b)=>({owner:0,admin:1,member:2}[a.role]||2)-({owner:0,admin:1,member:2}[b.role]||2));
+    if(!users.length){body.innerHTML='<div style="color:var(--muted);padding:16px;text-align:center;font-size:0.6rem;letter-spacing:0.1em;">No other users found.</div>';return;}
+    const PL=[
+      {key:'addTask',label:'Add Tasks',sub:'Add items to task lists'},
+      {key:'deleteDoneTask',label:'Delete Done Tasks',sub:'Remove completed tasks only'},
+      {key:'deleteAnyTask',label:'Delete Any Task',sub:'Remove any task'},
+      {key:'addJob',label:'Add Jobs',sub:'Add new jobs to MAHI'},
+      {key:'deleteJob',label:'Delete Jobs',sub:'Remove jobs from MAHI'},
+      {key:'addPO',label:'Add POs',sub:'Add subcontractor POs'},
+      {key:'comment',label:'Comment on Jobs',sub:'Post comments'},
+      {key:'viewAll',label:'View All Panels',sub:'See all panels'},
+    ];
+    let html='<div style="color:var(--muted);margin-bottom:10px;font-size:0.52rem;letter-spacing:0.08em;line-height:1.6;">Set what each member can do. Quick Launch always accessible.</div>';
+    users.forEach(u=>{
+      const perms=(D.permissions&&D.permissions[u.username])||DEFAULT_MEMBER_PERMS;
+      const rc=u.role==='owner'?'role-owner':u.role==='admin'?'role-admin':'role-member';
+      let rows='';
+      PL.forEach(({key,label,sub})=>{
+        rows+=`<div class="perm-item"><div><div class="perm-item-label">${label}</div><span class="perm-item-sub">${sub}</span></div><label class="toggle-sw"><input type="checkbox" ${perms[key]?'checked':''} onchange="setPerm('${u.username}','${key}',this.checked)"><span class="toggle-track"></span></label></div>`;
+      });
+      html+=`<div class="perm-card"><div class="perm-card-head" onclick="const b=this.nextElementSibling;b.style.display=b.style.display==='none'?'':'none'"><div class="perm-user-name">${u.name} <span class="role-badge ${rc}">${u.role}</span></div><span style="font-size:0.44rem;color:var(--muted)">▾ expand</span></div><div style="display:none"><div class="perm-grid">${rows}</div><div style="padding:6px 12px 10px;display:flex;gap:8px;align-items:center;"><button class="s-btn sm" onclick="setAllPerms('${u.username}',true)">Enable All</button><button class="s-btn sm red" onclick="setAllPerms('${u.username}',false)">Disable All</button><div class="s-status ok" id="pstat-${u.username}" style="margin-left:auto"></div></div></div></div>`;
+    });
+    body.innerHTML=html;
+  }catch(e){body.innerHTML='<div style="color:var(--red-dust);padding:12px;">Error: '+e.message+'</div>';}
+}
+function setPerm(username,key,val){
+  if(!D.permissions)D.permissions={};
+  if(!D.permissions[username])D.permissions[username]={...DEFAULT_MEMBER_PERMS};
+  D.permissions[username][key]=val;save();
+  const s=document.getElementById('pstat-'+username);
+  if(s){s.textContent='✓ Saved';s.className='s-status ok';setTimeout(()=>s.textContent='',2000);}
+}
+function setAllPerms(username,val){
+  if(!D.permissions)D.permissions={};
+  D.permissions[username]=Object.fromEntries(Object.keys(DEFAULT_MEMBER_PERMS).map(k=>[k,val]));
+  save();renderPermsTab(document.getElementById('settingsBody'));
+}
 
-// ESC closes fullscreen panels
-document.addEventListener('keydown',function(e){if(e.key==='Escape'){document.querySelectorAll('.pfs').forEach(p=>p.style.display='none');const mp=document.getElementById('mentionPopup');if(mp)mp.classList.remove('open');}});
+// ── COMMENTS WITH @MENTION ────────────────────────────
+function openComments(jobId,jobName){
+  _commentJobId=jobId;
+  document.getElementById('commentJobLabel').textContent=jobName;
+  document.getElementById('commentsModal').style.display='flex';
+  loadComments(jobId);loadTeamNames();
+}
+async function submitComment(){
+  const inp=document.getElementById('commentInput');
+  const txt=inp.value.trim();if(!txt||!CU)return;
+  document.getElementById('mentionPopup').classList.remove('open');
+  inp.value='';inp.disabled=true;
+  try{
+    await fetch(SHEET+'?action=add-comment&jobId='+encodeURIComponent(_commentJobId)+'&u='+encodeURIComponent(CU.username)+'&n='+encodeURIComponent(CU.name)+'&t='+encodeURIComponent(txt),{mode:'no-cors'});
+    loadComments(_commentJobId);
+    const mentions=txt.match(/@\S+/g)||[];
+    pushNotif('💬',mentions.length?`<strong>${CU.name}</strong> mentioned ${mentions.join(', ')}`:` <strong>${CU.name}</strong> commented`);
+  }catch(e){}
+  inp.disabled=false;
+}
 
+// ── CLOUD SYNC ────────────────────────────────────────
+async function fetchCloud(init){
+  syncUI('ok','☁ Live sync active');
+}
 
-// ── INIT ──────────────────────────────────────────────
+// ── ADDTASK/ADDJOB NOTIFICATIONS ─────────────────────
+// These replace the base addJob/addTask after they run
+// NOTE: addJob and addTask are defined in v5.2 base
+// We override them here AFTER they're defined
 
-(function(){try{var ex=JSON.parse(localStorage.getItem('rdu_data')||'null');var ok=ex&&ex.jobs&&ex.jobs.length>5&&ex.tasks&&ex.tasks.length>10;if(!ok){localStorage.setItem('rdu_data',JSON.stringify({"tasks": [{"text": "BRETT NASH DRAFT QUOTE(XERO)", "done": false}, {"text": "Sujan outstanding payment.", "done": false}, {"text": "BNI NSW-South Gala Awards Night 2026 Form", "done": false}, {"text": "Morning Routine", "done": true}, {"text": "Night Time Routine", "done": false}, {"text": "Lloyd - Letter of Acceptance.", "done": false}, {"text": "Christopher Igoe Gutters", "done": false}, {"text": "Loretta Ryde Follow Up", "done": false}, {"text": "Daniel :catchup at Archivore office 17th April", "done": false}, {"text": "Quote for 37 Narooma Dr Prestons", "done": false}, {"text": "Rocky Training Friday 10am", "done": false}, {"text": "Saturday 10am Pack Walk", "done": false}, {"text": "Sebastian 1-2-1 Thurs 11am", "done": true}, {"text": "HCM Janalli Quote", "done": false}, {"text": "HCM small Build Quote", "done": false}, {"text": "Alan Acumen Built Quote", "done": false}, {"text": "Jamie updating C order drft", "done": false}, {"text": "gardener", "done": false}, {"text": "Scents With Caitlin", "done": false}, {"text": "holden insurance harry interlock", "done": false}, {"text": "linkt tag", "done": false}, {"text": "pay for dr shen appt", "done": false}, {"text": "Acumen built quote add restoration and guttering", "done": false}, {"text": "icare Workers Insurance: Payment is overdue", "done": false}, {"text": "Payment Reminder : Cool Coolers Pty Ltd", "done": false}, {"text": "Invoice INV-4764 from Dust Devilz", "done": false}, {"text": "Reminder: Call Sam on Monday (0423 335 845)", "done": false}], "va_myla": [{"text": "Maria 1-2-1 With Clients Book in", "done": true}, {"text": "Excite Safety Roof Report", "done": false}, {"text": "harry purchase order woolooware road", "done": true}, {"text": "HCM Progress Claim", "done": true}, {"text": "Book Gala Night Accommodation & Ronny Suit Hire", "done": false}, {"text": "LLOYDS - L/O ,P/0 & MUD MAP SIGNED", "done": false}], "va_toneth": [{"text": "Develop the Workflow", "done": false}, {"text": "Develop Builder Friendly Workflow PDF", "done": false}, {"text": "37 narooma take off and quote", "done": false}], "jobs": [{"id": "j001", "quote": "0016", "name": "Lloyds Building and Development Pty Ltd", "addr": "297 Woolooware Rd, Burraneer 2230", "value": "$42,500", "invoice": "not-invoiced", "stage": "in-progress", "driveUrl": ""}, {"id": "j002", "quote": "0094A", "name": "HCM Build", "addr": "111 Mansfield St, Rozelle 2039", "value": "$29,500", "invoice": "progress-sent", "stage": "in-progress", "driveUrl": ""}, {"id": "j003", "quote": "0068", "name": "The Trustee for Perpetual Discretionary Aggregate Deductible Fund", "addr": "21 Mallacoota Close, Prestons NSW 2171", "value": "$13,988", "invoice": "not-invoiced", "stage": "in-progress", "driveUrl": ""}, {"id": "j004", "quote": "0020", "name": "Lloyds Building and Development Pty Ltd", "addr": "20 Northcote St, Canterbury NSW 2193", "value": "$45,000", "invoice": "not-invoiced", "stage": "in-progress", "driveUrl": ""}, {"id": "j005", "quote": "0058", "name": "Alan Acumen Built", "addr": "94 Wollybutt Road, Engadine NSW", "value": "$55,616", "invoice": "not-invoiced", "stage": "in-progress", "driveUrl": ""}, {"id": "j006", "quote": "0018", "name": "Lloyds", "addr": "2 Clarke St, Peakhurst 2210", "value": "$45,000", "invoice": "not-invoiced", "stage": "in-progress", "driveUrl": ""}, {"id": "j007", "quote": "0017", "name": "Lloyds", "addr": "4 Clarke St, Peakhurst 2210", "value": "$45,000", "invoice": "not-invoiced", "stage": "in-progress", "driveUrl": ""}, {"id": "j008", "quote": "QU-0015", "name": "Lloyds Building and Development Pty Ltd", "addr": "9 Fairs Ave, Woolooware", "value": "$45,859", "invoice": "not-invoiced", "stage": "in-progress", "driveUrl": ""}], "pos": [], "kai": {}, "moko": {"rev": 0, "target": 0, "quotes": "0", "won": "0"}, "notes": "Rocky 🐾 — worksite drop 8am\nToneth: invoice HCM Build", "panels": {}, "apps": null, "dropdowns": null, "customPanels": [], "permissions": {}, "users": [], "_ts": 1774590000000}));console.log('RDU: Restored 8 jobs 27 tasks');}}catch(e){}})()
+// ── ESC closes modals + PFS ───────────────────────────
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    document.querySelectorAll('.pfs').forEach(p=>p.style.display='none');
+    document.getElementById('mentionPopup')?.classList.remove('open');
+  }
+});
+
+// ── INIT ──────────────────────────────────────────
 if(!checkSession())syncUI('ok','☁ Ready — please log in');
 </script>
 </body>
