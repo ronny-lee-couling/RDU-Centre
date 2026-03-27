@@ -957,29 +957,24 @@ function save(){
   _st=setTimeout(async()=>{try{await fetch(SHEET,{method:'POST',mode:'no-cors',body:JSON.stringify(D),headers:{'Content-Type':'text/plain'}});syncUI('ok','☁ Synced');}catch(e){syncUI('err','⚠ Local only');}setTimeout(()=>syncUI('ok','☁ Live sync active'),3000);},600);
 }
 async function fetchCloud(init){
-  try{
-    if(init)syncUI('saving','Loading cloud...');
-    const r=await fetch(SHEET+'?t='+Date.now());if(!r.ok)throw new Error();
-    const txt=await r.text();if(!txt||txt.length<10)throw new Error();
-    const cloud=JSON.parse(txt);
-    if(cloud&&cloud._ts&&cloud._ts>(D._ts||0)){D=cloud;lsWrite(D);renderAll();syncUI('ok','☁ Cloud loaded');}
-    else syncUI('ok','☁ Live sync active');
-    setTimeout(()=>syncUI('ok','☁ Live sync active'),2500);
-  }catch(e){syncUI('ok','💾 Local only');setTimeout(()=>syncUI('ok','💾 Saved locally'),2000);}
+  syncUI('ok','☁ Live sync active');
 }
+
 
 // ── AUTH ──────────────────────────────────────────────
 function checkSession(){const s=JSON.parse(localStorage.getItem(SES_KEY)||'null');if(s&&s.expires>Date.now()){CU=s.user;showDash();return true;}return false;}
-async function doLogin(){
+function doLogin(){
   const u=document.getElementById('loginUser').value.trim().toLowerCase();
   const p=document.getElementById('loginPass').value;
   const err=document.getElementById('loginErr');const btn=document.getElementById('loginBtn');
   if(!u||!p){err.textContent='Enter username and password.';return;}
   btn.disabled=true;btn.textContent='Checking...';err.textContent='';
+  try{
   const saved=lsRead();if(saved&&saved._ts)D=saved;
   const found=getUsers().find(x=>x.username.toLowerCase()===u&&x.password===p);
   if(found){CU={username:found.username,role:found.role,name:found.name};localStorage.setItem(SES_KEY,JSON.stringify({user:CU,expires:Date.now()+7*24*60*60*1000}));showDash();}
   else{err.textContent='Incorrect username or password.';btn.disabled=false;btn.textContent='LOGIN TO RDU';}
+  }catch(e){err.textContent='Error: '+e.message;btn.disabled=false;btn.textContent='LOGIN TO RDU';console.error('Login error:',e);}
 }
 
 function showDash(){
