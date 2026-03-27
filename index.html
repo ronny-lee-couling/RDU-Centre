@@ -1011,14 +1011,14 @@ function collectTasks(){return Array.from(document.querySelectorAll('#taskList .
 function renderTask(t){const el=document.createElement('div');el.className='task-item'+(t.done?' done':'');el.innerHTML=`<div class="task-check" onclick="toggleTask(this.parentElement)">✓</div><span class="task-text" onclick="toggleTask(this.parentElement)">${t.text}</span><button class="task-del" onclick="removeTask(this)">✕</button>`;document.getElementById('taskList').appendChild(el);}
 function toggleTask(el){el.classList.toggle('done');D.tasks=collectTasks();save();}
 function removeTask(btn){btn.closest('.task-item').remove();D.tasks=collectTasks();save();}
-function addTask(){const i=document.getElementById('newTaskInput');const t=i.value.trim();if(!t)return;renderTask({text:t,done:false});i.value='';D.tasks=collectTasks();save();}
+function addTask(){const i=document.getElementById('newTaskInput');const t=i.value.trim();if(!t)return;renderTask({text:t,done:false});i.value='';pushNotif('⚡',`Task: <strong>${t}</strong>`);D.tasks=collectTasks();save();}
 
 // ── VA ────────────────────────────────────────────────
 function collectVa(w){const id=w==='myla'?'mylaTaskList':'tonethTaskList';return Array.from(document.querySelectorAll('#'+id+' .va-task-item')).map(el=>({text:el.querySelector('.va-task-text').textContent,done:el.classList.contains('done')}));}
 function renderVaTask(w,t){const lid=w==='myla'?'mylaTaskList':'tonethTaskList';const el=document.createElement('div');el.className='va-task-item'+(t.done?' done':'');el.innerHTML=`<div class="va-task-check" onclick="toggleVaTask(this.parentElement,'${w}')">✓</div><span class="va-task-text" onclick="toggleVaTask(this.parentElement,'${w}')">${t.text}</span><button class="va-task-del" onclick="removeVaTask(this,'${w}')">✕</button>`;document.getElementById(lid).appendChild(el);}
 function toggleVaTask(el,w){el.classList.toggle('done');D['va_'+w]=collectVa(w);save();}
 function removeVaTask(btn,w){btn.closest('.va-task-item').remove();D['va_'+w]=collectVa(w);save();}
-function addVaTask(w){const i=document.getElementById(w==='myla'?'mylaInput':'tonethInput');const t=i.value.trim();if(!t)return;renderVaTask(w,{text:t,done:false});i.value='';D['va_'+w]=collectVa(w);save();}
+function addVaTask(w){const i=document.getElementById(w==='myla'?'mylaInput':'tonethInput');const t=i.value.trim();if(!t)return;renderVaTask(w,{text:t,done:false});i.value='';pushNotif('🟣',`VA task added: <strong>${t}</strong>`);D['va_'+w]=collectVa(w);save();}
 
 // ── WEATHER COMPACT ───────────────────────────────────
 async function loadWeather(){
@@ -1095,7 +1095,7 @@ function addJob(){
   const name=document.getElementById('jobName').value.trim();if(!name)return;
   const j={id:mkId(),quote:document.getElementById('jobQuote').value.trim()||'—',name,addr:document.getElementById('jobAddr').value.trim()||'—',value:document.getElementById('jobValue').value.trim()||'TBC',stage:document.getElementById('jobStage').value,invoice:'not-invoiced',driveUrl:''};
   renderJob(j);['jobName','jobAddr','jobValue','jobQuote'].forEach(id=>document.getElementById(id).value='');
-  D.jobs=collectJobs();save();logAct('Job Added',`${j.name} — ${j.addr}`);
+  pushNotif('🔨',`Job added: <strong>${name}</strong>`);D.jobs=collectJobs();save();logAct('Job Added',`${j.name} — ${j.addr}`);
   // sync to FS if open
   if(document.getElementById('mahiFS').style.display!=='none'){document.getElementById('mahiFSBody').innerHTML='';D.jobs.forEach(x=>renderJobRow(x,'mahiFSBody'));updateFSCount();}
 }
@@ -1772,7 +1772,6 @@ document.addEventListener('keydown',e=>{
 });
 
 // ── INIT ──────────────────────────────────────────
-if(!checkSession())syncUI('ok','☁ Ready — please log in');
-</script>
+if(!checkSession())syncUI('ok','☁ Ready — please log in')</script>
 </body>
 </html>
