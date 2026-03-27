@@ -878,8 +878,9 @@ async function doLogin(){
   if(!u||!p){err.textContent='Enter username and password.';return;}
   btn.disabled=true;btn.textContent='Checking...';err.textContent='';
   try{
-    const res=await fetch(`${SHEET}?action=login&u=${encodeURIComponent(u)}&p=${encodeURIComponent(p)}`);
-    const data=await res.json();
+    const res=await fetch(`${SHEET}?action=login&u=${encodeURIComponent(u)}&p=${encodeURIComponent(p)}`,{redirect:'follow',cache:'no-cache'});
+    const txt=await res.text();
+    const data=JSON.parse(txt);
     if(data.ok){CU=data.user;localStorage.setItem(SES_KEY,JSON.stringify({user:CU,expires:Date.now()+7*24*60*60*1000}));logAct('Login','Logged in');showDash();}
     else{err.textContent='Invalid username or password.';btn.disabled=false;btn.textContent='LOGIN TO RDU';}
   }catch(e){err.textContent='Network error.';btn.disabled=false;btn.textContent='LOGIN TO RDU';}
